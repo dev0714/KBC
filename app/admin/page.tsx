@@ -20,6 +20,27 @@ function formatCurrency(amount: number) {
   return `R${Number(amount).toLocaleString()}`
 }
 
+function getStoragePathFromPublicUrl(url: string) {
+  try {
+    const parsed = new URL(url)
+    const marker = '/storage/v1/object/public/product-images/'
+    const markerIndex = parsed.pathname.indexOf(marker)
+    if (markerIndex >= 0) {
+      return decodeURIComponent(parsed.pathname.slice(markerIndex + marker.length))
+    }
+  } catch {
+    // Not a valid absolute URL, fall through to return the raw value.
+  }
+
+  const fallbackMarker = 'product-images/'
+  const fallbackIndex = url.indexOf(fallbackMarker)
+  if (fallbackIndex >= 0) {
+    return decodeURIComponent(url.slice(fallbackIndex + fallbackMarker.length))
+  }
+
+  return url
+}
+
 const getStatusColor = (status: string) => {
   switch (status) {
     case 'Active':
@@ -306,31 +327,52 @@ export default function AdminPage() {
     e.target.value = ''
   }
 
-  const handleDeleteProductImage = async (sku: string) => {
-    setDeletingProductImage(sku)
+  const handleDeleteProductImage = async (sku: string, imageUrl: string) => {
+    setDeletingProductImage(imageUrl)
     try {
       const supabase = createClient()
-      
-      // Delete image records from database
+      const storagePath = getStoragePathFromPublicUrl(imageUrl)
+
+      if (storagePath) {
+        const { error: storageError } = await supabase.storage
+          .from('product-images')
+          .remove([storagePath])
+        if (storageError) {
+          console.warn('[v0] Could not remove product image file from storage:', storageError)
+        }
+      }
+
       const { error: deleteError } = await supabase
         .from('product_images')
         .delete()
         .eq('product_sku', sku)
+        .eq('storage_path', imageUrl)
       
       if (deleteError) throw deleteError
-      
-      // Update local state
+
+      const nextGallery = (productGallery.length > 0 ? productGallery : (productImages[sku] || [])).filter((item) => item !== imageUrl)
+
       setProductImages(prev => {
-        const updated = {...prev}
-        delete updated[sku]
+        const updated = { ...prev }
+        if (nextGallery.length > 0) {
+          updated[sku] = nextGallery
+        } else {
+          delete updated[sku]
+        }
         return updated
       })
-      
+
+      setProductGallery(nextGallery)
+      if (previewImage === imageUrl) {
+        setPreviewImage(nextGallery[0] || null)
+      }
+
       console.log('[v0] Product image deleted successfully for SKU:', sku)
     } catch (err) {
       console.error('[v0] Error deleting product image:', err)
     } finally {
       setDeletingProductImage(null)
+      mutate()
     }
   }
 
@@ -2187,16 +2229,33 @@ export default function AdminPage() {
                     <div className="mt-3">
                       <div className="grid grid-cols-4 gap-3">
                         {productGallery.map((imageUrl, index) => (
-                          <button
+                          <div
                             key={`${imageUrl}-${index}`}
-                            type="button"
-                            onClick={() => setPreviewImage(imageUrl)}
-                            className={`rounded-lg border overflow-hidden transition-all ${
+                            className={`relative rounded-lg border overflow-hidden transition-all ${
                               previewImage === imageUrl ? 'border-red-500 ring-2 ring-red-500/40' : 'border-slate-400/30 hover:border-red-500/40'
                             }`}
                           >
-                            <img src={imageUrl} alt={`Product preview ${index + 1}`} className="w-full h-20 object-cover" />
-                          </button>
+                            <button
+                              type="button"
+                              onClick={() => setPreviewImage(imageUrl)}
+                              className="block w-full"
+                            >
+                              <img src={imageUrl} alt={`Product preview ${index + 1}`} className="w-full h-20 object-cover" />
+                            </button>
+                            <button
+                              type="button"
+                              aria-label={`Delete image ${index + 1}`}
+                              onClick={() => handleDeleteProductImage(productFormData.sku, imageUrl)}
+                              disabled={deletingProductImage === imageUrl}
+                              className="absolute top-1 right-1 inline-flex items-center justify-center rounded-full bg-black/70 text-white p-1.5 hover:bg-red-600 transition-colors disabled:opacity-60"
+                            >
+                              {deletingProductImage === imageUrl ? (
+                                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                              ) : (
+                                <Trash2 className="w-3.5 h-3.5" />
+                              )}
+                            </button>
+                          </div>
                         ))}
                       </div>
                     </div>
