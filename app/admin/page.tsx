@@ -815,7 +815,7 @@ export default function AdminPage() {
       <div className="relative z-10 flex flex-1">
         {/* Sidebar */}
         <aside
-          className={`w-64 bg-[#06123d]/80 border-r border-white/10 fixed md:static md:self-stretch md:h-auto transition-transform z-30 backdrop-blur-xl shadow-[12px_0_40px_rgba(0,0,0,0.18)] ${
+          className={`w-64 bg-[#06123d]/80 border-r border-white/10 fixed md:sticky md:top-[72px] md:self-start md:h-[calc(100vh-72px)] transition-transform z-30 backdrop-blur-xl shadow-[12px_0_40px_rgba(0,0,0,0.18)] ${
             sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
           }`}
         >
