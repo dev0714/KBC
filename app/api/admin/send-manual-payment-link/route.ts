@@ -163,9 +163,22 @@ export async function POST(req: NextRequest) {
 
     let paymentUrl = paymentUrlFromBody
     if (!paymentUrl) {
-      const paymentResponse = await fetch(new URL('/api/payfast/create-payment', req.url), {
+      const payFastUrl = process.env.NEXT_PUBLIC_PAYFAST_MERCHANT_URL
+      const payFastKey = process.env.NEXT_PUBLIC_PAYFAST_MERCHANT_KEY
+
+      if (!payFastUrl || !payFastKey) {
+        return NextResponse.json(
+          { error: 'Missing PaySync configuration' },
+          { status: 500 }
+        )
+      }
+
+      const paymentResponse = await fetch(`${payFastUrl}/functions/v1/PaySync`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${payFastKey}`,
+        },
         body: JSON.stringify({
           id: 1,
           client_id: resolvedCustomer.accountNo,
@@ -180,18 +193,18 @@ export async function POST(req: NextRequest) {
         }),
       })
 
+      const paymentData = await paymentResponse.json().catch(() => null)
+
       if (!paymentResponse.ok) {
-        const paymentError = await paymentResponse.json().catch(() => null)
         return NextResponse.json(
           {
-            error: paymentError?.error || 'Failed to create payment link',
-            details: paymentError?.details || paymentError?.message || null,
+            error: paymentData?.error || 'Failed to create payment link',
+            details: paymentData?.details || paymentData?.message || paymentData,
           },
           { status: paymentResponse.status }
         )
       }
 
-      const paymentData = await paymentResponse.json()
       paymentUrl = paymentData.url || paymentData.shortened_url || ''
     }
 
