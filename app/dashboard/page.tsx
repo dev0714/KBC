@@ -874,27 +874,30 @@ export default function DashboardPage() {
                           style={{ animationDelay: `${idx * 0.05}s` }}
                         >
                           {/* Product Image */}
-                          <div className="w-full h-40 bg-slate-700/50 flex items-center justify-center overflow-hidden flex-shrink-0">
-                            {product.image_url ? (
-                              <img
-                                src={product.image_url}
-                                alt={product.title}
-                                className="w-full h-full object-cover"
-                              />
-                            ) : (
-                              <div className="w-full h-full bg-slate-600 flex items-center justify-center">
-                                <svg className="w-12 h-12 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
-                              </div>
-                            )}
-                          </div>
+                          <Link href={`/customer/catalog/${product.id}`} className="block">
+                            <div className="w-full h-40 bg-slate-700/50 flex items-center justify-center overflow-hidden flex-shrink-0">
+                              {product.image_url ? (
+                                <img
+                                  src={product.image_url}
+                                  alt={product.title}
+                                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                />
+                              ) : (
+                                <div className="w-full h-full bg-slate-600 flex items-center justify-center">
+                                  <svg className="w-12 h-12 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                  </svg>
+                                </div>
+                              )}
+                            </div>
+                          </Link>
 
                           <div className="p-5 flex flex-col h-full">
-                            <div className="mb-3">
-                              <p className="font-bold text-slate-200">{product.title}</p>
+                            <Link href={`/customer/catalog/${product.id}`} className="mb-3 block">
+                              <p className="font-bold text-slate-200 hover:text-red-300 transition-colors">{product.title}</p>
                               <p className="text-xs text-slate-400">{product.sku}</p>
-                            </div>
+                              <p className="text-xs text-red-300 mt-1 opacity-80">Click to view large image</p>
+                            </Link>
                             <p className="text-sm text-slate-400 mb-4 flex-grow">{product.description}</p>
                             <div className="space-y-3 mt-auto">
                               <div className="flex items-center justify-between">

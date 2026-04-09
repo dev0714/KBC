@@ -30,6 +30,7 @@ export async function GET(request: NextRequest) {
     const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10))
     const limit = Math.min(100, Math.max(1, parseInt(searchParams.get('limit') || '50', 10)))
     const search = searchParams.get('search')?.trim() || ''
+    const productId = searchParams.get('id')?.trim()
 
     // Calculate range for pagination
     const from = (page - 1) * limit
@@ -38,8 +39,12 @@ export async function GET(request: NextRequest) {
     // Build query with product_images join
     let query = supabase
       .from('products')
-      .select('*, product_images(file_name, storage_path, is_primary)', { count: 'exact' })
+      .select('*, product_images(file_name, storage_path, is_primary, sort_order)', { count: 'exact' })
       .order('title', { ascending: true })
+
+    if (productId) {
+      query = query.eq('id', productId)
+    }
 
     // Add search filter if provided
     if (search) {
@@ -55,17 +60,41 @@ export async function GET(request: NextRequest) {
 
     if (error) throw new Error(`Products query failed: ${error.message}`)
 
-    // Extract primary image for each product
-    const productsWithImages = data?.map(product => {
-      const primaryImage = product.product_images?.find((img: any) => img.is_primary)
-      const imageUrl = resolveImageUrl(supabase, primaryImage?.storage_path)
+    const normalizeProduct = (product: any) => {
+      const images = (product.product_images || [])
+        .map((img: any) => ({
+          file_name: img.file_name,
+          storage_path: img.storage_path,
+          is_primary: img.is_primary,
+          sort_order: img.sort_order,
+          url: resolveImageUrl(supabase, img.storage_path),
+        }))
+        .filter((img: any) => !!img.url)
+        .sort((a: any, b: any) => {
+          if (a.is_primary && !b.is_primary) return -1
+          if (!a.is_primary && b.is_primary) return 1
+          return (a.sort_order || 0) - (b.sort_order || 0)
+        })
+
+      const primaryImage = images.find((img: any) => img.is_primary) || images[0] || null
 
       return {
         ...product,
-        image_url: imageUrl,
-        product_images: undefined
+        image_url: primaryImage?.url || null,
+        product_images: images,
       }
-    }) || []
+    }
+
+    const productsWithImages = data?.map(normalizeProduct) || []
+
+    if (productId) {
+      return NextResponse.json({
+        product: productsWithImages[0] || null,
+        total: productsWithImages.length,
+        page,
+        limit,
+      })
+    }
 
     return NextResponse.json({
       products: productsWithImages,
