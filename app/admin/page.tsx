@@ -851,7 +851,7 @@ export default function AdminPage() {
       <div className="flex flex-1">
         {/* Sidebar */}
         <aside
-          className={`w-64 bg-gradient-to-b from-[#0056a1]/40 to-[#002463]/40 border-r border-slate-400/30 fixed md:static md:self-stretch md:h-auto overflow-y-auto transition-transform z-30 backdrop-blur-sm ${
+          className={`w-64 bg-gradient-to-b from-[#0056a1]/40 to-[#002463]/40 border-r border-slate-400/30 fixed md:static md:self-stretch md:h-auto transition-transform z-30 backdrop-blur-sm ${
             sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
           }`}
         >
