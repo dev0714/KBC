@@ -80,8 +80,9 @@ export default function AdminPage() {
   const [approvingCustomer, setApprovingCustomer] = useState<string | null>(null)
   const [rejectingCustomer, setRejectingCustomer] = useState<string | null>(null)
   const [updatingOrderStatus, setUpdatingOrderStatus] = useState<string | null>(null)
-  const [statusUpdateSuccess, setStatusUpdateSuccess] = useState<string | null>(null)
-  const [paymentLinkMethod, setPaymentLinkMethod] = useState<'email' | 'sms'>('email')
+    const [statusUpdateSuccess, setStatusUpdateSuccess] = useState<string | null>(null)
+    const [paymentLinkMethod, setPaymentLinkMethod] = useState<'email' | 'sms'>('email')
+    const [sendingPaymentLink, setSendingPaymentLink] = useState(false)
   const [customerFilter, setCustomerFilter] = useState<'All' | 'Active Login' | 'No Login' | 'Pending' | 'Approved' | 'Rejected'>('All')
   const [paymentLinkAmount, setPaymentLinkAmount] = useState('')
   const [paymentLinkNote, setPaymentLinkNote] = useState('')
@@ -2184,16 +2185,44 @@ export default function AdminPage() {
                 <p className="text-sm text-slate-400 font-bold mb-3">Send Payment Link</p>
                 <div className="space-y-3">
                   <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      className="flex-1 border-slate-400/50 text-slate-300 hover:text-slate-200 hover:bg-slate-400/10 font-bold bg-transparent gap-2"
-                      onClick={() => {
-                        console.log('[v0] Sending payment link via email to:', viewingOrder.client_name)
-                      }}
-                    >
-                      <Mail className="w-4 h-4" />
-                      Send via Email
-                    </Button>
+                      <Button
+                        variant="outline"
+                        className="flex-1 border-slate-400/50 text-slate-300 hover:text-slate-200 hover:bg-slate-400/10 font-bold bg-transparent gap-2"
+                        disabled={sendingPaymentLink || !viewingOrder.client_email}
+                        onClick={async () => {
+                          try {
+                            setSendingPaymentLink(true)
+                            const response = await fetch('/api/admin/send-payment-link', {
+                              method: 'POST',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({
+                                order_number: viewingOrder.order_number,
+                                order_id: viewingOrder.id,
+                                customer_email: viewingOrder.client_email,
+                                customer_name: viewingOrder.client_name,
+                                amount: viewingOrder.total_amount,
+                                item_name: `Order ${viewingOrder.order_number}`,
+                                item_description: `KBC Order - ${viewingOrder.item_count || viewingOrder.order_items?.length || 0} items`,
+                              }),
+                            })
+
+                            const result = await response.json()
+                            if (!response.ok) {
+                              throw new Error(result.error || result.message || 'Failed to send payment link')
+                            }
+
+                            alert('Payment link sent successfully via email')
+                          } catch (error: any) {
+                            console.error('[v0] Sending payment link via email failed:', error)
+                            alert(error?.message || 'Failed to send payment link')
+                          } finally {
+                            setSendingPaymentLink(false)
+                          }
+                        }}
+                      >
+                        <Mail className="w-4 h-4" />
+                        {sendingPaymentLink ? 'Sending...' : 'Send via Email'}
+                      </Button>
                     <Button
                       variant="outline"
                       className="flex-1 border-slate-400/50 text-slate-300 hover:text-slate-200 hover:bg-slate-400/10 font-bold bg-transparent gap-2"

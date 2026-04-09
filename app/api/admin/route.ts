@@ -98,6 +98,9 @@ export async function GET(request: Request) {
     // Enrich orders with client name and normalise order_items
     const enrichedOrders = orders?.map((order: any) => {
       const clientData = Array.isArray(order.clients) ? order.clients[0] : order.clients
+      const clientEmail = enrichedClients.find(
+        client => client.account_no === order.client_account_no
+      )?.email || null
       // Normalise order_items so products is always an object, not an array
       const normalizedItems = (order.order_items || []).map((item: any) => ({
         ...item,
@@ -106,6 +109,7 @@ export async function GET(request: Request) {
       return {
         ...order,
         client_name: clientData?.client_name || order.client_account_no || 'Unknown',
+        client_email: clientEmail,
         order_items: normalizedItems,
       }
     })
