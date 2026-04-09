@@ -305,30 +305,6 @@ export default function ProductDetailPage() {
                   </div>
                 </div>
 
-                {images.length > 1 && (
-                  <div className="mt-4 hidden overflow-x-auto rounded-2xl border border-white/10 bg-white/5 p-3 md:block">
-                    <div className="flex gap-3">
-                      {images.map((img, index) => (
-                        <button
-                          key={`${img.url}-bottom-${index}`}
-                          type="button"
-                          onClick={() => setActiveImageIndex(index)}
-                          className={`h-20 w-20 flex-shrink-0 overflow-hidden rounded-xl border transition-all ${
-                            index === activeImageIndex
-                              ? 'border-red-400 ring-2 ring-red-400/40'
-                              : 'border-white/10 hover:border-red-400/40'
-                          }`}
-                        >
-                          <img
-                            src={img.url || ''}
-                            alt={`${product.title} ${index + 1}`}
-                            className="h-full w-full object-cover"
-                          />
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
             ) : null}
           </div>
