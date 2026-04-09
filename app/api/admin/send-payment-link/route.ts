@@ -45,10 +45,6 @@ async function resolveCustomerEmail(
   orderNumber: string,
   providedEmail?: string | null
 ) {
-  if (providedEmail && providedEmail.trim()) {
-    return providedEmail.trim()
-  }
-
   const orderIdString = String(orderId).trim()
   const orderNumberString = String(orderNumber).trim()
 
@@ -73,7 +69,7 @@ async function resolveCustomerEmail(
 
   const { data: clientRecord } = await supabase
     .from('clients')
-    .select('account_no, contacts(id, email), users(id, email)')
+    .select('account_no, contacts(id, email, full_name), users(id, email)')
     .eq('account_no', clientAccountNo)
     .maybeSingle()
 
@@ -85,7 +81,11 @@ async function resolveCustomerEmail(
     ? clientRecord.users[0]
     : clientRecord?.users
 
-  return contactRecord?.email?.trim() || userRecord?.email?.trim() || null
+  return {
+    email: contactRecord?.email?.trim() || null,
+    clientAccountNo,
+    fallbackEmail: userRecord?.email?.trim() || null,
+  }
 }
 
 export async function POST(req: NextRequest) {
@@ -119,9 +119,12 @@ export async function POST(req: NextRequest) {
       customer_email
     )
 
-    if (!resolvedCustomerEmail) {
+    if (!resolvedCustomerEmail?.email) {
       return NextResponse.json(
-        { error: 'Customer email not found for this order' },
+        {
+          error: 'Customer contact email not found for this order',
+          details: `No email stored in contacts for account ${resolvedCustomerEmail?.clientAccountNo || 'unknown'}`,
+        },
         { status: 404 }
       )
     }
@@ -136,7 +139,7 @@ export async function POST(req: NextRequest) {
         item_description: item_description ? String(item_description).trim() : '',
         name_first: customer_name ? String(customer_name).trim().split(' ')[0] : 'Customer',
         name_last: customer_name ? String(customer_name).trim().split(' ').slice(1).join(' ') : '',
-        email_address: resolvedCustomerEmail,
+        email_address: resolvedCustomerEmail.email,
         cell_number: '',
         custom_int1: '1',
         custom_str1: String(order_id),
@@ -178,7 +181,7 @@ export async function POST(req: NextRequest) {
         apikey: `${supabaseServiceKey}`,
       },
       body: JSON.stringify({
-        to: resolvedCustomerEmail,
+        to: resolvedCustomerEmail.email,
         from: fromEmail,
         subject: `PayFast payment link for order ${order_number}`,
         html: buildPaymentEmailHtml({
