@@ -775,14 +775,24 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-b from-[#000034] via-[#002463] to-[#0056a1]">
+    <div className="relative flex flex-col min-h-screen overflow-hidden bg-gradient-to-b from-[#000034] via-[#002463] to-[#0056a1]">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.08),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(239,68,68,0.10),transparent_30%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:96px_96px] opacity-20" />
       {/* Admin Header */}
-      <div className="sticky top-0 z-40 bg-gradient-to-b from-[#000034] via-[#002463] to-[#0056a1] text-white border-b border-blue-500/30 shadow-lg shadow-blue-600/20">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+      <div className="sticky top-0 z-40 border-b border-blue-500/30 bg-[#06123dcc]/90 text-white shadow-[0_18px_40px_rgba(0,0,0,0.25)] backdrop-blur-xl">
+        <div className="mx-auto flex items-center justify-between px-4 py-4">
           <div className="flex items-center gap-3">
             <img src="/kbc-logo.png" alt="KBC" className="h-14 w-auto" />
+            <div className="hidden md:block">
+              <p className="text-[11px] uppercase tracking-[0.35em] text-slate-300/80">KBC CRM</p>
+              <p className="text-sm font-semibold text-slate-100">Command Center</p>
+            </div>
           </div>
           <div className="flex items-center gap-4">
+            <div className="hidden lg:flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-200">
+              <Search className="w-4 h-4 text-slate-400" />
+              <span>Admin workspace</span>
+            </div>
             <Button
               size="icon"
               className="bg-red-600 hover:bg-red-700 text-white transition-all"
@@ -802,14 +812,22 @@ export default function AdminPage() {
         </div>
       </div>
 
-      <div className="flex flex-1">
+      <div className="relative z-10 flex flex-1">
         {/* Sidebar */}
         <aside
-          className={`w-64 bg-gradient-to-b from-[#0056a1]/40 to-[#002463]/40 border-r border-slate-400/30 fixed md:static md:self-stretch md:h-auto transition-transform z-30 backdrop-blur-sm ${
+          className={`w-64 bg-[#06123d]/80 border-r border-white/10 fixed md:static md:self-stretch md:h-auto transition-transform z-30 backdrop-blur-xl shadow-[12px_0_40px_rgba(0,0,0,0.18)] ${
             sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
           }`}
         >
-          <nav className="p-6 space-y-2">
+          <div className="p-6 border-b border-white/10">
+            <p className="text-[11px] uppercase tracking-[0.35em] text-slate-400 mb-2">Workspace</p>
+            <div className="rounded-2xl border border-white/10 bg-gradient-to-br from-blue-500/10 to-red-500/10 p-4 shadow-inner">
+              <p className="text-sm font-semibold text-white">Customer CRM</p>
+              <p className="text-xs text-slate-300 mt-1">Manage products, customers, orders, and payments from one panel.</p>
+            </div>
+          </div>
+          <nav className="p-4 space-y-2">
+            <p className="px-3 pb-2 text-[11px] uppercase tracking-[0.35em] text-slate-500">Navigation</p>
             {[
   { id: 'overview', label: 'Overview', icon: BarChart3 },
   { id: 'products', label: 'Products', icon: Package },
@@ -826,14 +844,17 @@ export default function AdminPage() {
                   setActiveTab(item.id)
                   setSidebarOpen(false)
                 }}
-                className={`w-full text-left px-4 py-3 rounded-lg transition-all duration-300 font-bold flex items-center gap-2 ${
+                className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-300 font-semibold flex items-center gap-3 border ${
                   activeTab === item.id
-                    ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-600/30'
-                    : 'hover:bg-slate-400/10 text-slate-200 hover:text-white'
+                    ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-600/30 border-blue-400/30'
+                    : 'border-transparent hover:border-white/10 hover:bg-white/5 text-slate-300 hover:text-white'
                 }`}
               >
-                <Icon className="w-5 h-5" />
-                {item.label}
+                <span className={`w-9 h-9 rounded-lg flex items-center justify-center ${activeTab === item.id ? 'bg-white/15' : 'bg-white/5'}`}>
+                  <Icon className="w-4 h-4" />
+                </span>
+                <span className="flex-1">{item.label}</span>
+                {activeTab === item.id && <span className="w-2 h-2 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]" />}
               </button>
               )
             })}
@@ -841,14 +862,50 @@ export default function AdminPage() {
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 overflow-auto">
-          <div className="container mx-auto px-4 py-8">
+        <main className="relative flex-1 overflow-auto">
+          <div className="mx-auto w-full max-w-[1700px] px-4 py-8 lg:px-8">
             {/* Overview Tab */}
             {activeTab === 'overview' && (
               <div className="space-y-8 animate-fade-in-up">
-                <div>
-                  <h1 className="text-3xl font-bold bg-gradient-to-r from-red-400 to-slate-300 bg-clip-text text-transparent mb-2">Dashboard</h1>
-                  <p className="text-slate-300">Welcome to KBC Admin Panel</p>
+                <div className="overflow-hidden rounded-[28px] border border-white/10 bg-gradient-to-r from-[#07163f]/95 via-[#0b2a5b]/95 to-[#102f73]/95 p-6 shadow-[0_24px_70px_rgba(0,0,0,0.28)] backdrop-blur-xl md:p-8">
+                  <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+                    <div className="max-w-3xl">
+                      <p className="text-[11px] uppercase tracking-[0.45em] text-slate-400 mb-3">Operations snapshot</p>
+                      <h1 className="text-4xl font-black tracking-tight text-white md:text-5xl">
+                        Dashboard
+                        <span className="block bg-gradient-to-r from-red-400 via-white to-blue-200 bg-clip-text text-transparent">
+                          KBC CRM Control Center
+                        </span>
+                      </h1>
+                      <p className="mt-4 max-w-2xl text-slate-300">
+                        Track products, customers, orders, and payments from a single workspace built for day-to-day operations.
+                      </p>
+                    </div>
+                    <div className="flex flex-wrap gap-3">
+                      <Button asChild className="bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg shadow-red-600/30">
+                        <Link href="#orders">Review Orders</Link>
+                      </Button>
+                      <Button asChild variant="outline" className="border-white/15 bg-white/5 text-slate-100 hover:bg-white/10">
+                        <Link href="#customers">Customer CRM</Link>
+                      </Button>
+                    </div>
+                  </div>
+                  <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
+                    {statsCards.map((stat) => {
+                      const Icon = stat.icon
+                      return (
+                        <div key={stat.label} className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                          <div className="flex items-center justify-between gap-3">
+                            <p className="text-[11px] uppercase tracking-[0.32em] text-slate-400">{stat.label}</p>
+                            <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center text-white shadow-lg`}>
+                              <Icon className="w-5 h-5" />
+                            </div>
+                          </div>
+                          <p className="mt-4 text-3xl font-black text-white">{stat.value}</p>
+                        </div>
+                      )
+                    })}
+                  </div>
                 </div>
 
                 {/* Stats Cards */}
@@ -858,16 +915,16 @@ export default function AdminPage() {
                     return (
                       <div
                         key={stat.label}
-                        className="p-6 bg-gradient-to-br from-[#0056a1]/30 to-[#002463]/30 border border-slate-400/40 rounded-xl hover:border-red-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-red-500/20 group cursor-pointer animate-fade-in-up hover:-translate-y-1"
+                        className="group cursor-pointer rounded-2xl border border-white/10 bg-gradient-to-br from-[#0c2e67]/80 to-[#07163f]/80 p-6 shadow-[0_18px_40px_rgba(0,0,0,0.22)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-red-500/40 hover:shadow-[0_18px_50px_rgba(220,38,38,0.18)] animate-fade-in-up"
                         style={{ animationDelay: `${idx * 0.1}s` }}
                       >
                         <div className="flex items-center justify-between mb-4">
-                          <p className="text-slate-300 text-sm font-bold uppercase tracking-wide">{stat.label}</p>
-                          <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${stat.color} flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform`}>
+                          <p className="text-[11px] uppercase tracking-[0.32em] text-slate-400">{stat.label}</p>
+                          <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform`}>
                             <Icon className="w-6 h-6" />
                           </div>
                         </div>
-                        <p className="text-4xl font-bold bg-gradient-to-r from-red-400 to-slate-300 bg-clip-text text-transparent">{stat.value}</p>
+                        <p className="text-4xl font-black text-white">{stat.value}</p>
                       </div>
                     )
                   })}
@@ -876,19 +933,22 @@ export default function AdminPage() {
                 {/* Recent Orders & Customers */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   {/* Recent Orders */}
-                  <div className="bg-gradient-to-br from-[#0056a1]/30 to-[#002463]/30 border border-slate-400/40 rounded-xl p-8 shadow-xl shadow-red-500/10 backdrop-blur-sm">
+                  <div className="rounded-2xl border border-white/10 bg-gradient-to-br from-[#0b2a5b]/90 to-[#07163f]/90 p-8 shadow-[0_20px_50px_rgba(0,0,0,0.2)] backdrop-blur-xl">
                     <div className="flex items-center justify-between mb-6">
-                      <h2 className="text-xl font-bold text-white">Recent Orders</h2>
-                      <Button asChild variant="outline" size="sm" className="border-red-500 text-red-400 hover:bg-red-500/10 font-bold bg-transparent">
+                      <div>
+                        <p className="text-[11px] uppercase tracking-[0.35em] text-slate-400 mb-2">Activity</p>
+                        <h2 className="text-xl font-bold text-white">Recent Orders</h2>
+                      </div>
+                      <Button asChild variant="outline" size="sm" className="border-red-500/50 text-red-300 hover:bg-red-500/10 font-bold bg-transparent">
                         <Link href="#orders">View All</Link>
                       </Button>
                     </div>
                     <div className="space-y-3">
                       {orders.slice(0, 3).map((order: any, idx: number) => (
-                        <div key={order.order_number} className={`p-4 border border-slate-400/30 rounded-lg hover:border-red-500/50 transition-all animate-fade-in-up hover:bg-slate-400/5`} style={{ animationDelay: `${idx * 0.1}s` }}>
+                        <div key={order.order_number} className="rounded-2xl border border-white/10 bg-white/5 p-4 transition-all hover:border-red-500/30 hover:bg-white/[0.07] animate-fade-in-up" style={{ animationDelay: `${idx * 0.1}s` }}>
                           <div className="flex items-start justify-between mb-2">
                             <div>
-                              <p className="font-bold text-red-400">{order.order_number}</p>
+                              <p className="font-bold text-white">{order.order_number}</p>
                               <p className="text-xs text-slate-400">{order.client_name}</p>
                             </div>
                             <span className={`inline-flex px-2.5 py-1 rounded-full text-xs font-bold border ${getStatusColor(order.payment_status)}`}>
@@ -897,7 +957,7 @@ export default function AdminPage() {
                           </div>
                           <div className="flex items-center justify-between text-sm">
                             <p className="text-slate-400">{order.item_count} items</p>
-                            <p className="font-bold text-slate-200">R{Number(order.total_amount).toLocaleString()}</p>
+                            <p className="font-bold text-red-300">R{Number(order.total_amount).toLocaleString()}</p>
                           </div>
                         </div>
                       ))}
@@ -905,23 +965,26 @@ export default function AdminPage() {
                   </div>
 
                   {/* Active Customers */}
-                  <div className="bg-gradient-to-br from-[#0056a1]/30 to-[#002463]/30 border border-slate-400/40 rounded-xl p-8 shadow-xl shadow-red-500/10 backdrop-blur-sm">
+                  <div className="rounded-2xl border border-white/10 bg-gradient-to-br from-[#0b2a5b]/90 to-[#07163f]/90 p-8 shadow-[0_20px_50px_rgba(0,0,0,0.2)] backdrop-blur-xl">
                     <div className="flex items-center justify-between mb-6">
-                      <h2 className="text-xl font-bold text-white">Top Customers</h2>
-                      <Button asChild variant="outline" size="sm" className="border-red-500 text-red-400 hover:bg-red-500/10 font-bold bg-transparent">
+                      <div>
+                        <p className="text-[11px] uppercase tracking-[0.35em] text-slate-400 mb-2">Relationship view</p>
+                        <h2 className="text-xl font-bold text-white">Top Customers</h2>
+                      </div>
+                      <Button asChild variant="outline" size="sm" className="border-red-500/50 text-red-300 hover:bg-red-500/10 font-bold bg-transparent">
                         <Link href="#customers">View All</Link>
                       </Button>
                     </div>
                     <div className="space-y-3">
                       {clients.filter((c: any) => c.order_count > 0).slice(0, 3).map((customer: any, idx: number) => (
-                        <div key={customer.account_no} className={`p-4 border border-slate-400/30 rounded-lg hover:border-red-500/50 transition-all animate-fade-in-up hover:bg-slate-400/5`} style={{ animationDelay: `${idx * 0.1}s` }}>
+                        <div key={customer.account_no} className="rounded-2xl border border-white/10 bg-white/5 p-4 transition-all hover:border-red-500/30 hover:bg-white/[0.07] animate-fade-in-up" style={{ animationDelay: `${idx * 0.1}s` }}>
                           <div className="flex items-start justify-between mb-2">
                             <div>
-                              <p className="font-bold text-slate-200">{customer.client_name}</p>
+                              <p className="font-bold text-white">{customer.client_name}</p>
                               <p className="text-xs text-slate-400">{customer.account_no}</p>
                             </div>
                             <div className="text-right">
-                              <p className="text-sm font-bold text-red-400">{customer.order_count} orders</p>
+                              <p className="text-sm font-bold text-red-300">{customer.order_count} orders</p>
                             </div>
                           </div>
                         </div>
