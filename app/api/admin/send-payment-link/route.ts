@@ -184,7 +184,41 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    if (!paymentUrl) {
+    let finalPaymentUrl = paymentUrl
+    if (!finalPaymentUrl) {
+      const paymentResponse = await fetch(new URL('/api/payfast/create-payment', req.url), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          client_id: resolvedCustomerEmail.clientAccountNo,
+          amount: Number(amount).toFixed(2),
+          item_name: String(item_name).trim(),
+          item_description: item_description ? String(item_description).trim() : '',
+          name_first: customer_name ? String(customer_name).trim().split(' ')[0] : 'Customer',
+          name_last: customer_name ? String(customer_name).trim().split(' ').slice(1).join(' ') : '',
+          email_address: resolvedCustomerEmail.email,
+          cell_number: '',
+          custom_int1: '1',
+          custom_str1: String(order_id),
+        }),
+      })
+
+      if (!paymentResponse.ok) {
+        const paymentError = await paymentResponse.json().catch(() => null)
+        return NextResponse.json(
+          {
+            error: paymentError?.error || 'Failed to create payment link',
+            details: paymentError?.details || paymentError?.message || null,
+          },
+          { status: paymentResponse.status }
+        )
+      }
+
+      const paymentData = await paymentResponse.json()
+      finalPaymentUrl = paymentData.url || paymentData.shortened_url || ''
+    }
+
+    if (!finalPaymentUrl) {
       return NextResponse.json(
         { error: 'Missing payment URL' },
         { status: 400 }
@@ -212,7 +246,7 @@ export async function POST(req: NextRequest) {
           customerName: String(customer_name || 'Customer'),
           orderNumber: String(order_number),
           amount: Number(amount).toFixed(2),
-          paymentUrl,
+          paymentUrl: finalPaymentUrl,
         }),
       }),
     })
@@ -220,7 +254,7 @@ export async function POST(req: NextRequest) {
     if (!emailResponse.ok) {
       const errorText = await emailResponse.text()
       return NextResponse.json(
-        { error: 'Failed to send email', details: errorText, paymentUrl },
+        { error: 'Failed to send email', details: errorText, paymentUrl: finalPaymentUrl },
         { status: emailResponse.status }
       )
     }
@@ -229,7 +263,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      paymentUrl,
+      paymentUrl: finalPaymentUrl,
       emailResult,
       message: 'Payment link emailed successfully',
     })
