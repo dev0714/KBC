@@ -64,7 +64,8 @@ export default function AdminPage() {
   const [savingProduct, setSavingProduct] = useState(false)
   const [deletingCustomer, setDeletingCustomer] = useState<string | null>(null)
   const [showEditCustomerModal, setShowEditCustomerModal] = useState(false)
-  const [productImages, setProductImages] = useState<{[key: string]: any}>({})
+  const [productImages, setProductImages] = useState<{[key: string]: string[]}>({})
+  const [productGallery, setProductGallery] = useState<string[]>([])
   const [previewImage, setPreviewImage] = useState<string | null>(null)
   const [createdLoginCredentials, setCreatedLoginCredentials] = useState<any>(null)
   const [viewingOrder, setViewingOrder] = useState<any>(null)
@@ -164,12 +165,16 @@ export default function AdminPage() {
         product_type: editingProduct.product_type || '',
         description: editingProduct.description || '',
       })
-      setPreviewImage(productImages[editingProduct.sku] || null)
+      const existingGallery = productImages[editingProduct.sku] || []
+      const initialImage = existingGallery[0] || null
+      setPreviewImage(initialImage)
+      setProductGallery(existingGallery)
       return
     }
 
     setProductFormData({})
     setPreviewImage(null)
+    setProductGallery([])
   }, [editingProduct])
 
   useEffect(() => {
@@ -183,42 +188,45 @@ export default function AdminPage() {
     { label: 'Total Revenue', value: `R${Number(stats.totalRevenue).toLocaleString()}`, icon: TrendingUp, color: 'from-pink-500 to-pink-600' },
   ]
 
-  const handleImageUpload = async (sku: string, file: File) => {
+  const handleImageUpload = async (sku: string, files: FileList | File[]) => {
+    const fileList = Array.from(files)
+    if (!fileList.length) return
+
     setUploadingImage(sku)
     setImageUploadError(null)
     try {
       const supabase = createClient()
-      
-      const filePath = `${sku}/${Date.now()}_${file.name}`
+      const existingImages = Array.isArray(productImages[sku]) ? productImages[sku] : []
+      const nextGallery = [...existingImages]
+      const uploads = await Promise.all(fileList.map(async (file, index) => {
+        const filePath = `${sku}/${Date.now()}_${index}_${file.name}`
+        const { error: uploadError } = await supabase
+          .storage
+          .from('product-images')
+          .upload(filePath, file, { upsert: true })
 
-      // Upload to storage
-      const { error: uploadError } = await supabase
-        .storage
-        .from('product-images')
-        .upload(filePath, file, { upsert: true })
+        if (uploadError) {
+          throw uploadError
+        }
 
-      if (uploadError) {
-        console.error('[v0] Upload error:', uploadError)
-        setImageUploadError('Failed to upload image')
-        return
-      }
+        const { data } = supabase
+          .storage
+          .from('product-images')
+          .getPublicUrl(filePath)
 
-      // Get public URL
-      const { data } = supabase
-        .storage
-        .from('product-images')
-        .getPublicUrl(filePath)
-
-      // Insert into product_images table
-      const { error: insertError } = await supabase
-        .from('product_images')
-        .insert([{
+        return {
           product_sku: sku,
           file_name: file.name,
           storage_path: data.publicUrl,
-          is_primary: true,
+          is_primary: existingImages.length === 0 && index === 0,
+          sort_order: existingImages.length + index,
           alt_text: productFormData.title || sku,
-        }])
+        }
+      }))
+
+      const { error: insertError } = await supabase
+        .from('product_images')
+        .insert(uploads)
 
       if (insertError) {
         console.error('[v0] Insert error:', insertError)
@@ -226,12 +234,11 @@ export default function AdminPage() {
         return
       }
 
-      console.log('[v0] Image upload and insert successful:', { sku, fileName: file.name, publicUrl: data.publicUrl })
-
-      // Update preview
-      setPreviewImage(data.publicUrl)
-      
-      // Refresh data
+      uploads.forEach((upload) => nextGallery.push(upload.storage_path))
+      const normalizedGallery = Array.from(new Set(nextGallery.filter(Boolean)))
+      setProductGallery(normalizedGallery)
+      setPreviewImage(normalizedGallery[0] || null)
+      setProductImages(prev => ({ ...prev, [sku]: normalizedGallery }))
       mutate()
     } catch (err) {
       console.error('[v0] Error in handleImageUpload:', err)
@@ -293,34 +300,10 @@ export default function AdminPage() {
   }
 
   const handleProductImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, sku: string) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    setUploadingImage(sku)
-    try {
-      const supabase = createClient()
-      const filePath = `${sku}/${Date.now()}_${file.name}`
-      const { error: uploadError } = await supabase.storage
-        .from('product-images')
-        .upload(filePath, file, { upsert: true })
-      if (uploadError) throw uploadError
-      const { data: urlData } = supabase.storage.from('product-images').getPublicUrl(filePath)
-      const publicUrl = urlData.publicUrl
-      // Set existing primary images to false
-      await supabase.from('product_images').update({ is_primary: false }).eq('product_sku', sku)
-      // Insert new image as primary
-      const { error: insertError } = await supabase.from('product_images').insert({
-        product_sku: sku,
-        file_name: file.name,
-        storage_path: publicUrl,
-        is_primary: true,
-      })
-      if (insertError) throw insertError
-      setProductImages(prev => ({...prev, [sku]: publicUrl}))
-    } catch (err) {
-      console.error('[v0] Error uploading product image:', err)
-    } finally {
-      setUploadingImage(null)
-    }
+    const files = e.target.files
+    if (!files || files.length === 0) return
+    await handleImageUpload(sku, files)
+    e.target.value = ''
   }
 
   const handleDeleteProductImage = async (sku: string) => {
@@ -616,9 +599,12 @@ export default function AdminPage() {
           console.error('[v0] Error fetching product images:', error)
           return
         }
-        const imageMap: {[sku: string]: string} = {}
+        const imageMap: {[sku: string]: string[]} = {}
         data?.forEach((img: any) => {
-          imageMap[img.product_sku] = img.storage_path
+          if (!imageMap[img.product_sku]) {
+            imageMap[img.product_sku] = []
+          }
+          imageMap[img.product_sku].push(img.storage_path)
         })
         setProductImages(imageMap)
       } catch (err) {
@@ -667,9 +653,12 @@ export default function AdminPage() {
         }
 
         // Map images by SKU
-        const imageMap: {[key: string]: any} = {}
+        const imageMap: {[key: string]: string[]} = {}
         data?.forEach((img: any) => {
-          imageMap[img.product_sku] = img
+          if (!imageMap[img.product_sku]) {
+            imageMap[img.product_sku] = []
+          }
+          imageMap[img.product_sku].push(img.storage_path)
         })
         setProductImages(imageMap)
       } catch (err) {
@@ -920,8 +909,8 @@ export default function AdminPage() {
                         {paginatedProducts.map((product: any) => (
                           <tr key={product.sku} className="hover:bg-slate-400/10 transition-colors">
                             <td className="py-3 px-4">
-                              {productImages[product.sku] ? (
-                                <img src={productImages[product.sku]} alt="" className="w-10 h-10 object-cover rounded" />
+                              {productImages[product.sku]?.[0] ? (
+                                <img src={productImages[product.sku][0]} alt="" className="w-10 h-10 object-cover rounded" />
                               ) : (
                                 <div className="w-10 h-10 bg-slate-600 rounded flex items-center justify-center">
                                   <ImageIcon className="w-5 h-5 text-slate-400" />
@@ -2044,13 +2033,14 @@ export default function AdminPage() {
                 <div className="flex items-center gap-4">
                   <label className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white rounded-lg font-bold cursor-pointer transition-all disabled:opacity-50 disabled:cursor-not-allowed">
                     <Upload className="w-4 h-4" />
-                    Upload Image
+                    Upload Images
                     <input
                       type="file"
                       accept="image/*"
+                      multiple
                       onChange={(e) => {
-                        if (e.target.files?.[0]) {
-                          handleImageUpload(productFormData.sku, e.target.files[0])
+                        if (e.target.files?.length) {
+                          handleImageUpload(productFormData.sku, e.target.files)
                         }
                       }}
                       disabled={uploadingImage !== null || !productFormData.sku}
@@ -2174,30 +2164,44 @@ export default function AdminPage() {
               <div className="border-t border-slate-400/30 pt-4">
                 <label className="block text-sm font-bold text-slate-300 mb-3">Product Image</label>
                 <div className="flex items-center gap-4">
-                  <label className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white rounded-lg font-bold cursor-pointer transition-all disabled:opacity-50 disabled:cursor-not-allowed">
-                    <Upload className="w-4 h-4" />
-                    Upload Image
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => {
-                        if (e.target.files?.[0]) {
-                          handleImageUpload(productFormData.sku, e.target.files[0])
-                        }
-                      }}
-                      disabled={uploadingImage !== null}
-                      className="hidden"
-                    />
-                  </label>
-                  {uploadingImage !== null && <span className="text-sm text-slate-300">Uploading...</span>}
-                  {imageUploadError && <span className="text-sm text-red-400 font-medium">{imageUploadError}</span>}
-                </div>
-                {previewImage && (
-                  <div className="mt-3">
-                    <img src={previewImage} alt="Preview" className="w-20 h-20 object-cover rounded-lg border border-slate-400/30" />
+                    <label className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white rounded-lg font-bold cursor-pointer transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                      <Upload className="w-4 h-4" />
+                      Upload Images
+                      <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={(e) => {
+                          if (e.target.files?.length) {
+                            handleImageUpload(productFormData.sku, e.target.files)
+                          }
+                        }}
+                        disabled={uploadingImage !== null}
+                        className="hidden"
+                      />
+                    </label>
+                    {uploadingImage !== null && <span className="text-sm text-slate-300">Uploading...</span>}
+                    {imageUploadError && <span className="text-sm text-red-400 font-medium">{imageUploadError}</span>}
                   </div>
-                )}
-              </div>
+                  {productGallery.length > 0 && (
+                    <div className="mt-3">
+                      <div className="grid grid-cols-4 gap-3">
+                        {productGallery.map((imageUrl, index) => (
+                          <button
+                            key={`${imageUrl}-${index}`}
+                            type="button"
+                            onClick={() => setPreviewImage(imageUrl)}
+                            className={`rounded-lg border overflow-hidden transition-all ${
+                              previewImage === imageUrl ? 'border-red-500 ring-2 ring-red-500/40' : 'border-slate-400/30 hover:border-red-500/40'
+                            }`}
+                          >
+                            <img src={imageUrl} alt={`Product preview ${index + 1}`} className="w-full h-20 object-cover" />
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
             </div>
 
             {/* Modal Footer */}
