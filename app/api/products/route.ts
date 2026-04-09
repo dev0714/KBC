@@ -1,6 +1,19 @@
 import { createClient } from '@supabase/supabase-js'
 import { NextRequest, NextResponse } from 'next/server'
 
+function resolveImageUrl(supabase: ReturnType<typeof createClient>, storagePath: string | null | undefined) {
+  if (!storagePath) return null
+
+  const trimmedPath = storagePath.trim()
+  if (!trimmedPath) return null
+
+  if (/^https?:\/\//i.test(trimmedPath)) {
+    return trimmedPath
+  }
+
+  return supabase.storage.from('product-images').getPublicUrl(trimmedPath).data.publicUrl
+}
+
 export async function GET(request: NextRequest) {
   try {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -45,9 +58,7 @@ export async function GET(request: NextRequest) {
     // Extract primary image for each product
     const productsWithImages = data?.map(product => {
       const primaryImage = product.product_images?.find((img: any) => img.is_primary)
-      const imageUrl = primaryImage?.storage_path
-        ? supabase.storage.from('product-images').getPublicUrl(primaryImage.storage_path).data.publicUrl
-        : null
+      const imageUrl = resolveImageUrl(supabase, primaryImage?.storage_path)
 
       return {
         ...product,
