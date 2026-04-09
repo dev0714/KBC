@@ -115,8 +115,21 @@ export default function AdminPage() {
   const clients = adminData?.clients || []
   const orders = adminData?.orders || []
   const stats = adminData?.stats || { totalProducts: 0, activeCustomers: 0, totalOrders: 0, totalRevenue: 0 }
+  const viewingOrderClient = viewingOrder
+    ? clients.find((client: any) => String(client.account_no) === String(viewingOrder.client_account_no)) || null
+    : null
   const viewingOrderEmail = viewingOrder
-    ? viewingOrder.client_email || clients.find((client: any) => String(client.account_no) === String(viewingOrder.client_account_no))?.email || ''
+    ? viewingOrder.client_contact_email ||
+      viewingOrder.client_email ||
+      viewingOrderClient?.contact?.email ||
+      viewingOrderClient?.email ||
+      ''
+    : ''
+  const viewingOrderContactName = viewingOrder
+    ? viewingOrderClient?.contact?.full_name ||
+      viewingOrderClient?.full_name ||
+      viewingOrder.client_name ||
+      ''
     : ''
 
   useEffect(() => {
@@ -2271,6 +2284,9 @@ export default function AdminPage() {
                       <div>
                         <p className="text-xs uppercase tracking-wider text-slate-400 font-bold">To</p>
                         <p className="text-sm text-white font-medium break-all">{viewingOrderEmail || 'No contact email available'}</p>
+                        {viewingOrderContactName && (
+                          <p className="text-xs text-slate-400 mt-1">Contact: {viewingOrderContactName}</p>
+                        )}
                       </div>
                     </div>
                     <div>
