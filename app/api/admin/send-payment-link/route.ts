@@ -164,7 +164,7 @@ export async function POST(req: NextRequest) {
       process.env.RESEND_FROM_EMAIL ||
       process.env.EMAIL_FROM ||
       process.env.ADMIN_EMAIL ||
-      'KBC <noreply@kbc.co.za>'
+      'kbc@notification.leadsync.co.za'
 
     const emailResponse = await fetch(`${supabaseUrl}/functions/v1/send-email`, {
       method: 'POST',
