@@ -3,8 +3,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import { Navbar } from '@/components/navigation/navbar'
-import { Footer } from '@/components/navigation/footer'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, CheckCircle2, Download, Heart, Share2, ShoppingCart, Shield, Truck, Loader2, ImageIcon } from 'lucide-react'
 
@@ -87,147 +85,256 @@ export default function ProductDetailPage() {
   const activeImage = images[activeImageIndex]?.url || product?.image_url || ''
 
   return (
-    <div className="flex flex-col min-h-screen bg-background">
-      <Navbar />
-
-      <main className="flex-1">
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-8">
-            <Link href="/dashboard?tab=shop" className="hover:text-secondary transition-colors flex items-center gap-1">
-              <ArrowLeft className="w-4 h-4" />
-              Back to Catalog
-            </Link>
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-[#000034] via-[#002463] to-[#0056a1]">
+      <div className="fixed inset-x-0 top-0 z-50 border-b border-blue-500/30 bg-[#06123dcc]/90 text-white shadow-[0_18px_40px_rgba(0,0,0,0.25)] backdrop-blur-xl">
+        <div className="flex h-[72px] items-center justify-between px-4 lg:px-8">
+          <div className="flex items-center gap-4">
+            <img src="/kbc-logo.png" alt="KBC" className="h-10 w-auto" />
+            <div>
+              <p className="text-[11px] uppercase tracking-[0.45em] text-slate-400">Customer CRM</p>
+              <h1 className="text-lg font-black leading-tight text-white">Shop Detail</h1>
+            </div>
           </div>
 
-          {loading ? (
-            <div className="flex items-center justify-center py-24">
-              <Loader2 className="w-10 h-10 text-secondary animate-spin" />
+          <div className="flex items-center gap-3">
+            <Button
+              asChild
+              variant="outline"
+              className="hidden border-white/10 bg-white/5 text-white hover:bg-white/10 hover:text-white sm:inline-flex"
+            >
+              <Link href="/dashboard?tab=shop" className="gap-2">
+                <ArrowLeft className="h-4 w-4" />
+                Back to Shop
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      <div className="relative z-10 flex pt-[72px]">
+        <aside className="hidden md:fixed md:inset-y-[72px] md:left-0 md:flex md:w-64 md:flex-col border-r border-white/10 bg-[#06123d]/80 backdrop-blur-xl shadow-[12px_0_40px_rgba(0,0,0,0.18)]">
+          <div className="border-b border-white/10 p-5">
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-4 shadow-[0_16px_30px_rgba(0,0,0,0.18)]">
+              <p className="mb-2 text-[11px] uppercase tracking-[0.35em] text-slate-400">Workspace</p>
+              <h2 className="text-lg font-bold text-white">Customer CRM</h2>
+              <p className="mt-2 text-sm leading-relaxed text-slate-300">
+                Browse the product catalog and inspect each item without leaving the CRM workspace.
+              </p>
             </div>
-          ) : error ? (
-            <div className="max-w-2xl mx-auto rounded-xl border border-red-500/30 bg-red-500/10 p-6 text-center">
-              <p className="text-lg font-bold text-red-300 mb-2">Could not load product</p>
-              <p className="text-sm text-red-100/80">{error}</p>
+          </div>
+
+          <nav className="flex-1 p-4">
+            <div className="mb-3 px-3 text-[11px] uppercase tracking-[0.45em] text-slate-500">Navigation</div>
+            <div className="space-y-2">
+              {[
+                { id: 'overview', label: 'Overview', href: '/dashboard', icon: '📊' },
+                { id: 'shop', label: 'Shop Catalog', href: '/dashboard?tab=shop', icon: '🛍️' },
+                { id: 'wishlist', label: 'Wishlist', href: '/dashboard?tab=wishlist', icon: '❤️' },
+                { id: 'cart', label: 'Shopping Cart', href: '/dashboard?tab=cart', icon: '🛒' },
+                { id: 'orders', label: 'Orders', href: '/dashboard?tab=orders', icon: '📦' },
+                { id: 'documents', label: 'Documents', href: '/dashboard?tab=documents', icon: '📑' },
+                { id: 'account', label: 'Account', href: '/dashboard?tab=account', icon: '⚙️' },
+              ].map((tab) => (
+                <Link
+                  key={tab.id}
+                  href={tab.href}
+                  className={`flex items-center gap-3 rounded-2xl px-4 py-4 font-bold transition-all duration-300 ${
+                    tab.id === 'shop'
+                      ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-[0_16px_30px_rgba(37,99,235,0.35)]'
+                      : 'text-slate-300 hover:bg-white/5 hover:text-white'
+                  }`}
+                >
+                  <span className={`flex h-9 w-9 items-center justify-center rounded-lg ${tab.id === 'shop' ? 'bg-white/15' : 'bg-white/5'}`}>
+                    {tab.icon}
+                  </span>
+                  <span className="flex-1">{tab.label}</span>
+                  {tab.id === 'shop' && <span className="h-2 w-2 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]" />}
+                </Link>
+              ))}
             </div>
-          ) : product ? (
-            <>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-12">
-                <div className="space-y-4">
-                  <div className="aspect-[4/3] rounded-2xl overflow-hidden border border-primary/20 bg-gradient-to-br from-primary/20 to-secondary/10 shadow-xl shadow-secondary/10">
-                    {activeImage ? (
-                      <img
-                        src={activeImage}
-                        alt={product.title}
-                        className="w-full h-full object-contain bg-black/20"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-slate-400">
-                        <div className="text-center">
-                          <ImageIcon className="w-12 h-12 mx-auto mb-2 opacity-70" />
-                          <p className="text-sm">No product image available</p>
+          </nav>
+        </aside>
+
+        <main className="relative flex-1 md:ml-64">
+          <div className="mx-auto w-full max-w-[1700px] px-4 py-8 lg:px-8">
+            <div className="mb-6 flex flex-col gap-4 rounded-[28px] border border-white/10 bg-[#06123d]/60 p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur-xl sm:flex-row sm:items-end sm:justify-between md:p-6">
+              <div>
+                <p className="text-[11px] uppercase tracking-[0.45em] text-slate-400">Product Detail</p>
+                <h2 className="mt-2 text-3xl font-black text-white">{product?.title || 'Loading product'}</h2>
+                <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-300">
+                  This product view lives inside the customer CRM shop workflow, so you can inspect the gallery and jump straight back into the catalog.
+                </p>
+              </div>
+
+              <Button asChild className="bg-gradient-to-r from-red-600 to-red-700 font-bold text-white shadow-lg shadow-red-600/40 transition-all duration-300 hover:from-red-700 hover:to-red-800">
+                <Link href="/dashboard?tab=shop" className="gap-2">
+                  <ArrowLeft className="h-4 w-4" />
+                  Back to Shop
+                </Link>
+              </Button>
+            </div>
+
+            <div className="mb-6 md:hidden">
+              <Link href="/dashboard?tab=shop" className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-white">
+                <ArrowLeft className="h-4 w-4" />
+                Back to Shop
+              </Link>
+            </div>
+
+            {loading ? (
+              <div className="flex items-center justify-center py-24">
+                <Loader2 className="h-10 w-10 animate-spin text-red-400" />
+              </div>
+            ) : error ? (
+              <div className="mx-auto max-w-2xl rounded-2xl border border-red-500/30 bg-red-500/10 p-6 text-center backdrop-blur-xl">
+                <p className="mb-2 text-lg font-bold text-red-300">Could not load product</p>
+                <p className="text-sm text-red-100/80">{error}</p>
+              </div>
+            ) : product ? (
+              <>
+                <div className="overflow-hidden rounded-[28px] border border-white/10 bg-gradient-to-br from-[#07163f]/95 via-[#0b2a5b]/95 to-[#102f73]/95 p-5 shadow-[0_24px_70px_rgba(0,0,0,0.28)] backdrop-blur-xl md:p-8">
+                  <div className="grid grid-cols-1 gap-8 xl:grid-cols-[1.15fr_0.85fr]">
+                    <div className="space-y-4">
+                      <div className="aspect-[4/3] overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-[#102f73]/80 to-[#07163f]/95 shadow-[0_20px_50px_rgba(0,0,0,0.28)]">
+                        {activeImage ? (
+                          <img
+                            src={activeImage}
+                            alt={product.title}
+                            className="h-full w-full bg-black/20 object-contain"
+                          />
+                        ) : (
+                          <div className="flex h-full w-full items-center justify-center text-slate-400">
+                            <div className="text-center">
+                              <ImageIcon className="mx-auto mb-2 h-12 w-12 opacity-70" />
+                              <p className="text-sm">No product image available</p>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {images.length > 1 && (
+                        <div className="grid grid-cols-4 gap-3">
+                          {images.map((img, index) => (
+                            <button
+                              key={`${img.url}-${index}`}
+                              type="button"
+                              onClick={() => setActiveImageIndex(index)}
+                              className={`aspect-square overflow-hidden rounded-xl border transition-all ${
+                                index === activeImageIndex
+                                  ? 'border-red-400 ring-2 ring-red-400/40'
+                                  : 'border-white/10 hover:border-red-400/40'
+                              }`}
+                            >
+                              <img
+                                src={img.url || ''}
+                                alt={`${product.title} ${index + 1}`}
+                                className="h-full w-full object-cover"
+                              />
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex flex-col">
+                      <div className="mb-4 flex items-center justify-between gap-3">
+                        <p className="text-sm font-bold text-red-300">SKU: {product.sku}</p>
+                        <p className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-bold uppercase tracking-[0.35em] text-slate-300">
+                          CRM Detail
+                        </p>
+                      </div>
+
+                      <h1 className="mb-4 text-4xl font-black text-white">{product.title}</h1>
+
+                      <div className="mb-6 border-b border-white/10 pb-6">
+                        <div className="mb-4 flex items-baseline gap-2">
+                          <span className="text-4xl font-black text-white">R{Number(product.price || 0).toLocaleString()}</span>
+                          <span className="text-sm text-slate-300">per unit</span>
+                        </div>
+
+                        {Number(product.inventory_quantity || 0) > 0 ? (
+                          <span className="inline-flex rounded-full border border-green-500/50 bg-green-500/20 px-4 py-2 text-sm font-bold text-green-300">
+                            In Stock - {product.inventory_quantity} available
+                          </span>
+                        ) : (
+                          <span className="inline-flex rounded-full border border-red-500/50 bg-red-500/20 px-4 py-2 text-sm font-bold text-red-300">
+                            Out of Stock
+                          </span>
+                        )}
+                      </div>
+
+                      <p className="mb-8 whitespace-pre-line text-lg text-slate-300">
+                        {product.description || 'No description available for this product.'}
+                      </p>
+
+                      <div className="space-y-3 rounded-2xl border border-white/10 bg-white/5 p-5 md:p-6">
+                        <div className="flex items-start gap-3">
+                          <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-400" />
+                          <div className="text-sm">
+                            <p className="font-bold text-white">Quality Guaranteed</p>
+                            <p className="text-slate-300">Manufactured and stored with care</p>
+                          </div>
+                        </div>
+                        <div className="flex items-start gap-3">
+                          <Truck className="mt-0.5 h-5 w-5 flex-shrink-0 text-blue-300" />
+                          <div className="text-sm">
+                            <p className="font-bold text-white">Fast Dispatch</p>
+                            <p className="text-slate-300">Prepared for shipping after order confirmation</p>
+                          </div>
+                        </div>
+                        <div className="flex items-start gap-3">
+                          <Shield className="mt-0.5 h-5 w-5 flex-shrink-0 text-sky-300" />
+                          <div className="text-sm">
+                            <p className="font-bold text-white">Product Support</p>
+                            <p className="text-slate-300">Contact us if you need help choosing the right part</p>
+                          </div>
                         </div>
                       </div>
-                    )}
-                  </div>
-
-                  {images.length > 1 && (
-                    <div className="grid grid-cols-4 gap-3">
-                      {images.map((img, index) => (
-                        <button
-                          key={`${img.url}-${index}`}
-                          type="button"
-                          onClick={() => setActiveImageIndex(index)}
-                          className={`aspect-square rounded-lg overflow-hidden border transition-all ${
-                            index === activeImageIndex
-                              ? 'border-secondary ring-2 ring-secondary/40'
-                              : 'border-primary/20 hover:border-secondary/40'
-                          }`}
-                        >
-                          <img
-                            src={img.url || ''}
-                            alt={`${product.title} ${index + 1}`}
-                            className="w-full h-full object-cover"
-                          />
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex flex-col">
-                  <p className="text-sm text-secondary font-bold mb-2">SKU: {product.sku}</p>
-                  <h1 className="text-4xl font-bold mb-4 text-foreground">{product.title}</h1>
-
-                  <div className="mb-6 pb-6 border-b border-primary/20">
-                    <div className="flex items-baseline gap-2 mb-4">
-                      <span className="text-4xl font-bold text-foreground">R{Number(product.price || 0).toLocaleString()}</span>
-                      <span className="text-sm text-muted-foreground">per unit</span>
-                    </div>
-
-                    {Number(product.inventory_quantity || 0) > 0 ? (
-                      <span className="inline-flex px-4 py-2 rounded-full text-sm font-bold bg-green-500/20 text-green-700 dark:text-green-300 border border-green-500/50">
-                        In Stock - {product.inventory_quantity} available
-                      </span>
-                    ) : (
-                      <span className="inline-flex px-4 py-2 rounded-full text-sm font-bold bg-red-500/20 text-red-700 dark:text-red-300 border border-red-500/50">
-                        Out of Stock
-                      </span>
-                    )}
-                  </div>
-
-                  <p className="text-lg text-muted-foreground mb-8 whitespace-pre-line">
-                    {product.description || 'No description available for this product.'}
-                  </p>
-
-                  <div className="space-y-3 p-6 bg-card border border-primary/20 rounded-lg">
-                    <div className="flex items-start gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <div className="text-sm">
-                        <p className="font-bold text-foreground">Quality Guaranteed</p>
-                        <p className="text-muted-foreground">Manufactured and stored with care</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <Truck className="w-5 h-5 text-secondary flex-shrink-0 mt-0.5" />
-                      <div className="text-sm">
-                        <p className="font-bold text-foreground">Fast Dispatch</p>
-                        <p className="text-muted-foreground">Prepared for shipping after order confirmation</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <Shield className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
-                      <div className="text-sm">
-                        <p className="font-bold text-foreground">Product Support</p>
-                        <p className="text-muted-foreground">Contact us if you need help choosing the right part</p>
-                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="border-t border-primary/20 pt-8 flex flex-wrap gap-4 justify-center">
-                <Button variant="outline" className="border-primary/30 hover:border-secondary/50 gap-2 bg-transparent">
-                  <Download className="w-4 h-4" />
-                  Download Datasheet
-                </Button>
-                <Button variant="outline" className="border-primary/30 hover:border-secondary/50 gap-2 bg-transparent">
-                  <Share2 className="w-4 h-4" />
-                  Share Product
-                </Button>
-                <Button variant="outline" className="border-primary/30 hover:border-secondary/50 gap-2 bg-transparent">
-                  <Heart className="w-4 h-4" />
-                  Add to Wishlist
-                </Button>
-                <Button className="bg-gradient-to-r from-secondary to-secondary/80 hover:from-secondary/90 hover:to-secondary/70 text-white font-bold gap-2 shadow-lg shadow-secondary/30">
-                  <ShoppingCart className="w-4 h-4" />
-                  Add to Cart
-                </Button>
-              </div>
-            </>
-          ) : null}
-        </div>
-      </main>
+                <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
+                  <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                    <p className="text-[11px] uppercase tracking-[0.32em] text-slate-400">Catalog</p>
+                    <p className="mt-2 text-xl font-black text-white">Shop Context</p>
+                    <p className="mt-1 text-sm text-slate-300">Open this item inside the CRM-style catalog workflow.</p>
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                    <p className="text-[11px] uppercase tracking-[0.32em] text-slate-400">Availability</p>
+                    <p className="mt-2 text-xl font-black text-white">{Number(product.inventory_quantity || 0) > 0 ? 'Ready to Order' : 'Out of Stock'}</p>
+                    <p className="mt-1 text-sm text-slate-300">Quantity is synced from the dashboard inventory field.</p>
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                    <p className="text-[11px] uppercase tracking-[0.32em] text-slate-400">Action</p>
+                    <p className="mt-2 text-xl font-black text-white">Keep Browsing</p>
+                    <p className="mt-1 text-sm text-slate-300">Return to the catalog without leaving the CRM shell.</p>
+                  </div>
+                </div>
 
-      <Footer />
+                <div className="mt-8 flex flex-wrap justify-center gap-4 border-t border-white/10 pt-8">
+                  <Button variant="outline" className="gap-2 border-white/10 bg-white/5 text-white hover:bg-white/10 hover:text-white">
+                    <Download className="h-4 w-4" />
+                    Download Datasheet
+                  </Button>
+                  <Button variant="outline" className="gap-2 border-white/10 bg-white/5 text-white hover:bg-white/10 hover:text-white">
+                    <Share2 className="h-4 w-4" />
+                    Share Product
+                  </Button>
+                  <Button variant="outline" className="gap-2 border-white/10 bg-white/5 text-white hover:bg-white/10 hover:text-white">
+                    <Heart className="h-4 w-4" />
+                    Add to Wishlist
+                  </Button>
+                  <Button className="gap-2 bg-gradient-to-r from-red-600 to-red-700 font-bold text-white shadow-lg shadow-red-600/30 hover:from-red-700 hover:to-red-800">
+                    <ShoppingCart className="h-4 w-4" />
+                    Add to Cart
+                  </Button>
+                </div>
+              </>
+            ) : null}
+          </div>
+        </main>
+      </div>
     </div>
   )
 }
