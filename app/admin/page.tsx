@@ -119,6 +119,24 @@ export default function AdminPage() {
     : ''
 
   useEffect(() => {
+    if (editingCustomer) {
+      setFormData({
+        status: editingCustomer.status || '',
+        client_name: editingCustomer.client_name || '',
+        address: editingCustomer.address || '',
+        full_name: editingCustomer.full_name || '',
+        phone_number: editingCustomer.phone_number || '',
+        business_type: editingCustomer.business_type || '',
+        email: editingCustomer.email || '',
+      })
+      setCustomerModalTab('account')
+      return
+    }
+
+    setFormData({})
+  }, [editingCustomer])
+
+  useEffect(() => {
     if (editingProduct) {
       setProductFormData({
         title: editingProduct.title || '',
@@ -1415,10 +1433,10 @@ export default function AdminPage() {
                       <label className="block text-sm font-bold text-slate-300 mb-2">Account No</label>
                       <Input value={editingCustomer.account_no} className="border-slate-400/50 focus:border-red-500 bg-white/10 text-white" readOnly />
                     </div>
-                    <div>
-                      <label className="block text-sm font-bold text-slate-300 mb-2">Status</label>
-                      <select 
-                        value={formData.status || editingCustomer.status || ''} 
+                  <div>
+                    <label className="block text-sm font-bold text-slate-300 mb-2">Status</label>
+                    <select 
+                        value={formData.status ?? editingCustomer.status ?? ''} 
                         onChange={(e) => setFormData({ ...formData, status: e.target.value })}
                         className="w-full border-slate-400/50 focus:border-red-500 bg-white/10 text-white rounded px-3 py-2 border font-medium"
                       >
@@ -1431,7 +1449,7 @@ export default function AdminPage() {
                   <div>
                     <label className="block text-sm font-bold text-slate-300 mb-2">Client Name</label>
                     <Input 
-                      value={formData.client_name || editingCustomer.client_name || ''} 
+                      value={formData.client_name ?? editingCustomer.client_name ?? ''} 
                       onChange={(e) => setFormData({ ...formData, client_name: e.target.value })}
                       className="border-slate-400/50 focus:border-red-500 bg-white/10 text-white" 
                     />
@@ -1439,7 +1457,7 @@ export default function AdminPage() {
                   <div>
                     <label className="block text-sm font-bold text-slate-300 mb-2">Address</label>
                     <Input 
-                      value={formData.address || editingCustomer.address || ''} 
+                      value={formData.address ?? editingCustomer.address ?? ''} 
                       onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                       className="border-slate-400/50 focus:border-red-500 bg-white/10 text-white" 
                     />
@@ -1453,7 +1471,7 @@ export default function AdminPage() {
                   <div>
                     <label className="block text-sm font-bold text-slate-300 mb-2">Full Name</label>
                     <Input 
-                      value={formData.full_name || editingCustomer.full_name || ''} 
+                      value={formData.full_name ?? editingCustomer.full_name ?? ''} 
                       onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
                       className="border-slate-400/50 focus:border-red-500 bg-white/10 text-white" 
                     />
@@ -1461,7 +1479,7 @@ export default function AdminPage() {
                   <div>
                     <label className="block text-sm font-bold text-slate-300 mb-2">Phone Number</label>
                     <Input 
-                      value={formData.phone_number || editingCustomer.phone_number || ''} 
+                      value={formData.phone_number ?? editingCustomer.phone_number ?? ''} 
                       onChange={(e) => setFormData({ ...formData, phone_number: e.target.value })}
                       className="border-slate-400/50 focus:border-red-500 bg-white/10 text-white" 
                     />
@@ -1469,7 +1487,7 @@ export default function AdminPage() {
                   <div>
                     <label className="block text-sm font-bold text-slate-300 mb-2">Business Type</label>
                     <Input 
-                      value={formData.business_type || editingCustomer.business_type || ''} 
+                      value={formData.business_type ?? editingCustomer.business_type ?? ''} 
                       onChange={(e) => setFormData({ ...formData, business_type: e.target.value })}
                       className="border-slate-400/50 focus:border-red-500 bg-white/10 text-white" 
                     />
@@ -1477,9 +1495,10 @@ export default function AdminPage() {
                   <div>
                     <label className="block text-sm font-bold text-slate-300 mb-2">Email</label>
                     <Input 
-                      value={editingCustomer.email || ''} 
+                      type="email"
+                      value={formData.email ?? editingCustomer.email ?? ''} 
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       className="border-slate-400/50 focus:border-red-500 bg-white/10 text-white" 
-                      readOnly 
                     />
                   </div>
                 </div>
@@ -1677,6 +1696,7 @@ export default function AdminPage() {
                           full_name: formData.full_name || editingCustomer.full_name,
                           phone_number: formData.phone_number || editingCustomer.phone_number,
                           business_type: formData.business_type || editingCustomer.business_type,
+                          email: formData.email || editingCustomer.email,
                         })
                         .eq('id', editingCustomer.user_id)
 
