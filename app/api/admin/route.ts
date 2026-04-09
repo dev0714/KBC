@@ -41,21 +41,51 @@ export async function GET(request: Request) {
     const supabase = createClient(supabaseUrl, supabaseServiceKey)
     console.log('[v0] Admin API - Supabase client created:', !!supabase)
 
-    // Fetch products with pagination and search support
-    let productsQuery = supabase
+    // Fetch products in chunks so we can exceed Supabase's default 1000-row response cap.
+    const PRODUCTS_BATCH_SIZE = 1000
+    let products: any[] = []
+    let productsCount = 0
+    let productsError: Error | null = null
+
+    const countQuery = supabase
       .from('products')
-      .select('*', { count: 'exact' })
-      .order('title', { ascending: true })
+      .select('*', { count: 'exact', head: true })
 
     if (search) {
-      productsQuery = productsQuery.or(`title.ilike.%${search}%,sku.ilike.%${search}%`)
+      countQuery.or(`title.ilike.%${search}%,sku.ilike.%${search}%`)
     }
 
-    const { data: products, error: productsError, count: productsCount } = await productsQuery
+    const { count: totalProductMatches, error: countError } = await countQuery
+    if (countError) throw new Error(`Products count query failed: ${countError.message}`)
+    productsCount = totalProductMatches || 0
+
+    for (let from = 0; from < productsCount; from += PRODUCTS_BATCH_SIZE) {
+      let batchQuery = supabase
+        .from('products')
+        .select('*')
+        .order('title', { ascending: true })
+        .range(from, from + PRODUCTS_BATCH_SIZE - 1)
+
+      if (search) {
+        batchQuery = batchQuery.or(`title.ilike.%${search}%,sku.ilike.%${search}%`)
+      }
+
+      const { data: batch, error: batchError } = await batchQuery
+      if (batchError) {
+        productsError = new Error(`Products query failed: ${batchError.message}`)
+        break
+      }
+
+      products = products.concat(batch || [])
+
+      if (!batch || batch.length < PRODUCTS_BATCH_SIZE) {
+        break
+      }
+    }
 
     console.log('[v0] Admin API - Products query result:', { count: products?.length, total: productsCount, error: productsError?.message })
 
-    if (productsError) throw new Error(`Products query failed: ${productsError.message}`)
+    if (productsError) throw productsError
 
     // Fetch all customers from clients table with join to users
     const { data: clients, error: clientsError } = await supabase
