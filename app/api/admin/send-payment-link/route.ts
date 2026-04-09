@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
-import { sendNotificationEmail } from '@/lib/supabase/send-notification'
 import { createHash } from 'crypto'
 
 function generateSignature(data: Record<string, string>, passphrase: string) {
@@ -19,6 +18,44 @@ function buildPaymentUrl(baseUrl: string, data: Record<string, string>, signatur
     .join('&')
 
   return `${baseUrl}?${queryString}`
+}
+
+function buildPaymentEmailHtml(params: {
+  customerName: string
+  orderNumber: string
+  amount: string
+  paymentUrl: string
+}) {
+  return `<!DOCTYPE html>
+  <html>
+    <body style="margin:0;padding:0;background:#f4f7fb;font-family:Arial,sans-serif;">
+      <div style="max-width:640px;margin:0 auto;padding:32px 20px;">
+        <div style="background:#0b2a5b;border-radius:16px;overflow:hidden;box-shadow:0 10px 30px rgba(11,42,91,.18);">
+          <div style="background:linear-gradient(135deg,#c1121f,#e11d48);color:#fff;padding:28px 32px;">
+            <h1 style="margin:0;font-size:28px;line-height:1.2;">Your KBC Payment Link</h1>
+            <p style="margin:10px 0 0;font-size:14px;opacity:.95;">Order ${params.orderNumber}</p>
+          </div>
+          <div style="padding:32px;color:#e2e8f0;">
+            <p style="margin:0 0 16px;font-size:16px;">Hi ${params.customerName || 'Customer'},</p>
+            <p style="margin:0 0 20px;font-size:15px;line-height:1.7;color:#cbd5e1;">
+              Your PayFast payment link is ready. Click the button below to complete payment for <strong>Order ${params.orderNumber}</strong>.
+            </p>
+            <div style="margin:28px 0;">
+              <a href="${params.paymentUrl}" style="display:inline-block;background:#ef4444;color:#fff;text-decoration:none;padding:14px 22px;border-radius:10px;font-weight:bold;">
+                Pay R${params.amount}
+              </a>
+            </div>
+            <p style="margin:0 0 8px;font-size:13px;color:#94a3b8;">Amount</p>
+            <p style="margin:0 0 20px;font-size:18px;font-weight:bold;color:#fff;">R${params.amount}</p>
+            <p style="margin:0;font-size:13px;line-height:1.6;color:#94a3b8;">
+              If the button does not work, copy and paste this link into your browser:<br />
+              <a href="${params.paymentUrl}" style="color:#60a5fa;word-break:break-all;">${params.paymentUrl}</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </body>
+  </html>`
 }
 
 export async function POST(req: NextRequest) {
@@ -87,24 +124,40 @@ export async function POST(req: NextRequest) {
 
     const paymentUrl = buildPaymentUrl(baseUrl, paymentData, signature)
 
-    await sendNotificationEmail({
-      customerEmail: String(customer_email).trim(),
-      adminEmail: process.env.ADMIN_EMAIL,
-      action: 'PayFast Payment Link',
-      status: 'success',
-      message: `Your payment link for order ${order_number} is ready.`,
-      details: {
-        'Order Number': String(order_number),
-        'Customer Name': String(customer_name || 'Customer'),
-        'Amount': `R${Number(amount).toLocaleString()}`,
-        'Payment Link': paymentUrl,
-        'Expires': 'Use the link to complete payment',
+    const supabaseFunctionUrl = `${supabaseUrl}/functions/v1/send-email`
+    const emailResponse = await fetch(supabaseFunctionUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${supabaseServiceKey}`,
+        apikey: supabaseServiceKey,
       },
+      body: JSON.stringify({
+        to: customer_email,
+        subject: `PayFast payment link for order ${order_number}`,
+        html: buildPaymentEmailHtml({
+          customerName: String(customer_name || 'Customer'),
+          orderNumber: String(order_number),
+          amount: Number(amount).toFixed(2),
+          paymentUrl,
+        }),
+      }),
     })
+
+    if (!emailResponse.ok) {
+      const errorText = await emailResponse.text()
+      return NextResponse.json(
+        { error: 'Failed to send email', details: errorText },
+        { status: emailResponse.status }
+      )
+    }
+
+    const emailResult = await emailResponse.json()
 
     return NextResponse.json({
       success: true,
       paymentUrl,
+      emailResult,
       message: 'Payment link emailed successfully',
     })
   } catch (error) {
