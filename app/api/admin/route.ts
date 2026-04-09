@@ -29,9 +29,7 @@ export async function GET(request: Request) {
     }
 
     const url = new URL(request.url)
-    const page = Math.max(1, parseInt(url.searchParams.get('page') || '1'))
     const search = url.searchParams.get('search') || ''
-    const ITEMS_PER_PAGE = 30
 
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
     const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
@@ -53,10 +51,7 @@ export async function GET(request: Request) {
       productsQuery = productsQuery.or(`title.ilike.%${search}%,sku.ilike.%${search}%`)
     }
 
-    const from = (page - 1) * ITEMS_PER_PAGE
-    const to = from + ITEMS_PER_PAGE - 1
-
-    const { data: products, error: productsError, count: productsCount } = await productsQuery.range(from, to)
+    const { data: products, error: productsError, count: productsCount } = await productsQuery
 
     console.log('[v0] Admin API - Products query result:', { count: products?.length, total: productsCount, error: productsError?.message })
 
