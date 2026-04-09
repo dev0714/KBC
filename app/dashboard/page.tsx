@@ -548,10 +548,11 @@ export default function DashboardPage() {
       // If PayFast payment, redirect to payment gateway
       if (paymentMethod === 'payfast') {
         try {
-          const response = await fetch('/api/payfast/create-payment', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
+            const response = await fetch('/api/payfast/create-payment', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+              id: 1,
               client_id: businessId,
               amount: pendingOrder.total.toString(),
               item_name: `Order ${orderNumber}`,

@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
     console.log('[v0] PayFast payment request received:', { amount: body.amount, item_name: body.item_name, id: body.id })
     
     // Validate required fields
-    const clientId = body.client_id ?? body.id
+    const clientId = body.id ?? body.client_id
 
     if (!body.amount || !body.item_name || clientId === undefined || clientId === null || String(clientId).trim() === '') {
       console.error('[v0] Missing required fields:', { amount: body.amount, item_name: body.item_name, id: body.id, client_id: body.client_id })

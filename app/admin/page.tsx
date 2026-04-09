@@ -2391,6 +2391,7 @@ export default function AdminPage() {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({
+                                  id: 1,
                                   client_id: viewingOrder.client_account_no,
                                   amount: viewingOrder.total_amount,
                                   item_name: `Order ${viewingOrder.order_number}`,
