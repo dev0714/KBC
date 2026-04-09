@@ -160,6 +160,12 @@ export async function POST(req: NextRequest) {
       )
     }
 
+    const fromEmail =
+      process.env.RESEND_FROM_EMAIL ||
+      process.env.EMAIL_FROM ||
+      process.env.ADMIN_EMAIL ||
+      'KBC <noreply@kbc.co.za>'
+
     const emailResponse = await fetch(`${supabaseUrl}/functions/v1/send-email`, {
       method: 'POST',
       headers: {
@@ -169,6 +175,7 @@ export async function POST(req: NextRequest) {
       },
       body: JSON.stringify({
         to: resolvedCustomerEmail,
+        from: fromEmail,
         subject: `PayFast payment link for order ${order_number}`,
         html: buildPaymentEmailHtml({
           customerName: String(customer_name || 'Customer'),
