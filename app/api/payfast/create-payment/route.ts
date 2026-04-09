@@ -7,8 +7,10 @@ export async function POST(req: NextRequest) {
     console.log('[v0] PayFast payment request received:', { amount: body.amount, item_name: body.item_name, id: body.id })
     
     // Validate required fields
-    if (!body.amount || !body.item_name || body.id === undefined) {
-      console.error('[v0] Missing required fields:', { amount: body.amount, item_name: body.item_name, id: body.id })
+    const clientId = body.client_id ?? body.id
+
+    if (!body.amount || !body.item_name || clientId === undefined || clientId === null || String(clientId).trim() === '') {
+      console.error('[v0] Missing required fields:', { amount: body.amount, item_name: body.item_name, id: body.id, client_id: body.client_id })
       return NextResponse.json(
         { error: 'Missing required fields (amount, item_name, id)' },
         { status: 400 }
@@ -29,7 +31,7 @@ export async function POST(req: NextRequest) {
     const edgeFunctionUrl = `${payFastUrl}/functions/v1/PaySync`
     
     const paymentPayload = {
-      id: String(body.id),
+      id: String(clientId),
       m_payment_id: body.custom_str1, // Send order ID as m_payment_id so PayFast returns it in ITN
       amount: parseFloat(body.amount).toFixed(2),
       item_name: body.item_name,

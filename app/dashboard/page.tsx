@@ -552,7 +552,7 @@ export default function DashboardPage() {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              id: 1,
+              client_id: businessId,
               amount: pendingOrder.total.toString(),
               item_name: `Order ${orderNumber}`,
               item_description: `KBC Order - ${pendingOrder.items.length} items`,
