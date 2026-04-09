@@ -6,7 +6,7 @@ import useSWR from 'swr'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { LogOut, Package, Users, ShoppingCart, BarChart3, Menu, X, Edit2, Trash2, Plus, CheckCircle2, AlertCircle, Clock, Loader2, Send, Mail, MessageSquare, Check, XCircle, Upload, ImageIcon, TrendingUp, ChevronDown, Lock, Shield, Bell, Database, Globe, Palette, CreditCard, Building2, Settings, User } from 'lucide-react'
+import { LogOut, Package, Users, ShoppingCart, BarChart3, Menu, X, Edit2, Trash2, Plus, CheckCircle2, AlertCircle, Clock, Loader2, Send, Mail, MessageSquare, Check, XCircle, Upload, ImageIcon, TrendingUp, ChevronDown, Lock, Shield, Bell, Database, Globe, Palette, CreditCard, Building2, Settings, User, Search } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
 const fetcher = (url: string) => fetch(url).then(res => res.json())
@@ -123,6 +123,14 @@ export default function AdminPage() {
   const [editProductLoading, setEditProductLoading] = useState(false)
   const [deletingProductImage, setDeletingProductImage] = useState<string | null>(null)
   const [paymentLinkPreview, setPaymentLinkPreview] = useState('')
+  const [paymentCustomerSearch, setPaymentCustomerSearch] = useState('')
+  const [selectedPaymentCustomer, setSelectedPaymentCustomer] = useState<any>(null)
+  const [manualPaymentAmount, setManualPaymentAmount] = useState('')
+  const [manualPaymentNote, setManualPaymentNote] = useState('')
+  const [manualPaymentLinkPreview, setManualPaymentLinkPreview] = useState('')
+  const [manualPaymentLoading, setManualPaymentLoading] = useState(false)
+  const [manualPaymentError, setManualPaymentError] = useState<string | null>(null)
+  const [manualPaymentSuccess, setManualPaymentSuccess] = useState<string | null>(null)
   const PRODUCTS_PER_PAGE = 15
 
   const [customerPage, setCustomerPage] = useState(1)
@@ -201,6 +209,19 @@ export default function AdminPage() {
   useEffect(() => {
     setPaymentLinkPreview('')
   }, [viewingOrder?.id])
+
+  useEffect(() => {
+    if (activeTab !== 'payment') {
+      setPaymentCustomerSearch('')
+      setSelectedPaymentCustomer(null)
+      setManualPaymentAmount('')
+      setManualPaymentNote('')
+      setManualPaymentLinkPreview('')
+      setManualPaymentError(null)
+      setManualPaymentSuccess(null)
+      setManualPaymentLoading(false)
+    }
+  }, [activeTab])
 
   const statsCards = [
     { label: 'Total Products', value: String(stats.totalProducts), icon: Package, color: 'from-blue-500 to-blue-600' },
@@ -373,6 +394,61 @@ export default function AdminPage() {
     } finally {
       setDeletingProductImage(null)
       mutate()
+    }
+  }
+
+  const filteredPaymentCustomers = clients.filter((client: any) =>
+    client.client_name?.toLowerCase().includes(paymentCustomerSearch.toLowerCase()) ||
+    client.full_name?.toLowerCase().includes(paymentCustomerSearch.toLowerCase()) ||
+    client.account_no?.toLowerCase().includes(paymentCustomerSearch.toLowerCase())
+  )
+
+  const handleSendManualPaymentLink = async () => {
+    if (!selectedPaymentCustomer?.account_no) {
+      setManualPaymentError('Please select a customer first')
+      return
+    }
+    if (!manualPaymentAmount || Number(manualPaymentAmount) <= 0) {
+      setManualPaymentError('Please enter a valid amount')
+      return
+    }
+
+    setManualPaymentLoading(true)
+    setManualPaymentError(null)
+    setManualPaymentSuccess(null)
+
+    try {
+      const response = await fetch('/api/admin/send-manual-payment-link', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customer_account_no: selectedPaymentCustomer.account_no,
+          customer_name: selectedPaymentCustomer.client_name || selectedPaymentCustomer.full_name || 'Customer',
+          customer_email: selectedPaymentCustomer.email || '',
+          amount: Number(manualPaymentAmount),
+          item_name: `Manual payment for ${selectedPaymentCustomer.client_name || selectedPaymentCustomer.full_name || selectedPaymentCustomer.account_no}`,
+          item_description: manualPaymentNote || `Manual payment request for ${selectedPaymentCustomer.client_name || selectedPaymentCustomer.full_name || selectedPaymentCustomer.account_no}`,
+          note: manualPaymentNote || '',
+        }),
+      })
+
+      const result = await response.json()
+      if (!response.ok) {
+        const detailText = result.details
+          ? `: ${typeof result.details === 'string' ? result.details : JSON.stringify(result.details)}`
+          : ''
+        throw new Error(`${result.error || 'Failed to send payment link'}${detailText}`)
+      }
+
+      setManualPaymentLinkPreview(result.paymentUrl || '')
+      setManualPaymentSuccess(`Payment link sent to ${result.customer?.email || selectedPaymentCustomer.email || 'customer email'}`)
+      setManualPaymentAmount('')
+      setManualPaymentNote('')
+    } catch (error: any) {
+      console.error('[v0] Manual payment send failed:', error)
+      setManualPaymentError(error?.message || 'Failed to send payment link')
+    } finally {
+      setManualPaymentLoading(false)
     }
   }
 
@@ -785,6 +861,7 @@ export default function AdminPage() {
   { id: 'products', label: 'Products', icon: Package },
   { id: 'customers', label: 'Customers', icon: Users },
               { id: 'orders', label: 'Orders', icon: ShoppingCart },
+              { id: 'payment', label: 'Payment', icon: CreditCard },
               { id: 'settings', label: 'Settings', icon: AlertCircle },
             ].map((item) => {
               const Icon = item.icon
@@ -1287,6 +1364,170 @@ export default function AdminPage() {
               </div>
               )
             })()}
+
+            {/* Payment Tab */}
+            {activeTab === 'payment' && (
+              <div className="space-y-6 animate-fade-in-up">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-1">Payment</h1>
+                    <p className="text-muted-foreground">Send a manual PayFast payment link by customer name</p>
+                  </div>
+                  <Button
+                    variant="outline"
+                    className="border-red-500 text-red-400 hover:bg-red-500/10 font-bold bg-transparent gap-2"
+                    onClick={() => {
+                      setPaymentCustomerSearch('')
+                      setSelectedPaymentCustomer(null)
+                      setManualPaymentAmount('')
+                      setManualPaymentNote('')
+                      setManualPaymentLinkPreview('')
+                      setManualPaymentError(null)
+                      setManualPaymentSuccess(null)
+                    }}
+                  >
+                    <X className="w-4 h-4" />
+                    Reset
+                  </Button>
+                </div>
+
+                <div className="grid grid-cols-1 xl:grid-cols-[1.3fr_0.9fr] gap-6">
+                  <div className="bg-gradient-to-br from-card to-card/50 border border-primary/20 rounded-xl overflow-hidden shadow-xl shadow-primary/10 backdrop-blur-sm p-6 space-y-5">
+                    <div>
+                      <label className="block text-sm font-bold text-slate-300 mb-2">Search Customer by Name</label>
+                      <div className="relative">
+                        <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                        <Input
+                          value={paymentCustomerSearch}
+                          onChange={(e) => {
+                            setPaymentCustomerSearch(e.target.value)
+                            setManualPaymentSuccess(null)
+                          }}
+                          placeholder="Type a customer name..."
+                          className="pl-10 border-slate-400/50 focus:border-red-500 bg-white/10 text-white placeholder:text-slate-400"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <p className="text-xs uppercase tracking-wider text-slate-400 font-bold mb-3">Matching Customers</p>
+                      <div className="max-h-72 overflow-y-auto space-y-2 pr-1">
+                        {filteredPaymentCustomers.length > 0 ? filteredPaymentCustomers.map((customer: any) => {
+                          const isSelected = selectedPaymentCustomer?.account_no === customer.account_no
+                          return (
+                            <button
+                              key={customer.account_no}
+                              type="button"
+                              onClick={() => {
+                                setSelectedPaymentCustomer(customer)
+                                setManualPaymentSuccess(null)
+                                setManualPaymentError(null)
+                                setManualPaymentLinkPreview('')
+                              }}
+                              className={`w-full text-left rounded-lg border px-4 py-3 transition-all ${
+                                isSelected
+                                  ? 'border-red-500 bg-red-500/10'
+                                  : 'border-slate-400/30 hover:border-red-500/40 hover:bg-slate-400/5'
+                              }`}
+                            >
+                              <div className="flex items-start justify-between gap-3">
+                                <div>
+                                  <p className="font-bold text-white">{customer.client_name || customer.full_name || 'Unnamed customer'}</p>
+                                  <p className="text-xs text-slate-400">{customer.account_no}</p>
+                                  <p className="text-xs text-slate-300 mt-1 break-all">{customer.email || customer.contact?.email || 'No email on file'}</p>
+                                </div>
+                                {isSelected && <Check className="w-4 h-4 text-red-400 mt-1" />}
+                              </div>
+                            </button>
+                          )
+                        }) : (
+                          <div className="rounded-lg border border-dashed border-slate-400/30 px-4 py-8 text-center text-slate-400">
+                            No customers match this name.
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-gradient-to-br from-[#0056a1]/30 to-[#002463]/30 border border-slate-400/40 rounded-xl p-6 shadow-xl shadow-red-500/10 backdrop-blur-sm space-y-5">
+                    <div>
+                      <p className="text-xs uppercase tracking-wider text-slate-400 font-bold">Selected Customer</p>
+                      <p className="text-xl font-bold text-white mt-2">
+                        {selectedPaymentCustomer?.client_name || selectedPaymentCustomer?.full_name || 'No customer selected'}
+                      </p>
+                      <p className="text-sm text-slate-400 mt-1">{selectedPaymentCustomer?.account_no || 'Search and select a customer'}</p>
+                      <p className="text-sm text-slate-300 mt-1 break-all">{selectedPaymentCustomer?.email || selectedPaymentCustomer?.contact?.email || 'No email on file yet'}</p>
+                    </div>
+
+                    <div className="grid grid-cols-1 gap-4">
+                      <div>
+                        <label className="block text-sm font-bold text-slate-300 mb-2">Amount (R)</label>
+                        <Input
+                          type="number"
+                          min="0"
+                          step="0.01"
+                          value={manualPaymentAmount}
+                          onChange={(e) => setManualPaymentAmount(e.target.value)}
+                          placeholder="Enter amount"
+                          className="border-slate-400/50 focus:border-red-500 bg-white/10 text-white placeholder:text-slate-400"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-bold text-slate-300 mb-2">Note / Description</label>
+                        <Textarea
+                          value={manualPaymentNote}
+                          onChange={(e) => setManualPaymentNote(e.target.value)}
+                          placeholder="Optional note to include in the email"
+                          className="border-slate-400/50 focus:border-red-500 bg-white/10 text-white placeholder:text-slate-400"
+                          rows={4}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="rounded-lg border border-slate-400/30 bg-black/10 p-4 space-y-3">
+                      <div>
+                        <p className="text-xs uppercase tracking-wider text-slate-400 font-bold">From</p>
+                        <p className="text-sm text-white font-medium break-all">kbc@notification.leadsync.co.za</p>
+                      </div>
+                      <div>
+                        <p className="text-xs uppercase tracking-wider text-slate-400 font-bold mb-1">Link</p>
+                        <div className="flex gap-2 items-center">
+                          <div className="flex-1 rounded-md border border-slate-400/30 bg-white/5 px-3 py-2 text-sm text-slate-200 break-all">
+                            {manualPaymentLinkPreview || 'Will be generated when you click Send Payment Link'}
+                          </div>
+                          {manualPaymentLinkPreview && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="border-slate-400/50 text-slate-300 hover:text-slate-200 hover:bg-slate-400/10 font-bold bg-transparent"
+                              onClick={() => navigator.clipboard.writeText(manualPaymentLinkPreview)}
+                            >
+                              Copy
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    {manualPaymentError && (
+                      <p className="text-sm text-red-400 font-medium">{manualPaymentError}</p>
+                    )}
+                    {manualPaymentSuccess && (
+                      <p className="text-sm text-green-400 font-medium">{manualPaymentSuccess}</p>
+                    )}
+
+                    <Button
+                      className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold shadow-lg shadow-red-600/50 hover:shadow-red-600/70 transition-all gap-2"
+                      disabled={manualPaymentLoading || !selectedPaymentCustomer || !manualPaymentAmount}
+                      onClick={handleSendManualPaymentLink}
+                    >
+                      <Mail className="w-4 h-4" />
+                      {manualPaymentLoading ? 'Sending...' : 'Send Payment Link'}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Settings Tab */}
             {activeTab === 'settings' && (
