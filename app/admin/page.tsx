@@ -1671,38 +1671,49 @@ export default function AdminPage() {
                 onClick={async () => {
                   try {
                     const supabase = createClient()
+                    const clientUpdates = {
+                      client_name: formData.client_name ?? editingCustomer.client_name,
+                      address: formData.address ?? editingCustomer.address,
+                    }
                     
                     // Update clients table
                     const { error: clientError } = await supabase
                       .from('clients')
-                      .update({ 
-                        client_name: formData.client_name || editingCustomer.client_name,
-                        address: formData.address || editingCustomer.address,
-                        status: formData.status || editingCustomer.status
-                      })
+                      .update(clientUpdates)
                       .eq('account_no', editingCustomer.account_no)
                     
                     if (clientError) {
                       console.error('[v0] Error updating clients:', clientError)
-                      alert('Error updating client details')
+                      alert(clientError.message || 'Error updating client details')
                       return
                     }
 
                     // Update users table if edits exist
-                    if (editingCustomer.user_id && (formData.full_name || formData.phone_number || formData.business_type)) {
+                    const hasUserUpdates =
+                      editingCustomer.user_id &&
+                      (
+                        formData.full_name !== undefined ||
+                        formData.phone_number !== undefined ||
+                        formData.business_type !== undefined ||
+                        formData.email !== undefined ||
+                        formData.status !== undefined
+                      )
+
+                    if (hasUserUpdates) {
                       const { error: userUpdateError } = await supabase
                         .from('users')
                         .update({
-                          full_name: formData.full_name || editingCustomer.full_name,
-                          phone_number: formData.phone_number || editingCustomer.phone_number,
-                          business_type: formData.business_type || editingCustomer.business_type,
-                          email: formData.email || editingCustomer.email,
+                          full_name: formData.full_name ?? editingCustomer.full_name,
+                          phone_number: formData.phone_number ?? editingCustomer.phone_number,
+                          business_type: formData.business_type ?? editingCustomer.business_type,
+                          email: formData.email ?? editingCustomer.email,
+                          status: formData.status ?? editingCustomer.status,
                         })
                         .eq('id', editingCustomer.user_id)
 
                       if (userUpdateError) {
                         console.error('[v0] Error updating users:', userUpdateError)
-                        alert('Error updating contact details')
+                        alert(userUpdateError.message || 'Error updating contact details')
                         return
                       }
                     }
