@@ -1,24 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
-import { createHash } from 'crypto'
-
-function generateSignature(data: Record<string, string>, passphrase: string) {
-  const queryString = Object.keys(data)
-    .sort()
-    .map((key) => `${key}=${encodeURIComponent(String(data[key])).replace(/%20/g, '+')}`)
-    .join('&')
-
-  const signatureString = passphrase ? `${queryString}&passphrase=${encodeURIComponent(passphrase).replace(/%20/g, '+')}` : queryString
-  return createHash('md5').update(signatureString).digest('hex')
-}
-
-function buildPaymentUrl(baseUrl: string, data: Record<string, string>, signature: string) {
-  const queryString = Object.entries({ ...data, signature })
-    .map(([key, value]) => `${key}=${encodeURIComponent(String(value)).replace(/%20/g, '+')}`)
-    .join('&')
-
-  return `${baseUrl}?${queryString}`
-}
 
 function buildPaymentEmailHtml(params: {
   customerName: string
@@ -141,55 +122,50 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const { data: paymentConfig, error: configError } = await supabase
-      .from('payfast_payment_configs')
-      .select('*')
-      .limit(1)
-      .single()
+    const paymentResponse = await fetch(new URL('/api/payfast/create-payment', req.url), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        id: '1',
+        amount: Number(amount).toFixed(2),
+        item_name: String(item_name).trim(),
+        item_description: item_description ? String(item_description).trim() : '',
+        name_first: customer_name ? String(customer_name).trim().split(' ')[0] : 'Customer',
+        name_last: customer_name ? String(customer_name).trim().split(' ').slice(1).join(' ') : '',
+        email_address: resolvedCustomerEmail,
+        cell_number: '',
+        custom_int1: '1',
+        custom_str1: String(order_id),
+      }),
+    })
 
-    if (configError || !paymentConfig) {
+    if (!paymentResponse.ok) {
+      const paymentError = await paymentResponse.json().catch(() => null)
       return NextResponse.json(
-        { error: configError?.message || 'Payment configuration not found' },
-        { status: 404 }
+        {
+          error: paymentError?.error || 'Failed to create payment link',
+          details: paymentError?.details || paymentError?.message || null,
+        },
+        { status: paymentResponse.status }
       )
     }
 
-    const paymentId = `PAY-${crypto.randomUUID()}`
-    const paymentData: Record<string, string> = {
-      merchant_id: String(paymentConfig.merchant_id).trim(),
-      merchant_key: String(paymentConfig.merchant_key).trim(),
-      return_url: String(paymentConfig.return_url).trim(),
-      cancel_url: String(paymentConfig.cancel_url).trim(),
-      notify_url: String(paymentConfig.notify_url).trim(),
-      m_payment_id: paymentId,
-      amount: Number(amount).toFixed(2),
-      item_name: String(item_name).trim(),
-      name_first: customer_name ? String(customer_name).trim().split(' ')[0] : 'Customer',
-      name_last: customer_name ? String(customer_name).trim().split(' ').slice(1).join(' ') : '',
-      email_address: resolvedCustomerEmail,
-      custom_str1: String(order_id),
-      custom_int1: '1',
+    const paymentData = await paymentResponse.json()
+    const paymentUrl = paymentData.url
+
+    if (!paymentUrl) {
+      return NextResponse.json(
+        { error: 'No payment URL returned from payment API' },
+        { status: 500 }
+      )
     }
 
-    if (item_description) {
-      paymentData.item_description = String(item_description).trim()
-    }
-
-    const signature = generateSignature(paymentData, String(paymentConfig.passphrase))
-
-    const baseUrl = paymentConfig.is_sandbox === false
-      ? 'https://www.payfast.co.za/eng/process'
-      : 'https://sandbox.payfast.co.za/eng/process'
-
-    const paymentUrl = buildPaymentUrl(baseUrl, paymentData, signature)
-
-    const supabaseFunctionUrl = `${supabaseUrl}/functions/v1/send-email`
-    const emailResponse = await fetch(supabaseFunctionUrl, {
+    const emailResponse = await fetch(`${supabaseUrl}/functions/v1/send-email`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${supabaseServiceKey}`,
-        apikey: supabaseServiceKey,
+        apikey: `${supabaseServiceKey}`,
       },
       body: JSON.stringify({
         to: resolvedCustomerEmail,
