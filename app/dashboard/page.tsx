@@ -540,11 +540,14 @@ export default function DashboardPage() {
             throw new Error(paymentData.error || paymentData.details || `HTTP ${response.status}`)
           }
           
-          if (paymentData.url) {
-            window.location.href = paymentData.url
-          } else {
-            throw new Error('Failed to generate payment URL')
-          }
+            if (paymentData.url) {
+              sessionStorage.setItem('kbc_pending_order_id', String(createdOrderId))
+              sessionStorage.setItem('kbc_pending_order_number', String(orderNumber))
+              sessionStorage.setItem('kbc_pending_payment_method', 'payfast')
+              window.location.href = paymentData.url
+            } else {
+              throw new Error('Failed to generate payment URL')
+            }
         } catch (paymentError) {
           console.error('[v0] PayFast error:', paymentError)
           const errorMessage = paymentError instanceof Error ? paymentError.message : String(paymentError)

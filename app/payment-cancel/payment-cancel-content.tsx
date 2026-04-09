@@ -18,9 +18,12 @@ export default function PaymentCancelContent() {
       try {
         const mPaymentId = searchParams.get('m_payment_id')
         const customStr1 = searchParams.get('custom_str1')
+        const storedOrderId = sessionStorage.getItem('kbc_pending_order_id')
         const paymentStatus = searchParams.get('pf_payment_status') || 'CANCELLED'
 
-        if (!mPaymentId && !customStr1) {
+        const orderReference = customStr1 || storedOrderId
+
+        if (!mPaymentId && !orderReference) {
           setMessage('Your payment was cancelled. We could not identify the order from the return URL.')
           setIsUpdating(false)
           return
@@ -32,7 +35,7 @@ export default function PaymentCancelContent() {
           body: JSON.stringify({
             pf_payment_status: paymentStatus,
             m_payment_id: mPaymentId,
-            custom_str1: customStr1,
+            custom_str1: orderReference,
           }),
         })
 
@@ -42,6 +45,9 @@ export default function PaymentCancelContent() {
           setMessage(data.newStatus === 'Cancelled'
             ? 'Your payment was cancelled and the order has been updated.'
             : data.message || 'Your payment was cancelled.')
+          sessionStorage.removeItem('kbc_pending_order_id')
+          sessionStorage.removeItem('kbc_pending_order_number')
+          sessionStorage.removeItem('kbc_pending_payment_method')
         } else {
           setMessage(data.message || 'Your payment was cancelled, but the order could not be updated automatically.')
         }
