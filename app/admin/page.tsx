@@ -779,7 +779,7 @@ export default function AdminPage() {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.08),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(239,68,68,0.10),transparent_30%)]" />
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:96px_96px] opacity-20" />
       {/* Admin Header */}
-      <div className="sticky top-0 z-40 border-b border-blue-500/30 bg-[#06123dcc]/90 text-white shadow-[0_18px_40px_rgba(0,0,0,0.25)] backdrop-blur-xl">
+      <div className="fixed inset-x-0 top-0 z-40 border-b border-blue-500/30 bg-[#06123dcc]/90 text-white shadow-[0_18px_40px_rgba(0,0,0,0.25)] backdrop-blur-xl">
         <div className="mx-auto flex items-center justify-between px-4 py-4">
           <div className="flex items-center gap-3">
             <img src="/kbc-logo.png" alt="KBC" className="h-14 w-auto" />
@@ -812,7 +812,7 @@ export default function AdminPage() {
         </div>
       </div>
 
-      <div className="relative z-10 flex flex-1">
+      <div className="relative z-10 flex flex-1 pt-[72px]">
         {/* Sidebar */}
         <aside
           className={`w-64 bg-[#06123d]/80 border-r border-white/10 fixed md:fixed md:top-[72px] md:left-0 md:h-[calc(100vh-72px)] transition-transform z-30 backdrop-blur-xl shadow-[12px_0_40px_rgba(0,0,0,0.18)] ${
