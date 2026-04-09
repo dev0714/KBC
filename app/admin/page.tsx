@@ -612,56 +612,10 @@ export default function AdminPage() {
   }, [searchTerm])
 
   useEffect(() => {
-    const fetchPagedCustomers = async () => {
-      setCustomerPageLoading(true)
-      try {
-        const supabase = createClient()
-        const from = (customerPage - 1) * CUSTOMERS_PER_PAGE
-        const to = from + CUSTOMERS_PER_PAGE - 1
-
-        let query = supabase
-          .from('clients')
-          .select('*, contacts(id, full_name, email, phone_number, business_type), users(id, email, full_name, phone_number, business_type, status)', { count: 'exact' })
-          .order('created_at', { ascending: false })
-          .range(from, to)
-
-        if (searchTerm) {
-          query = query.or(`client_name.ilike.%${searchTerm}%,account_no.ilike.%${searchTerm}%`)
-        }
-
-        const { data, count, error } = await query
-        if (error) {
-          console.error('[v0] Error fetching paged customers:', error)
-          return
-        }
-
-        // Flatten users join so user_id, email, status are top-level
-        const enriched = (data || []).map((c: any) => {
-          const contact = Array.isArray(c.contacts) ? c.contacts[0] : c.contacts
-          const user = Array.isArray(c.users) ? c.users[0] : c.users
-          return {
-            ...c,
-            contact,
-            user_id: user?.id || null,
-            full_name: contact?.full_name || user?.full_name || null,
-            email: contact?.email || user?.email || null,
-            phone_number: contact?.phone_number || user?.phone_number || null,
-            business_type: contact?.business_type || user?.business_type || null,
-            status: user?.status || c.status || null,
-          }
-        })
-
-        setPagedCustomers(enriched)
-        setTotalCustomerCount(count || 0)
-      } catch (err) {
-        console.error('[v0] Error in fetchPagedCustomers:', err)
-      } finally {
-        setCustomerPageLoading(false)
-      }
-    }
-
-    fetchPagedCustomers()
-  }, [customerPage, searchTerm])
+    setPagedCustomers(clients)
+    setTotalCustomerCount(clients.length)
+    setCustomerPageLoading(false)
+  }, [clients])
 
   const filteredOrders = orders.filter((o: any) =>
     o.client_name?.toLowerCase().includes(searchTerm.toLowerCase()) || o.order_number?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -1100,7 +1054,7 @@ export default function AdminPage() {
 
             {/* Customers Tab */}
             {activeTab === 'customers' && (() => {
-              const filteredCustomers = clients.filter((c: any) => 
+              const filteredCustomers = pagedCustomers.filter((c: any) => 
                 c.account_no?.toLowerCase().includes(customerSearch.toLowerCase()) ||
                 c.client_name?.toLowerCase().includes(customerSearch.toLowerCase()) ||
                 c.full_name?.toLowerCase().includes(customerSearch.toLowerCase()) ||
