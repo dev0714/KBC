@@ -87,20 +87,45 @@ export async function GET(request: Request) {
 
     if (productsError) throw productsError
 
-    // Fetch all customers from clients table with join to users
-    const { data: clients, error: clientsError } = await supabase
-      .from('clients')
-      .select(`
-        client_name,
-        account_no,
-        address,
-        created_at,
-        contacts(id, full_name, email, phone_number, business_type),
-        users(id, email, full_name, phone_number, business_type, status)
-      `)
-      .order('created_at', { ascending: false })
+    // Fetch customers in chunks so we can exceed Supabase's default 1000-row response cap.
+    const CLIENTS_BATCH_SIZE = 1000
+    let clients: any[] = []
+    let clientsError: Error | null = null
 
-    if (clientsError) throw new Error(`Clients query failed: ${clientsError.message}`)
+    const clientsCountQuery = supabase
+      .from('clients')
+      .select('*', { count: 'exact', head: true })
+
+    const { count: totalClientMatches, error: clientsCountError } = await clientsCountQuery
+    if (clientsCountError) throw new Error(`Clients count query failed: ${clientsCountError.message}`)
+
+    for (let from = 0; from < (totalClientMatches || 0); from += CLIENTS_BATCH_SIZE) {
+      const { data: batch, error: batchError } = await supabase
+        .from('clients')
+        .select(`
+          client_name,
+          account_no,
+          address,
+          created_at,
+          contacts(id, full_name, email, phone_number, business_type),
+          users(id, email, full_name, phone_number, business_type, status)
+        `)
+        .order('created_at', { ascending: false })
+        .range(from, from + CLIENTS_BATCH_SIZE - 1)
+
+      if (batchError) {
+        clientsError = new Error(`Clients query failed: ${batchError.message}`)
+        break
+      }
+
+      clients = clients.concat(batch || [])
+
+      if (!batch || batch.length < CLIENTS_BATCH_SIZE) {
+        break
+      }
+    }
+
+    if (clientsError) throw clientsError
 
     // Transform clients data to flatten the joined user info
     const enrichedClients = clients?.map((client: any) => ({
