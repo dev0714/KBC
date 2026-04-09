@@ -2434,7 +2434,10 @@ export default function AdminPage() {
 
                             const result = await response.json()
                             if (!response.ok) {
-                              throw new Error(result.error || result.message || 'Failed to send payment link')
+                              const detailText = result.details
+                                ? `: ${typeof result.details === 'string' ? result.details : JSON.stringify(result.details)}`
+                                : ''
+                              throw new Error(`${result.error || result.message || 'Failed to send payment link'}${detailText}`)
                             }
 
                             setPaymentLinkPreview(result.paymentUrl || paymentUrl)
