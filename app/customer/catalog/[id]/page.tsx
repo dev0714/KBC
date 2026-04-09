@@ -93,7 +93,7 @@ export default function ProductDetailPage() {
       <main className="flex-1">
         <div className="container mx-auto px-4 py-8">
           <div className="flex items-center gap-2 text-sm text-muted-foreground mb-8">
-            <Link href="/customer/catalog" className="hover:text-secondary transition-colors flex items-center gap-1">
+            <Link href="/dashboard?tab=shop" className="hover:text-secondary transition-colors flex items-center gap-1">
               <ArrowLeft className="w-4 h-4" />
               Back to Catalog
             </Link>

@@ -103,6 +103,16 @@ export default function DashboardPage() {
     { label: 'Wishlist Items', value: String(favorites.size), icon: Heart, color: 'from-pink-500 to-pink-600' },
   ]
 
+  useEffect(() => {
+    const tab = new URLSearchParams(window.location.search).get('tab')
+    if (!tab) return
+
+    const allowedTabs = new Set(['overview', 'shop', 'wishlist', 'cart', 'orders', 'documents', 'account'])
+    if (allowedTabs.has(tab)) {
+      setActiveTab(tab)
+    }
+  }, [])
+
   const handleLogout = async () => {
     try {
       await fetch('/api/auth/logout', { method: 'POST' })
