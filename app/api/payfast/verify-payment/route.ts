@@ -18,11 +18,34 @@ export async function POST(req: NextRequest) {
       process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     )
 
+    let orderId: number | null = null
+
+    if (/^\d+$/.test(String(m_payment_id))) {
+      orderId = Number.parseInt(String(m_payment_id), 10)
+    } else {
+      const { data: itnLog } = await supabase
+        .from('payfast_itn_logs')
+        .select('order_id, payment_status')
+        .eq('m_payment_id', String(m_payment_id))
+        .maybeSingle()
+
+      if (itnLog?.order_id) {
+        orderId = Number(itnLog.order_id)
+      }
+    }
+
+    if (!orderId) {
+      return NextResponse.json(
+        { success: true, message: 'Payment is being processed.' },
+        { status: 200 }
+      )
+    }
+
     // Fetch the order to update its payment status
     const { data: order, error: fetchError } = await supabase
       .from('orders')
       .select('id, payment_status')
-      .eq('id', m_payment_id)
+      .eq('id', orderId)
       .single()
 
     if (fetchError || !order) {
@@ -45,7 +68,7 @@ export async function POST(req: NextRequest) {
     const { error: updateError } = await supabase
       .from('orders')
       .update({ payment_status: newStatus })
-      .eq('id', m_payment_id)
+      .eq('id', orderId)
 
     if (updateError) {
       console.error('[v0] Error updating order:', updateError)
@@ -55,7 +78,7 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    console.log('[v0] Order payment status updated:', { orderId: m_payment_id, status: newStatus })
+    console.log('[v0] Order payment status updated:', { orderId, status: newStatus })
 
     return NextResponse.json({
       success: newStatus === 'Paid',

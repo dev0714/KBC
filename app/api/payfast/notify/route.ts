@@ -16,15 +16,17 @@ export async function POST(req: NextRequest) {
     
     console.log('[v0] PayFast ITN webhook received - Full body:', JSON.stringify(body, null, 2))
     
-    // PayFast returns m_payment_id in the ITN notification (we sent it in the payment request)
-    const orderId = body.m_payment_id
+    // PayFast returns the generated payment reference in m_payment_id.
+    // The actual order reference is stored in custom_str1.
+    const paymentReference = body.m_payment_id
+    const orderReference = body.custom_str1
     const paymentStatus = body.payment_status
     
-    console.log('[v0] PayFast ITN - m_payment_id:', orderId, 'payment_status:', paymentStatus)
+    console.log('[v0] PayFast ITN - paymentReference:', paymentReference, 'orderReference:', orderReference, 'payment_status:', paymentStatus)
     
     // Verify the request comes from PayFast
-    if (!orderId || paymentStatus === undefined) {
-      console.error('[v0] Invalid ITN payload - missing m_payment_id or payment_status. Body:', JSON.stringify(body))
+    if (!paymentReference || !orderReference || paymentStatus === undefined) {
+      console.error('[v0] Invalid ITN payload - missing m_payment_id, custom_str1, or payment_status. Body:', JSON.stringify(body))
       return NextResponse.json(
         { error: 'Invalid payload' },
         { status: 400 }
@@ -36,18 +38,35 @@ export async function POST(req: NextRequest) {
       process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     )
 
-    const parsedOrderId = Number.parseInt(String(orderId), 10)
+    const parsedOrderId = Number.parseInt(String(orderReference), 10)
     const processedAt = new Date().toISOString()
 
     const { error: logError } = await supabase.from('payfast_itn_logs').insert({
       order_id: Number.isFinite(parsedOrderId) ? parsedOrderId : null,
-      m_payment_id: String(orderId),
-      pf_payment_id: body.pf_payment_id ? String(body.pf_payment_id) : null,
-      payment_status: String(paymentStatus),
-      amount_gross: body.mc_gross ? Number(body.mc_gross) : null,
+      item_name: body.item_name ? String(body.item_name) : null,
+      name_first: body.name_first ? String(body.name_first) : null,
+      name_last: body.name_last ? String(body.name_last) : null,
+      signature: body.signature ? String(body.signature) : null,
       amount_fee: body.amount_fee ? Number(body.amount_fee) : null,
       amount_net: body.amount_net ? Number(body.amount_net) : null,
-      signature: body.signature ? String(body.signature) : null,
+      amount_gross: body.amount_gross ? Number(body.amount_gross) : null,
+      custom_int1: body.custom_int1 ? String(body.custom_int1) : null,
+      custom_int2: body.custom_int2 ? String(body.custom_int2) : null,
+      custom_int3: body.custom_int3 ? String(body.custom_int3) : null,
+      custom_int4: body.custom_int4 ? String(body.custom_int4) : null,
+      custom_int5: body.custom_int5 ? String(body.custom_int5) : null,
+      custom_str1: body.custom_str1 ? String(body.custom_str1) : null,
+      custom_str2: body.custom_str2 ? String(body.custom_str2) : null,
+      custom_str3: body.custom_str3 ? String(body.custom_str3) : null,
+      custom_str4: body.custom_str4 ? String(body.custom_str4) : null,
+      custom_str5: body.custom_str5 ? String(body.custom_str5) : null,
+      merchant_id: body.merchant_id ? String(body.merchant_id) : null,
+      email_address: body.email_address ? String(body.email_address) : null,
+      m_payment_id: String(paymentReference),
+      pf_payment_id: body.pf_payment_id ? String(body.pf_payment_id) : null,
+      payment_status: String(paymentStatus),
+      item_description: body.item_description ? String(body.item_description) : null,
+      amount_gross: body.amount_gross ? Number(body.amount_gross) : body.mc_gross ? Number(body.mc_gross) : null,
       raw_payload: body,
       processing_status: 'received',
       received_at: processedAt,
@@ -73,7 +92,7 @@ export async function POST(req: NextRequest) {
       orderStatus = 'Failed'
     }
     
-    console.log('[v0] Processing ITN - orderId:', orderId, 'PayFast status:', paymentStatus, '-> Order status:', orderStatus)
+    console.log('[v0] Processing ITN - orderReference:', orderReference, 'PayFast status:', paymentStatus, '-> Order status:', orderStatus)
     
     // First, check if order exists
     const { data: existingOrder, error: checkError } = await supabase
@@ -83,7 +102,7 @@ export async function POST(req: NextRequest) {
       .single()
     
     if (checkError) {
-      console.error('[v0] Error checking if order exists:', checkError, 'Looking for orderId:', orderId)
+      console.error('[v0] Error checking if order exists:', checkError, 'Looking for orderReference:', orderReference)
     } else {
       console.log('[v0] Found existing order:', existingOrder)
     }
@@ -96,7 +115,7 @@ export async function POST(req: NextRequest) {
       .select()
     
     if (updateError) {
-      console.error('[v0] Error updating order:', updateError, 'orderId:', orderId)
+      console.error('[v0] Error updating order:', updateError, 'orderReference:', orderReference)
       
       // Send failure notification email
       await sendNotificationEmail({
@@ -104,9 +123,10 @@ export async function POST(req: NextRequest) {
         adminEmail: process.env.ADMIN_EMAIL,
         action: 'Order Payment Processing',
         status: 'failed',
-        message: `Failed to process payment for order ${orderId}. Please contact support.`,
+        message: `Failed to process payment for order ${orderReference}. Please contact support.`,
         details: {
-          'Order ID': orderId,
+          'Order ID': orderReference,
+          'Payment Reference': paymentReference,
           'Error': updateError.message,
           'Timestamp': new Date().toISOString(),
         },
@@ -128,9 +148,10 @@ export async function POST(req: NextRequest) {
         adminEmail: process.env.ADMIN_EMAIL,
         action: 'Order Payment Received',
         status: 'success',
-        message: `Payment for order ${orderId} has been successfully processed and confirmed.`,
+        message: `Payment for order ${orderReference} has been successfully processed and confirmed.`,
         details: {
-          'Order ID': orderId,
+          'Order ID': orderReference,
+          'Payment Reference': paymentReference,
           'Payment Status': orderStatus,
           'Amount': order.total_amount,
           'Timestamp': new Date().toISOString(),
@@ -145,12 +166,13 @@ export async function POST(req: NextRequest) {
         processed_at: processedAt,
         error_message: null,
       })
-      .eq('m_payment_id', String(orderId))
+      .eq('m_payment_id', String(paymentReference))
     
     return NextResponse.json({
       success: true,
       message: 'ITN processed successfully',
-      orderId,
+      orderId: orderReference,
+      paymentReference,
       newStatus: orderStatus
     })
   } catch (error) {
