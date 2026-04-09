@@ -149,7 +149,7 @@ export default function ProductDetailPage() {
           </nav>
         </aside>
 
-        <main className="relative flex-1 md:ml-64 md:h-[calc(100vh-72px)] md:overflow-hidden">
+        <main className="relative flex-1 md:ml-64 md:h-[calc(100vh-72px)] md:overflow-y-auto md:pb-6">
           <div className="mx-auto w-full max-w-[1700px] px-4 py-4 lg:px-8 lg:py-4">
             <div className="mb-3 flex flex-col gap-3 rounded-[22px] border border-white/10 bg-[#06123d]/60 p-4 shadow-[0_18px_50px_rgba(0,0,0,0.2)] backdrop-blur-xl sm:flex-row sm:items-end sm:justify-between">
               <div>
@@ -188,7 +188,7 @@ export default function ProductDetailPage() {
               <div className="overflow-hidden rounded-[24px] border border-white/10 bg-gradient-to-br from-[#07163f]/95 via-[#0b2a5b]/95 to-[#102f73]/95 p-4 shadow-[0_18px_50px_rgba(0,0,0,0.25)] backdrop-blur-xl md:p-4">
                 <div className="grid grid-cols-1 gap-5 xl:grid-cols-[1.05fr_0.95fr]">
                   <div className="space-y-3">
-                    <div className="aspect-[16/10] overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-[#102f73]/80 to-[#07163f]/95 shadow-[0_16px_40px_rgba(0,0,0,0.24)]">
+                    <div className="aspect-[4/3] overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-[#102f73]/80 to-[#07163f]/95 shadow-[0_16px_40px_rgba(0,0,0,0.24)] xl:aspect-[16/11]">
                       {activeImage ? (
                         <img
                           src={activeImage}
@@ -304,6 +304,31 @@ export default function ProductDetailPage() {
                     </div>
                   </div>
                 </div>
+
+                {images.length > 1 && (
+                  <div className="mt-4 hidden overflow-x-auto rounded-2xl border border-white/10 bg-white/5 p-3 md:block">
+                    <div className="flex gap-3">
+                      {images.map((img, index) => (
+                        <button
+                          key={`${img.url}-bottom-${index}`}
+                          type="button"
+                          onClick={() => setActiveImageIndex(index)}
+                          className={`h-20 w-20 flex-shrink-0 overflow-hidden rounded-xl border transition-all ${
+                            index === activeImageIndex
+                              ? 'border-red-400 ring-2 ring-red-400/40'
+                              : 'border-white/10 hover:border-red-400/40'
+                          }`}
+                        >
+                          <img
+                            src={img.url || ''}
+                            alt={`${product.title} ${index + 1}`}
+                            className="h-full w-full object-cover"
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             ) : null}
           </div>
