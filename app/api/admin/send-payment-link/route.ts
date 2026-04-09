@@ -43,7 +43,8 @@ async function resolveCustomerEmail(
   supabase: ReturnType<typeof createClient>,
   orderId: string | number,
   orderNumber: string,
-  providedEmail?: string | null
+  providedEmail?: string | null,
+  customerName?: string | null
 ) {
   const orderIdString = String(orderId).trim()
   const orderNumberString = String(orderNumber).trim()
@@ -81,10 +82,35 @@ async function resolveCustomerEmail(
     ? clientRecord.users[0]
     : clientRecord?.users
 
+  const contactEmail = contactRecord?.email?.trim() || null
+  const fallbackEmail = providedEmail?.trim() || userRecord?.email?.trim() || null
+
+  if (!contactEmail && fallbackEmail) {
+    const { error: contactUpsertError } = await supabase
+      .from('contacts')
+      .upsert(
+        {
+          client_account_no: clientAccountNo,
+          full_name: customerName?.trim() || contactRecord?.full_name || null,
+          email: fallbackEmail,
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: 'client_account_no' }
+      )
+
+    if (!contactUpsertError) {
+      return {
+        email: fallbackEmail,
+        clientAccountNo,
+        fallbackEmail,
+      }
+    }
+  }
+
   return {
-    email: contactRecord?.email?.trim() || null,
+    email: contactEmail,
     clientAccountNo,
-    fallbackEmail: userRecord?.email?.trim() || null,
+    fallbackEmail,
   }
 }
 
@@ -116,7 +142,8 @@ export async function POST(req: NextRequest) {
       supabase,
       order_id,
       order_number,
-      customer_email
+      customer_email,
+      customer_name
     )
 
     if (!resolvedCustomerEmail?.email) {
