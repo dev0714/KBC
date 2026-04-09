@@ -145,6 +145,34 @@ export default function AdminPage() {
   const clients = adminData?.clients || []
   const orders = adminData?.orders || []
   const stats = adminData?.stats || { totalProducts: 0, activeCustomers: 0, totalOrders: 0, totalRevenue: 0 }
+  const paidOrders = orders.filter((order: any) => Number(order.total_amount || 0) > 0)
+  const averagePayment = paidOrders.length
+    ? paidOrders.reduce((sum: number, order: any) => sum + Number(order.total_amount || 0), 0) / paidOrders.length
+    : 0
+  const activeLoginUsers = clients.filter((client: any) => !!client.user_id).length
+  const customersWithPayments = clients.filter((client: any) => Number(client.order_count || 0) > 0).length
+  const averagePaymentsPerCustomer = customersWithPayments > 0
+    ? orders.length / customersWithPayments
+    : 0
+  const timeBuckets = orders.reduce((acc: Record<string, number>, order: any) => {
+    const date = order.order_date ? new Date(order.order_date) : null
+    if (!date || Number.isNaN(date.getTime())) return acc
+
+    const hour = date.getHours()
+    const bucket =
+      hour >= 5 && hour < 12 ? 'Morning' :
+      hour >= 12 && hour < 17 ? 'Afternoon' :
+      hour >= 17 && hour < 21 ? 'Evening' :
+      'Night'
+
+    acc[bucket] = (acc[bucket] || 0) + 1
+    return acc
+  }, { Morning: 0, Afternoon: 0, Evening: 0, Night: 0 })
+  const peakTimeEntry = Object.entries(timeBuckets).sort((a, b) => b[1] - a[1])[0]
+  const peakTimeLabel = peakTimeEntry?.[0] || 'Afternoon'
+  const peakTimeShare = orders.length > 0
+    ? Math.round(((peakTimeEntry?.[1] || 0) / orders.length) * 100)
+    : 0
   const viewingOrderClient = viewingOrder
     ? clients.find((client: any) =>
         String(client.account_no) === String(viewingOrder.client_account_no) ||
@@ -908,9 +936,38 @@ export default function AdminPage() {
                   </div>
                 </div>
 
-                {/* Stats Cards */}
+                {/* CRM Insights */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {statsCards.map((stat, idx) => {
+                  {[
+                    {
+                      label: 'Average Payment',
+                      value: `R${averagePayment.toLocaleString('en-ZA', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}`,
+                      helper: `${orders.length} total payments`,
+                      icon: CreditCard,
+                      color: 'from-emerald-500 to-emerald-600',
+                    },
+                    {
+                      label: 'Users',
+                      value: String(activeLoginUsers),
+                      helper: 'Customers with logins',
+                      icon: Users,
+                      color: 'from-blue-500 to-blue-600',
+                    },
+                    {
+                      label: 'Avg Payments / Customer',
+                      value: averagePaymentsPerCustomer.toFixed(1),
+                      helper: `${customersWithPayments} paying customers`,
+                      icon: ShoppingCart,
+                      color: 'from-purple-500 to-purple-600',
+                    },
+                    {
+                      label: 'Peak Time',
+                      value: peakTimeLabel,
+                      helper: `${peakTimeShare}% of orders`,
+                      icon: Clock,
+                      color: 'from-pink-500 to-pink-600',
+                    },
+                  ].map((stat, idx) => {
                     const Icon = stat.icon
                     return (
                       <div
@@ -925,6 +982,7 @@ export default function AdminPage() {
                           </div>
                         </div>
                         <p className="text-4xl font-black text-white">{stat.value}</p>
+                        <p className="mt-2 text-sm text-slate-400">{stat.helper}</p>
                       </div>
                     )
                   })}
@@ -1647,49 +1705,66 @@ export default function AdminPage() {
                   </div>
                 </div>
 
-                {/* Quick Stats */}
-                <div className="bg-gradient-to-br from-card to-card/50 border border-primary/20 rounded-xl p-6 shadow-xl shadow-primary/10 backdrop-blur-sm">
-                  <h3 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
-                    <Database className="w-5 h-5 text-primary" />
-                    System Overview
-                  </h3>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-600/30">
-                      <div className="flex items-center gap-3">
-                        <Users className="w-8 h-8 text-blue-400" />
-                        <div>
-                          <p className="text-2xl font-bold text-foreground">{clients.length}</p>
-                          <p className="text-xs text-muted-foreground">Total Customers</p>
-                        </div>
-                      </div>
+                {/* CRM Insights */}
+                <div className="rounded-2xl border border-white/10 bg-gradient-to-br from-[#0b2a5b]/90 to-[#07163f]/90 p-6 shadow-[0_20px_50px_rgba(0,0,0,0.2)] backdrop-blur-xl">
+                  <div className="mb-4 flex items-center justify-between">
+                    <div>
+                      <p className="text-[11px] uppercase tracking-[0.35em] text-slate-400 mb-2">CRM insights</p>
+                      <h3 className="text-lg font-bold text-white">Operational Signals</h3>
                     </div>
-                    <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-600/30">
-                      <div className="flex items-center gap-3">
-                        <Package className="w-8 h-8 text-emerald-400" />
-                        <div>
-                          <p className="text-2xl font-bold text-foreground">{products.length}</p>
-                          <p className="text-xs text-muted-foreground">Total Products</p>
+                    <Database className="h-5 w-5 text-slate-400" />
+                  </div>
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+                    {[
+                      {
+                        label: 'Average Payment',
+                        value: `R${averagePayment.toLocaleString('en-ZA', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}`,
+                        helper: `${orders.length} payments captured`,
+                        icon: CreditCard,
+                        color: 'from-emerald-500 to-emerald-600',
+                      },
+                      {
+                        label: 'No. of Users',
+                        value: String(activeLoginUsers),
+                        helper: 'Customers with active logins',
+                        icon: Users,
+                        color: 'from-blue-500 to-blue-600',
+                      },
+                      {
+                        label: 'Avg Payments / Customer',
+                        value: averagePaymentsPerCustomer.toFixed(1),
+                        helper: `${customersWithPayments} customers placing orders`,
+                        icon: ShoppingCart,
+                        color: 'from-purple-500 to-purple-600',
+                      },
+                      {
+                        label: 'Peak Time of Day',
+                        value: peakTimeLabel,
+                        helper: `${peakTimeShare}% of all orders`,
+                        icon: Clock,
+                        color: 'from-pink-500 to-pink-600',
+                      },
+                    ].map((stat, idx) => {
+                      const Icon = stat.icon
+                      return (
+                        <div
+                          key={stat.label}
+                          className="group rounded-2xl border border-white/10 bg-white/5 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-red-500/30 hover:bg-white/[0.08]"
+                          style={{ animationDelay: `${idx * 0.08}s` }}
+                        >
+                          <div className="flex items-start justify-between gap-3">
+                            <div>
+                              <p className="text-[11px] uppercase tracking-[0.32em] text-slate-400">{stat.label}</p>
+                              <p className="mt-3 text-3xl font-black text-white">{stat.value}</p>
+                              <p className="mt-2 text-sm text-slate-400">{stat.helper}</p>
+                            </div>
+                            <div className={`flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${stat.color} text-white shadow-lg`}>
+                              <Icon className="h-6 w-6" />
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                    <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-600/30">
-                      <div className="flex items-center gap-3">
-                        <ShoppingCart className="w-8 h-8 text-amber-400" />
-                        <div>
-                          <p className="text-2xl font-bold text-foreground">{orders.length}</p>
-                          <p className="text-xs text-muted-foreground">Total Orders</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-600/30">
-                      <div className="flex items-center gap-3">
-                        <CreditCard className="w-8 h-8 text-primary" />
-                        <div>
-                          <p className="text-2xl font-bold text-foreground">R{orders.reduce((sum: number, o: any) => sum + (o.total_amount || 0), 0).toLocaleString()}</p>
-                          <p className="text-xs text-muted-foreground">Total Revenue</p>
-                        </div>
-                      </div>
-                    </div>
+                      )
+                    })}
                   </div>
                 </div>
               </div>
