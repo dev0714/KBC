@@ -118,6 +118,24 @@ export default function AdminPage() {
     ? viewingOrder.client_email || clients.find((client: any) => String(client.account_no) === String(viewingOrder.client_account_no))?.email || ''
     : ''
 
+  useEffect(() => {
+    if (editingProduct) {
+      setProductFormData({
+        title: editingProduct.title || '',
+        sku: editingProduct.sku || '',
+        price: String(editingProduct.price ?? ''),
+        inventory_quantity: String(editingProduct.inventory_quantity ?? editingProduct.stock ?? ''),
+        product_type: editingProduct.product_type || '',
+        description: editingProduct.description || '',
+      })
+      setPreviewImage(productImages[editingProduct.sku] || null)
+      return
+    }
+
+    setProductFormData({})
+    setPreviewImage(null)
+  }, [editingProduct])
+
   const statsCards = [
     { label: 'Total Products', value: String(stats.totalProducts), icon: Package, color: 'from-blue-500 to-blue-600' },
     { label: 'Active Customers', value: String(stats.activeCustomers), icon: Users, color: 'from-green-500 to-green-600' },
@@ -2129,7 +2147,7 @@ export default function AdminPage() {
                 <Button
                   className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold shadow-lg shadow-red-600/50 hover:shadow-red-600/70 transition-all"
                   disabled={savingProduct}
-                  onClick={() => handleUpdateProduct()}
+                  onClick={() => handleSaveProduct()}
                 >
                   {savingProduct ? 'Saving...' : 'Save Changes'}
                 </Button>
