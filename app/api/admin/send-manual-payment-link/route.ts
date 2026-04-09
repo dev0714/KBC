@@ -133,6 +133,34 @@ export async function POST(req: NextRequest) {
       )
     }
 
+    const manualOrderNumber = `ORD-${Date.now()}`
+    const manualOrderDate = new Date().toISOString()
+    const manualTaxAmount = Number((amount * 0.15).toFixed(2))
+
+    const { data: manualOrder, error: manualOrderError } = await supabase
+      .from('orders')
+      .insert({
+        order_number: manualOrderNumber,
+        client_account_no: resolvedCustomer.accountNo,
+        order_date: manualOrderDate,
+        total_amount: amount.toFixed(2),
+        total_tax_amount: manualTaxAmount,
+        shipping_amount: 0,
+        payment_status: 'Pending',
+      })
+      .select('id, order_number')
+      .single()
+
+    if (manualOrderError || !manualOrder) {
+      return NextResponse.json(
+        {
+          error: 'Failed to create manual order',
+          details: manualOrderError?.message || 'Unable to insert pending order',
+        },
+        { status: 500 }
+      )
+    }
+
     let paymentUrl = paymentUrlFromBody
     if (!paymentUrl) {
       const paymentResponse = await fetch(new URL('/api/payfast/create-payment', req.url), {
@@ -142,13 +170,14 @@ export async function POST(req: NextRequest) {
           id: 1,
           client_id: resolvedCustomer.accountNo,
           amount: amount.toFixed(2),
-          item_name: itemName,
+          item_name: `Order ${manualOrder.order_number}`,
           item_description: note || `Manual payment for ${resolvedCustomer.name}`,
           name_first: resolvedCustomer.name.split(' ')[0] || 'Customer',
           name_last: resolvedCustomer.name.split(' ').slice(1).join(' '),
+          email_address: resolvedCustomer.email,
           cell_number: '',
           custom_int1: '1',
-          custom_str1: `${Date.now()}`,
+          custom_str1: String(manualOrder.id),
         }),
       })
 
