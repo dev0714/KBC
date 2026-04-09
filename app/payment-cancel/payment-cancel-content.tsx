@@ -1,21 +1,77 @@
 'use client'
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { XCircle } from "lucide-react"
-import Link from "next/link"
+import { useEffect, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { XCircle, Loader2 } from 'lucide-react'
+import Link from 'next/link'
 
 export default function PaymentCancelContent() {
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const [isUpdating, setIsUpdating] = useState(true)
+  const [message, setMessage] = useState('Updating your order status...')
+
+  useEffect(() => {
+    const markCancelled = async () => {
+      try {
+        const mPaymentId = searchParams.get('m_payment_id')
+        const customStr1 = searchParams.get('custom_str1')
+        const paymentStatus = searchParams.get('pf_payment_status') || 'CANCELLED'
+
+        if (!mPaymentId && !customStr1) {
+          setMessage('Your payment was cancelled. We could not identify the order from the return URL.')
+          setIsUpdating(false)
+          return
+        }
+
+        const response = await fetch('/api/payfast/verify-payment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            pf_payment_status: paymentStatus,
+            m_payment_id: mPaymentId,
+            custom_str1: customStr1,
+          }),
+        })
+
+        const data = await response.json()
+
+        if (response.ok) {
+          setMessage(data.newStatus === 'Cancelled'
+            ? 'Your payment was cancelled and the order has been updated.'
+            : data.message || 'Your payment was cancelled.')
+        } else {
+          setMessage(data.message || 'Your payment was cancelled, but the order could not be updated automatically.')
+        }
+      } catch (error) {
+        console.error('[v0] Payment cancel error:', error)
+        setMessage('Your payment was cancelled, but we could not update the order automatically.')
+      } finally {
+        setIsUpdating(false)
+      }
+    }
+
+    markCancelled()
+  }, [searchParams])
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-950 via-background to-blue-900 flex items-center justify-center py-12 px-4">
       <Card className="max-w-md w-full bg-card/95 backdrop-blur-sm border-border/50">
         <CardHeader className="text-center">
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-destructive/20">
-            <XCircle className="h-10 w-10 text-destructive" />
+            {isUpdating ? (
+              <Loader2 className="h-10 w-10 animate-spin text-destructive" />
+            ) : (
+              <XCircle className="h-10 w-10 text-destructive" />
+            )}
           </div>
-          <CardTitle className="text-2xl text-foreground">Payment Cancelled</CardTitle>
+          <CardTitle className="text-2xl text-foreground">
+            {isUpdating ? 'Updating Cancellation' : 'Payment Cancelled'}
+          </CardTitle>
           <CardDescription className="text-muted-foreground">
-            Your payment was cancelled and no charges were made
+            {message}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -28,8 +84,13 @@ export default function PaymentCancelContent() {
             <Button asChild className="w-full">
               <Link href="/dashboard?refresh=true">Return to Dashboard</Link>
             </Button>
-            <Button asChild variant="outline" className="w-full bg-transparent">
-              <Link href="/dashboard?refresh=true">Try Again</Link>
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full bg-transparent"
+              onClick={() => router.push('/dashboard?refresh=true')}
+            >
+              Try Again
             </Button>
           </div>
         </CardContent>

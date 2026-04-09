@@ -4,11 +4,11 @@ import { createClient } from '@supabase/supabase-js'
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    const { pf_payment_status, m_payment_id } = body
+    const { pf_payment_status, m_payment_id, custom_str1 } = body
 
-    if (!m_payment_id) {
+    if (!m_payment_id && !custom_str1) {
       return NextResponse.json(
-        { success: false, message: 'Invalid payment ID' },
+        { success: false, message: 'Invalid payment reference' },
         { status: 400 }
       )
     }
@@ -18,15 +18,32 @@ export async function POST(req: NextRequest) {
       process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     )
 
+    const paymentReference = m_payment_id ? String(m_payment_id) : ''
+    const orderReference = custom_str1 ? String(custom_str1) : ''
+
     let orderId: number | null = null
 
-    if (/^\d+$/.test(String(m_payment_id))) {
-      orderId = Number.parseInt(String(m_payment_id), 10)
-    } else {
+    if (/^\d+$/.test(paymentReference)) {
+      orderId = Number.parseInt(paymentReference, 10)
+    } else if (/^\d+$/.test(orderReference)) {
+      orderId = Number.parseInt(orderReference, 10)
+    } else if (paymentReference) {
       const { data: itnLog } = await supabase
         .from('payfast_itn_logs')
         .select('order_id, payment_status')
-        .eq('m_payment_id', String(m_payment_id))
+        .eq('m_payment_id', paymentReference)
+        .maybeSingle()
+
+      if (itnLog?.order_id) {
+        orderId = Number(itnLog.order_id)
+      }
+    }
+
+    if (!orderId && orderReference) {
+      const { data: itnLog } = await supabase
+        .from('payfast_itn_logs')
+        .select('order_id, payment_status')
+        .eq('custom_str1', orderReference)
         .maybeSingle()
 
       if (itnLog?.order_id) {
@@ -41,7 +58,6 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    // Fetch the order to update its payment status
     const { data: order, error: fetchError } = await supabase
       .from('orders')
       .select('id, payment_status')
@@ -56,15 +72,15 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    // Determine payment status based on PayFast response
     let newStatus = 'Pending'
     if (pf_payment_status === 'COMPLETE') {
       newStatus = 'Paid'
-    } else if (pf_payment_status === 'FAILED' || pf_payment_status === 'CANCELLED') {
+    } else if (pf_payment_status === 'CANCELLED') {
+      newStatus = 'Cancelled'
+    } else if (pf_payment_status === 'FAILED') {
       newStatus = 'Failed'
     }
 
-    // Update order payment status
     const { error: updateError } = await supabase
       .from('orders')
       .update({ payment_status: newStatus })
@@ -81,12 +97,16 @@ export async function POST(req: NextRequest) {
     console.log('[v0] Order payment status updated:', { orderId, status: newStatus })
 
     return NextResponse.json({
-      success: newStatus === 'Paid',
-      message: newStatus === 'Paid' 
-        ? 'Payment successful!' 
-        : newStatus === 'Failed'
-        ? 'Payment failed. Please try again.'
-        : 'Payment is being processed.',
+      success: true,
+      message:
+        newStatus === 'Paid'
+          ? 'Payment successful!'
+          : newStatus === 'Cancelled'
+          ? 'Payment cancelled.'
+          : newStatus === 'Failed'
+          ? 'Payment failed. Please try again.'
+          : 'Payment is being processed.',
+      newStatus,
     })
   } catch (error) {
     console.error('[v0] Payment verification error:', error)
