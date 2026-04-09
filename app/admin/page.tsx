@@ -100,6 +100,7 @@ export default function AdminPage() {
   const [editProductData, setEditProductData] = useState<{title: string; product_type: string; description: string; price: string; inventory_quantity: string}>({title: '', product_type: '', description: '', price: '', inventory_quantity: ''})
   const [editProductLoading, setEditProductLoading] = useState(false)
   const [deletingProductImage, setDeletingProductImage] = useState<string | null>(null)
+  const [paymentLinkPreview, setPaymentLinkPreview] = useState('')
   const PRODUCTS_PER_PAGE = 15
 
   const [customerPage, setCustomerPage] = useState(1)
@@ -153,6 +154,10 @@ export default function AdminPage() {
     setProductFormData({})
     setPreviewImage(null)
   }, [editingProduct])
+
+  useEffect(() => {
+    setPaymentLinkPreview('')
+  }, [viewingOrder?.id])
 
   const statsCards = [
     { label: 'Total Products', value: String(stats.totalProducts), icon: Package, color: 'from-blue-500 to-blue-600' },
@@ -2261,6 +2266,36 @@ export default function AdminPage() {
               <div className="border-t border-slate-400/30 pt-4">
                 <p className="text-sm text-slate-400 font-bold mb-3">Send Payment Link</p>
                 <div className="space-y-3">
+                  <div className="rounded-lg border border-slate-400/30 bg-black/10 p-4 space-y-3">
+                    <div className="flex items-center justify-between gap-3">
+                      <div>
+                        <p className="text-xs uppercase tracking-wider text-slate-400 font-bold">To</p>
+                        <p className="text-sm text-white font-medium break-all">{viewingOrderEmail || 'No contact email available'}</p>
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-xs uppercase tracking-wider text-slate-400 font-bold">From</p>
+                      <p className="text-sm text-white font-medium break-all">kbc@notification.leadsync.co.za</p>
+                    </div>
+                    <div>
+                      <p className="text-xs uppercase tracking-wider text-slate-400 font-bold mb-1">Link</p>
+                      <div className="flex gap-2 items-center">
+                        <div className="flex-1 rounded-md border border-slate-400/30 bg-white/5 px-3 py-2 text-sm text-slate-200 break-all">
+                          {paymentLinkPreview || 'Will be generated when you click Send via Email'}
+                        </div>
+                        {paymentLinkPreview && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="border-slate-400/50 text-slate-300 hover:text-slate-200 hover:bg-slate-400/10 font-bold bg-transparent"
+                            onClick={() => navigator.clipboard.writeText(paymentLinkPreview)}
+                          >
+                            Copy
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                   <div className="flex gap-2">
                       <Button
                         variant="outline"
@@ -2285,9 +2320,13 @@ export default function AdminPage() {
 
                             const result = await response.json()
                             if (!response.ok) {
+                              if (result?.paymentUrl) {
+                                setPaymentLinkPreview(result.paymentUrl)
+                              }
                               throw new Error(result.error || result.message || 'Failed to send payment link')
                             }
 
+                            setPaymentLinkPreview(result.paymentUrl || '')
                             alert('Payment link sent successfully via email')
                           } catch (error: any) {
                             console.error('[v0] Sending payment link via email failed:', error)

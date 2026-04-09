@@ -223,7 +223,7 @@ export async function POST(req: NextRequest) {
     if (!emailResponse.ok) {
       const errorText = await emailResponse.text()
       return NextResponse.json(
-        { error: 'Failed to send email', details: errorText },
+        { error: 'Failed to send email', details: errorText, paymentUrl },
         { status: emailResponse.status }
       )
     }
