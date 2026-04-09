@@ -155,13 +155,13 @@ export default function ProductDetailPage() {
           </nav>
         </aside>
 
-        <main className="relative flex-1 md:ml-64">
-          <div className="mx-auto w-full max-w-[1700px] px-4 py-8 lg:px-8">
-            <div className="mb-6 flex flex-col gap-4 rounded-[28px] border border-white/10 bg-[#06123d]/60 p-5 shadow-[0_24px_70px_rgba(0,0,0,0.22)] backdrop-blur-xl sm:flex-row sm:items-end sm:justify-between md:p-6">
+        <main className="relative flex-1 md:ml-64 md:h-[calc(100vh-72px)] md:overflow-hidden">
+          <div className="mx-auto w-full max-w-[1700px] px-4 py-4 lg:px-8 lg:py-5">
+            <div className="mb-4 flex flex-col gap-4 rounded-[24px] border border-white/10 bg-[#06123d]/60 p-4 shadow-[0_18px_50px_rgba(0,0,0,0.2)] backdrop-blur-xl sm:flex-row sm:items-end sm:justify-between md:p-5">
               <div>
                 <p className="text-[11px] uppercase tracking-[0.45em] text-slate-400">Product Detail</p>
-                <h2 className="mt-2 text-3xl font-black text-white">{product?.title || 'Loading product'}</h2>
-                <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-300">
+                <h2 className="mt-1.5 text-2xl font-black text-white">{product?.title || 'Loading product'}</h2>
+                <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-slate-300">
                   This product view lives inside the customer CRM shop workflow, so you can inspect the gallery and jump straight back into the catalog.
                 </p>
               </div>
@@ -182,7 +182,7 @@ export default function ProductDetailPage() {
             </div>
 
             {loading ? (
-              <div className="flex items-center justify-center py-24">
+              <div className="flex h-[calc(100vh-260px)] items-center justify-center">
                 <Loader2 className="h-10 w-10 animate-spin text-red-400" />
               </div>
             ) : error ? (
@@ -192,10 +192,10 @@ export default function ProductDetailPage() {
               </div>
             ) : product ? (
               <>
-                <div className="overflow-hidden rounded-[28px] border border-white/10 bg-gradient-to-br from-[#07163f]/95 via-[#0b2a5b]/95 to-[#102f73]/95 p-5 shadow-[0_24px_70px_rgba(0,0,0,0.28)] backdrop-blur-xl md:p-8">
-                  <div className="grid grid-cols-1 gap-8 xl:grid-cols-[1.15fr_0.85fr]">
-                    <div className="space-y-4">
-                      <div className="aspect-[4/3] overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-[#102f73]/80 to-[#07163f]/95 shadow-[0_20px_50px_rgba(0,0,0,0.28)]">
+                <div className="overflow-hidden rounded-[24px] border border-white/10 bg-gradient-to-br from-[#07163f]/95 via-[#0b2a5b]/95 to-[#102f73]/95 p-4 shadow-[0_18px_50px_rgba(0,0,0,0.25)] backdrop-blur-xl md:p-5">
+                  <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1.05fr_0.95fr]">
+                    <div className="space-y-3">
+                      <div className="aspect-[16/10] overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-[#102f73]/80 to-[#07163f]/95 shadow-[0_16px_40px_rgba(0,0,0,0.24)]">
                         {activeImage ? (
                           <img
                             src={activeImage}
@@ -213,7 +213,7 @@ export default function ProductDetailPage() {
                       </div>
 
                       {images.length > 1 && (
-                        <div className="grid grid-cols-4 gap-3">
+                        <div className="grid grid-cols-4 gap-2.5">
                           {images.map((img, index) => (
                             <button
                               key={`${img.url}-${index}`}
@@ -237,18 +237,18 @@ export default function ProductDetailPage() {
                     </div>
 
                     <div className="flex flex-col">
-                      <div className="mb-4 flex items-center justify-between gap-3">
+                      <div className="mb-3 flex items-center justify-between gap-3">
                         <p className="text-sm font-bold text-red-300">SKU: {product.sku}</p>
                         <p className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-bold uppercase tracking-[0.35em] text-slate-300">
                           CRM Detail
                         </p>
                       </div>
 
-                      <h1 className="mb-4 text-4xl font-black text-white">{product.title}</h1>
+                      <h1 className="mb-3 text-3xl font-black text-white">{product.title}</h1>
 
-                      <div className="mb-6 border-b border-white/10 pb-6">
-                        <div className="mb-4 flex items-baseline gap-2">
-                          <span className="text-4xl font-black text-white">R{Number(product.price || 0).toLocaleString()}</span>
+                      <div className="mb-4 border-b border-white/10 pb-4">
+                        <div className="mb-3 flex items-baseline gap-2">
+                          <span className="text-3xl font-black text-white">R{Number(product.price || 0).toLocaleString()}</span>
                           <span className="text-sm text-slate-300">per unit</span>
                         </div>
 
@@ -263,11 +263,11 @@ export default function ProductDetailPage() {
                         )}
                       </div>
 
-                      <p className="mb-8 whitespace-pre-line text-lg text-slate-300">
+                      <p className="mb-5 whitespace-pre-line text-base leading-relaxed text-slate-300">
                         {product.description || 'No description available for this product.'}
                       </p>
 
-                      <div className="space-y-3 rounded-2xl border border-white/10 bg-white/5 p-5 md:p-6">
+                      <div className="space-y-2.5 rounded-2xl border border-white/10 bg-white/5 p-4 md:p-5">
                         <div className="flex items-start gap-3">
                           <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-400" />
                           <div className="text-sm">
@@ -294,25 +294,25 @@ export default function ProductDetailPage() {
                   </div>
                 </div>
 
-                <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
+                <div className="mt-5 grid grid-cols-1 gap-3 md:grid-cols-3">
                   <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
                     <p className="text-[11px] uppercase tracking-[0.32em] text-slate-400">Catalog</p>
-                    <p className="mt-2 text-xl font-black text-white">Shop Context</p>
+                    <p className="mt-1.5 text-lg font-black text-white">Shop Context</p>
                     <p className="mt-1 text-sm text-slate-300">Open this item inside the CRM-style catalog workflow.</p>
                   </div>
                   <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
                     <p className="text-[11px] uppercase tracking-[0.32em] text-slate-400">Availability</p>
-                    <p className="mt-2 text-xl font-black text-white">{Number(product.inventory_quantity || 0) > 0 ? 'Ready to Order' : 'Out of Stock'}</p>
+                    <p className="mt-1.5 text-lg font-black text-white">{Number(product.inventory_quantity || 0) > 0 ? 'Ready to Order' : 'Out of Stock'}</p>
                     <p className="mt-1 text-sm text-slate-300">Quantity is synced from the dashboard inventory field.</p>
                   </div>
                   <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
                     <p className="text-[11px] uppercase tracking-[0.32em] text-slate-400">Action</p>
-                    <p className="mt-2 text-xl font-black text-white">Keep Browsing</p>
+                    <p className="mt-1.5 text-lg font-black text-white">Keep Browsing</p>
                     <p className="mt-1 text-sm text-slate-300">Return to the catalog without leaving the CRM shell.</p>
                   </div>
                 </div>
 
-                <div className="mt-8 flex flex-wrap justify-center gap-4 border-t border-white/10 pt-8">
+                <div className="mt-5 flex flex-wrap justify-center gap-3 border-t border-white/10 pt-4">
                   <Button variant="outline" className="gap-2 border-white/10 bg-white/5 text-white hover:bg-white/10 hover:text-white">
                     <Download className="h-4 w-4" />
                     Download Datasheet
