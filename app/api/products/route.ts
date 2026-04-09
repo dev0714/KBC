@@ -30,7 +30,10 @@ export async function GET(request: NextRequest) {
     const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10))
     const limit = Math.min(100, Math.max(1, parseInt(searchParams.get('limit') || '50', 10)))
     const search = searchParams.get('search')?.trim() || ''
-    const productId = searchParams.get('id')?.trim()
+    const rawProductId = searchParams.get('id')?.trim()
+    const productId = rawProductId && rawProductId !== 'undefined' && rawProductId !== 'null'
+      ? rawProductId
+      : null
 
     // Calculate range for pagination
     const from = (page - 1) * limit
@@ -43,6 +46,12 @@ export async function GET(request: NextRequest) {
       .order('title', { ascending: true })
 
     if (productId) {
+      if (!/^\d+$/.test(productId)) {
+        return NextResponse.json(
+          { products: [], total: 0, page, limit, error: 'Invalid product id' },
+          { status: 400 }
+        )
+      }
       query = query.eq('id', productId)
     }
 

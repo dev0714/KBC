@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
+import { useParams } from 'next/navigation'
 import { Navbar } from '@/components/navigation/navbar'
 import { Footer } from '@/components/navigation/footer'
 import { Button } from '@/components/ui/button'
@@ -27,18 +28,31 @@ type Product = {
   product_images?: ProductImage[]
 }
 
-export default function ProductDetailPage({ params }: { params: { id: string } }) {
+export default function ProductDetailPage() {
+  const params = useParams<{ id?: string | string[] }>()
   const [product, setProduct] = useState<Product | null>(null)
   const [activeImageIndex, setActiveImageIndex] = useState(0)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
+  const productId = useMemo(() => {
+    const rawId = Array.isArray(params?.id) ? params.id[0] : params?.id
+    if (!rawId || rawId === 'undefined' || rawId === 'null') return null
+    return rawId
+  }, [params])
+
   useEffect(() => {
+    if (!productId) {
+      setError('Invalid product link')
+      setLoading(false)
+      return
+    }
+
     const loadProduct = async () => {
       setLoading(true)
       setError(null)
       try {
-        const response = await fetch(`/api/products?id=${encodeURIComponent(params.id)}`)
+        const response = await fetch(`/api/products?id=${encodeURIComponent(productId)}`)
         const data = await response.json()
 
         if (!response.ok) {
@@ -59,7 +73,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
     }
 
     loadProduct()
-  }, [params.id])
+  }, [productId])
 
   const images = useMemo(() => {
     const productImages = product?.product_images?.filter((img) => img.url) || []
