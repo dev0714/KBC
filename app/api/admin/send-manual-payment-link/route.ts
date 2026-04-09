@@ -146,10 +146,9 @@ export async function POST(req: NextRequest) {
           item_description: note || `Manual payment for ${resolvedCustomer.name}`,
           name_first: resolvedCustomer.name.split(' ')[0] || 'Customer',
           name_last: resolvedCustomer.name.split(' ').slice(1).join(' '),
-          email_address: resolvedCustomer.email,
           cell_number: '',
           custom_int1: '1',
-          custom_str1: `${resolvedCustomer.accountNo}-${Date.now()}`,
+          custom_str1: `${Date.now()}`,
         }),
       })
 
