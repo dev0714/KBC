@@ -972,8 +972,10 @@ export default function AdminPage() {
             {activeTab === 'customers' && (() => {
               const filteredCustomers = clients.filter((c: any) => 
                 c.account_no?.toLowerCase().includes(customerSearch.toLowerCase()) ||
-                c.name?.toLowerCase().includes(customerSearch.toLowerCase()) ||
-                c.email?.toLowerCase().includes(customerSearch.toLowerCase())
+                c.client_name?.toLowerCase().includes(customerSearch.toLowerCase()) ||
+                c.full_name?.toLowerCase().includes(customerSearch.toLowerCase()) ||
+                c.email?.toLowerCase().includes(customerSearch.toLowerCase()) ||
+                c.phone_number?.toLowerCase().includes(customerSearch.toLowerCase())
               )
               const totalCustomerPages = Math.ceil(filteredCustomers.length / CUSTOMERS_PER_PAGE)
               const paginatedCustomers = filteredCustomers.slice((customerPage - 1) * CUSTOMERS_PER_PAGE, customerPage * CUSTOMERS_PER_PAGE)
@@ -1018,9 +1020,9 @@ export default function AdminPage() {
                         {paginatedCustomers.map((client: any) => (
                           <tr key={client.account_no} className="hover:bg-slate-400/10 transition-colors">
                             <td className="py-3 px-4 font-mono text-sm text-foreground">{client.account_no}</td>
-                            <td className="py-3 px-4 text-foreground">{client.name}</td>
+                            <td className="py-3 px-4 text-foreground">{client.client_name || client.full_name || '-'}</td>
                             <td className="py-3 px-4 text-foreground">{client.email || '-'}</td>
-                            <td className="py-3 px-4 text-foreground">{client.phone || '-'}</td>
+                            <td className="py-3 px-4 text-foreground">{client.phone_number || '-'}</td>
                             <td className="py-3 px-4">
                               <Button 
                                 variant="ghost" 
