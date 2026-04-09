@@ -914,7 +914,7 @@ export default function DashboardPage() {
                   </div>
                 ) : (
                   <>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-3 xl:gap-4">
                       {products.map((product: any, idx: number) => (
                         <div
                           key={product.id}
@@ -923,7 +923,7 @@ export default function DashboardPage() {
                         >
                           {/* Product Image */}
                           <Link href={`/customer/catalog/${product.id}`} className="block">
-                            <div className="w-full h-40 bg-slate-700/50 flex items-center justify-center overflow-hidden flex-shrink-0">
+                            <div className="w-full h-32 xl:h-28 bg-slate-700/50 flex items-center justify-center overflow-hidden flex-shrink-0">
                               {product.image_url ? (
                                 <img
                                   src={product.image_url}
@@ -940,25 +940,25 @@ export default function DashboardPage() {
                             </div>
                           </Link>
 
-                          <div className="p-5 flex flex-col h-full">
+                          <div className="p-4 xl:p-3.5 flex flex-col h-full">
                             <Link href={`/customer/catalog/${product.id}`} className="mb-3 block">
-                              <p className="font-bold text-slate-200 hover:text-red-300 transition-colors">{product.title}</p>
-                              <p className="text-xs text-slate-400">{product.sku}</p>
-                              <p className="text-xs text-red-300 mt-1 opacity-80">Click to view large image</p>
+                              <p className="font-bold text-slate-200 text-sm xl:text-[13px] leading-tight hover:text-red-300 transition-colors">{product.title}</p>
+                              <p className="text-[11px] text-slate-400 mt-1">{product.sku}</p>
+                              <p className="text-[11px] text-red-300 mt-1 opacity-80">View large image</p>
                             </Link>
-                            <p className="text-sm text-slate-400 mb-4 flex-grow">{product.description}</p>
-                            <div className="space-y-3 mt-auto">
+                            <p className="text-xs text-slate-400 mb-3 flex-grow line-clamp-3">{product.description}</p>
+                            <div className="space-y-2 mt-auto">
                               <div className="flex items-center justify-between">
-                                <p className="text-2xl font-bold text-red-400">R{Number(product.price).toLocaleString()}</p>
+                                <p className="text-lg xl:text-xl font-bold text-red-400">R{Number(product.price).toLocaleString()}</p>
                                 {product.inventory_quantity > 0 ? (
-                                  <span className="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded-full font-bold">In Stock ({product.inventory_quantity})</span>
+                                  <span className="text-[10px] bg-green-500/20 text-green-400 px-2 py-1 rounded-full font-bold">In Stock ({product.inventory_quantity})</span>
                                 ) : (
-                                  <span className="text-xs bg-red-500/20 text-red-400 px-2 py-1 rounded-full font-bold">Out of Stock</span>
+                                  <span className="text-[10px] bg-red-500/20 text-red-400 px-2 py-1 rounded-full font-bold">Out of Stock</span>
                                 )}
                               </div>
                               {product.inventory_quantity > 0 ? (
                                 <>
-                                  <div className="flex items-center border border-slate-400/50 rounded-lg bg-white/10">
+                                  <div className="flex items-center border border-slate-400/50 rounded-lg bg-white/10 text-sm">
                                     <button
                                       onClick={() => {
                                         setProductQuantities(prev => ({...prev, [product.id]: Math.max(1, (prev[product.id] || 1) - 1)}))
@@ -968,7 +968,7 @@ export default function DashboardPage() {
                                     >
                                       −
                                     </button>
-                                    <span className="px-3 py-1 text-white font-bold min-w-[40px] text-center">
+                                    <span className="px-2 py-1 text-white font-bold min-w-[32px] text-center">
                                       {productQuantities[product.id] || 1}
                                     </span>
                                     <button
@@ -987,10 +987,10 @@ export default function DashboardPage() {
                                     </button>
                                   </div>
                                   {stockErrors[product.id] && (
-                                    <p className="text-xs text-red-400 font-bold">{stockErrors[product.id]}</p>
+                                    <p className="text-[11px] text-red-400 font-bold">{stockErrors[product.id]}</p>
                                   )}
                                   <div className="flex gap-2">
-                                    <Button size="sm" onClick={() => addToCart({id: product.id, sku: product.sku, name: product.title, price: Number(product.price), inventory_quantity: product.inventory_quantity})} disabled={cart.some(item => item.id === product.id)} className={`flex-1 font-bold gap-1 ${cart.some(item => item.id === product.id) ? 'bg-slate-600 text-slate-400 cursor-not-allowed' : 'bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white'}`}>
+                                    <Button size="sm" onClick={() => addToCart({id: product.id, sku: product.sku, name: product.title, price: Number(product.price), inventory_quantity: product.inventory_quantity})} disabled={cart.some(item => item.id === product.id)} className={`flex-1 h-9 text-xs font-bold gap-1 ${cart.some(item => item.id === product.id) ? 'bg-slate-600 text-slate-400 cursor-not-allowed' : 'bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white'}`}>
                                       {cart.some(item => item.id === product.id) ? 'In Cart' : 'Add to Cart'}
                                     </Button>
                                     <button
@@ -1000,14 +1000,14 @@ export default function DashboardPage() {
                                       title={favorites.has(product.sku) ? 'Remove from wishlist' : 'Add to wishlist'}
                                     >
                                       <Heart
-                                        className={`w-5 h-5 transition-all ${favorites.has(product.sku) ? 'fill-pink-500 text-pink-500' : 'text-slate-300 hover:text-pink-400'}`}
+                                        className={`w-4 h-4 transition-all ${favorites.has(product.sku) ? 'fill-pink-500 text-pink-500' : 'text-slate-300 hover:text-pink-400'}`}
                                       />
                                     </button>
                                   </div>
                                 </>
                               ) : (
                                 <div className="flex gap-2">
-                                  <Button size="sm" disabled className="flex-1 font-bold gap-1 bg-slate-600 text-slate-400 cursor-not-allowed">
+                                  <Button size="sm" disabled className="flex-1 h-9 text-xs font-bold gap-1 bg-slate-600 text-slate-400 cursor-not-allowed">
                                     Out of Stock
                                   </Button>
                                   <button
@@ -1015,11 +1015,11 @@ export default function DashboardPage() {
                                     onClick={() => toggleFavorite(product.sku)}
                                     className={`p-2 rounded-lg transition-all transform hover:bg-pink-500/10 ${favorites.has(product.sku) ? 'scale-110 animate-pulse' : 'scale-100 hover:scale-105'}`}
                                     title={favorites.has(product.sku) ? 'Remove from wishlist' : 'Add to wishlist'}
-                                  >
-                                    <Heart
-                                      className={`w-5 h-5 transition-all ${favorites.has(product.sku) ? 'fill-pink-500 text-pink-500' : 'text-slate-300 hover:text-pink-400'}`}
-                                    />
-                                  </button>
+                                    >
+                                      <Heart
+                                      className={`w-4 h-4 transition-all ${favorites.has(product.sku) ? 'fill-pink-500 text-pink-500' : 'text-slate-300 hover:text-pink-400'}`}
+                                      />
+                                    </button>
                                 </div>
                               )}
                             </div>
@@ -1068,30 +1068,30 @@ export default function DashboardPage() {
                     </Button>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-3 xl:gap-4">
                     {products.filter((p: any) => favorites.has(p.sku)).map((product: any, idx: number) => (
                       <div
                         key={product.id}
                         className="border border-slate-400/40 rounded-lg bg-gradient-to-br from-[#0056a1]/20 to-[#002463]/20 hover:border-red-500/50 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300 group animate-fade-in-up overflow-hidden flex flex-col h-full"
                         style={{ animationDelay: `${idx * 0.05}s` }}
                       >
-                        <div className="p-5 flex flex-col h-full">
+                        <div className="p-4 xl:p-3.5 flex flex-col h-full">
                           <div className="mb-3">
-                            <p className="font-bold text-slate-200">{product.title}</p>
-                            <p className="text-xs text-slate-400">{product.sku}</p>
+                            <p className="font-bold text-slate-200 text-sm xl:text-[13px] leading-tight">{product.title}</p>
+                            <p className="text-[11px] text-slate-400 mt-1">{product.sku}</p>
                           </div>
-                          <p className="text-sm text-slate-400 mb-4 flex-grow">{product.description}</p>
-                          <div className="space-y-3 mt-auto">
+                          <p className="text-xs text-slate-400 mb-3 flex-grow line-clamp-3">{product.description}</p>
+                          <div className="space-y-2 mt-auto">
                             <div className="flex items-center justify-between">
-                              <p className="text-2xl font-bold text-red-400">R{Number(product.price).toLocaleString()}</p>
+                              <p className="text-lg xl:text-xl font-bold text-red-400">R{Number(product.price).toLocaleString()}</p>
                               {product.inventory_quantity > 0 ? (
-                                <span className="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded-full font-bold">In Stock ({product.inventory_quantity})</span>
+                                <span className="text-[10px] bg-green-500/20 text-green-400 px-2 py-1 rounded-full font-bold">In Stock ({product.inventory_quantity})</span>
                               ) : (
-                                <span className="text-xs bg-red-500/20 text-red-400 px-2 py-1 rounded-full font-bold">Out of Stock</span>
+                                <span className="text-[10px] bg-red-500/20 text-red-400 px-2 py-1 rounded-full font-bold">Out of Stock</span>
                               )}
                             </div>
                             <div className="flex gap-2">
-                              <Button size="sm" onClick={() => addToCart({id: product.id, sku: product.sku, name: product.title, price: Number(product.price), inventory_quantity: product.inventory_quantity})} disabled={cart.some(item => item.id === product.id) || !product.inventory_quantity || product.inventory_quantity === 0} className={`flex-1 font-bold gap-1 ${cart.some(item => item.id === product.id) ? 'bg-slate-600 text-slate-400 cursor-not-allowed' : !product.inventory_quantity || product.inventory_quantity === 0 ? 'bg-slate-600 text-slate-400 cursor-not-allowed' : 'bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white'}`}>
+                              <Button size="sm" onClick={() => addToCart({id: product.id, sku: product.sku, name: product.title, price: Number(product.price), inventory_quantity: product.inventory_quantity})} disabled={cart.some(item => item.id === product.id) || !product.inventory_quantity || product.inventory_quantity === 0} className={`flex-1 h-9 text-xs font-bold gap-1 ${cart.some(item => item.id === product.id) ? 'bg-slate-600 text-slate-400 cursor-not-allowed' : !product.inventory_quantity || product.inventory_quantity === 0 ? 'bg-slate-600 text-slate-400 cursor-not-allowed' : 'bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white'}`}>
                                 {cart.some(item => item.id === product.id) ? 'In Cart' : !product.inventory_quantity || product.inventory_quantity === 0 ? 'Out of Stock' : 'Add to Cart'}
                               </Button>
                               <button
@@ -1100,7 +1100,7 @@ export default function DashboardPage() {
                                 className="p-2 rounded-lg transition-all hover:bg-red-500/20 active:scale-95"
                                 title="Remove from wishlist"
                               >
-                                <X className="w-5 h-5 text-red-400 hover:text-red-300" />
+                                <X className="w-4 h-4 text-red-400 hover:text-red-300" />
                               </button>
                             </div>
                           </div>
