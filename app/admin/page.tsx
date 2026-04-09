@@ -114,6 +114,9 @@ export default function AdminPage() {
   const clients = adminData?.clients || []
   const orders = adminData?.orders || []
   const stats = adminData?.stats || { totalProducts: 0, activeCustomers: 0, totalOrders: 0, totalRevenue: 0 }
+  const viewingOrderEmail = viewingOrder
+    ? viewingOrder.client_email || clients.find((client: any) => String(client.account_no) === String(viewingOrder.client_account_no))?.email || ''
+    : ''
 
   const statsCards = [
     { label: 'Total Products', value: String(stats.totalProducts), icon: Package, color: 'from-blue-500 to-blue-600' },
@@ -2188,22 +2191,22 @@ export default function AdminPage() {
                       <Button
                         variant="outline"
                         className="flex-1 border-slate-400/50 text-slate-300 hover:text-slate-200 hover:bg-slate-400/10 font-bold bg-transparent gap-2"
-                        disabled={sendingPaymentLink || !viewingOrder.client_email}
+                        disabled={sendingPaymentLink || !viewingOrderEmail}
                         onClick={async () => {
                           try {
                             setSendingPaymentLink(true)
                             const response = await fetch('/api/admin/send-payment-link', {
-                              method: 'POST',
-                              headers: { 'Content-Type': 'application/json' },
-                              body: JSON.stringify({
-                                order_number: viewingOrder.order_number,
-                                order_id: viewingOrder.id,
-                                customer_email: viewingOrder.client_email,
-                                customer_name: viewingOrder.client_name,
-                                amount: viewingOrder.total_amount,
-                                item_name: `Order ${viewingOrder.order_number}`,
-                                item_description: `KBC Order - ${viewingOrder.item_count || viewingOrder.order_items?.length || 0} items`,
-                              }),
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                  order_number: viewingOrder.order_number,
+                                  order_id: viewingOrder.id,
+                                  customer_email: viewingOrderEmail,
+                                  customer_name: viewingOrder.client_name,
+                                  amount: viewingOrder.total_amount,
+                                  item_name: `Order ${viewingOrder.order_number}`,
+                                  item_description: `KBC Order - ${viewingOrder.item_count || viewingOrder.order_items?.length || 0} items`,
+                                }),
                             })
 
                             const result = await response.json()
