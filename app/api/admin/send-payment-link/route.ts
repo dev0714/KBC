@@ -232,7 +232,7 @@ export async function POST(req: NextRequest) {
       process.env.ADMIN_EMAIL ||
       'kbc@notification.leadsync.co.za'
 
-    const emailResponse = await fetch(`${supabaseUrl}/functions/v1/send-email`, {
+    const emailResponse = await fetch(`${supabaseUrl}/functions/v1/send_email`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
