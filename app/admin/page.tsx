@@ -42,16 +42,21 @@ function getStoragePathFromPublicUrl(url: string) {
 }
 
 const getStatusColor = (status: string) => {
-  switch (status) {
-    case 'Active':
+  switch ((status || '').toLowerCase()) {
+    case 'active':
       return 'bg-gradient-to-r from-green-500/20 to-green-400/20 border-green-500/50 text-green-700 dark:text-green-300'
-    case 'Pending':
+    case 'pending':
       return 'bg-gradient-to-r from-yellow-500/20 to-yellow-400/20 border-yellow-500/50 text-yellow-700 dark:text-yellow-300'
-    case 'Completed':
+    case 'completed':
+    case 'paid':
       return 'bg-gradient-to-r from-blue-500/20 to-blue-400/20 border-blue-500/50 text-blue-700 dark:text-blue-300'
-    case 'Shipped':
+    case 'shipped':
       return 'bg-gradient-to-r from-purple-500/20 to-purple-400/20 border-purple-500/50 text-purple-700 dark:text-purple-300'
-    case 'Low Stock':
+    case 'cancelled':
+      return 'bg-gradient-to-r from-red-500/20 to-red-400/20 border-red-500/50 text-red-300 dark:text-red-200'
+    case 'failed':
+      return 'bg-gradient-to-r from-rose-500/20 to-rose-400/20 border-rose-500/50 text-rose-300 dark:text-rose-200'
+    case 'low stock':
       return 'bg-gradient-to-r from-orange-500/20 to-orange-400/20 border-orange-500/50 text-orange-700 dark:text-orange-300'
     default:
       return 'bg-gradient-to-r from-primary/20 to-primary/10 border-primary/50'
@@ -1357,7 +1362,9 @@ export default function AdminPage() {
                                   >
                                     <option value="Pending">Pending</option>
                                     <option value="Paid">Paid</option>
+                                    <option value="Cancelled">Cancelled</option>
                                     <option value="Shipped">Shipped</option>
+                                    <option value="Failed">Failed</option>
                                   </select>
                                   {statusUpdateSuccess === order.order_number && (
                                     <Check className="w-4 h-4 text-green-400" />
