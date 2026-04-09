@@ -498,7 +498,7 @@ export default function AdminPage() {
 
         let query = supabase
           .from('clients')
-          .select('*, users(id, email, status)', { count: 'exact' })
+          .select('*, contacts(id, full_name, email, phone_number, business_type), users(id, email, full_name, phone_number, business_type, status)', { count: 'exact' })
           .order('created_at', { ascending: false })
           .range(from, to)
 
@@ -514,11 +514,16 @@ export default function AdminPage() {
 
         // Flatten users join so user_id, email, status are top-level
         const enriched = (data || []).map((c: any) => {
+          const contact = Array.isArray(c.contacts) ? c.contacts[0] : c.contacts
           const user = Array.isArray(c.users) ? c.users[0] : c.users
           return {
             ...c,
+            contact,
             user_id: user?.id || null,
-            email: user?.email || null,
+            full_name: contact?.full_name || user?.full_name || null,
+            email: contact?.email || user?.email || null,
+            phone_number: contact?.phone_number || user?.phone_number || null,
+            business_type: contact?.business_type || user?.business_type || null,
             status: user?.status || c.status || null,
           }
         })
@@ -1685,6 +1690,24 @@ export default function AdminPage() {
                     if (clientError) {
                       console.error('[v0] Error updating clients:', clientError)
                       alert(clientError.message || 'Error updating client details')
+                      return
+                    }
+
+                    const contactUpdates = {
+                      client_account_no: editingCustomer.account_no,
+                      full_name: formData.full_name ?? editingCustomer.full_name ?? null,
+                      email: formData.email ?? editingCustomer.email ?? null,
+                      phone_number: formData.phone_number ?? editingCustomer.phone_number ?? null,
+                      business_type: formData.business_type ?? editingCustomer.business_type ?? null,
+                    }
+
+                    const { error: contactError } = await supabase
+                      .from('contacts')
+                      .upsert(contactUpdates, { onConflict: 'client_account_no' })
+
+                    if (contactError) {
+                      console.error('[v0] Error updating contacts:', contactError)
+                      alert(contactError.message || 'Error updating contact details')
                       return
                     }
 

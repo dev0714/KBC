@@ -70,7 +70,8 @@ export async function GET(request: Request) {
         account_no,
         address,
         created_at,
-        users(id, email, status)
+        contacts(id, full_name, email, phone_number, business_type),
+        users(id, email, full_name, phone_number, business_type, status)
       `)
       .order('created_at', { ascending: false })
 
@@ -79,10 +80,22 @@ export async function GET(request: Request) {
     // Transform clients data to flatten the joined user info
     const enrichedClients = clients?.map((client: any) => ({
       ...client,
+      contact: Array.isArray(client.contacts) ? client.contacts[0] : client.contacts,
       client_name: client.client_name,
       account_no: client.account_no,
       address: client.address,
-      email: (Array.isArray(client.users) ? client.users[0] : client.users)?.email || null,
+      full_name: (Array.isArray(client.contacts) ? client.contacts[0] : client.contacts)?.full_name
+        || (Array.isArray(client.users) ? client.users[0] : client.users)?.full_name
+        || null,
+      email: (Array.isArray(client.contacts) ? client.contacts[0] : client.contacts)?.email
+        || (Array.isArray(client.users) ? client.users[0] : client.users)?.email
+        || null,
+      phone_number: (Array.isArray(client.contacts) ? client.contacts[0] : client.contacts)?.phone_number
+        || (Array.isArray(client.users) ? client.users[0] : client.users)?.phone_number
+        || null,
+      business_type: (Array.isArray(client.contacts) ? client.contacts[0] : client.contacts)?.business_type
+        || (Array.isArray(client.users) ? client.users[0] : client.users)?.business_type
+        || null,
       status: (Array.isArray(client.users) ? client.users[0] : client.users)?.status || null,
       user_id: (Array.isArray(client.users) ? client.users[0] : client.users)?.id || null,
       created_at: client.created_at,

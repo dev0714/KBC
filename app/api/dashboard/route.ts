@@ -38,7 +38,7 @@ export async function GET(request: Request) {
     // Fetch client profile from clients table where account_no = business_id
     const { data: clientRecord, error: clientError } = await supabase
       .from('clients')
-      .select('*')
+      .select('*, contacts(id, full_name, email, phone_number, business_type)')
       .eq('account_no', businessId)
       .maybeSingle()
 
@@ -57,16 +57,22 @@ export async function GET(request: Request) {
       throw new Error(`User query failed: ${userError.message}`)
     }
 
+    const contactRecord = Array.isArray(clientRecord?.contacts)
+      ? clientRecord.contacts[0]
+      : clientRecord?.contacts
+
     console.log('[v0] Dashboard - businessId:', businessId)
     console.log('[v0] Dashboard - clientRecord:', clientRecord)
     console.log('[v0] Dashboard - userRecord:', userRecord)
 
     // Combine user and client data
     const client = {
-      ...(userRecord || {}),
       ...(clientRecord || {}),
+      ...(userRecord || {}),
+      ...(contactRecord || {}),
       business_name:
         clientRecord?.client_name ||
+        contactRecord?.full_name ||
         userRecord?.salesperson_name ||
         userRecord?.full_name ||
         businessId,

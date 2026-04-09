@@ -411,24 +411,43 @@ export default function DashboardPage() {
     setSavingProfile(true)
     try {
         const supabase = createClient()
-        const { error } = await supabase
+        const contactPayload = {
+          client_account_no: client.account_no,
+          full_name: editFormData.full_name || null,
+          email: editFormData.email || null,
+          phone_number: editFormData.phone_number || null,
+          business_type: editFormData.business_type || null,
+        }
+
+        const { error: contactError } = await supabase
+          .from('contacts')
+          .upsert(contactPayload, { onConflict: 'client_account_no' })
+
+      if (contactError) {
+        console.error('[v0] Error updating contact profile:', contactError)
+        alert('Error updating profile. Please try again.')
+        return
+      }
+
+      if (userId) {
+        const { error: userError } = await supabase
           .from('users')
           .update({
-            email: editFormData.email,
-            full_name: editFormData.full_name,
-            phone_number: editFormData.phone_number,
-            business_type: editFormData.business_type
+            email: editFormData.email || null,
+            full_name: editFormData.full_name || null,
+            phone_number: editFormData.phone_number || null,
+            business_type: editFormData.business_type || null
           })
-        .eq('id', userId)
+          .eq('id', userId)
 
-      if (error) {
-        console.error('[v0] Error updating profile:', error)
-        alert('Error updating profile. Please try again.')
-      } else {
-        setEditMode(false)
-        // Refresh the dashboard data
-        window.location.reload()
+        if (userError) {
+          console.error('[v0] Error syncing login profile:', userError)
+        }
       }
+
+      setEditMode(false)
+      // Refresh the dashboard data
+      window.location.reload()
     } catch (err) {
       console.error('[v0] Error in handleSaveProfile:', err)
       alert('An error occurred while saving your profile')

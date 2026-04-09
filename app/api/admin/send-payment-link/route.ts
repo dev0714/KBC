@@ -73,15 +73,19 @@ async function resolveCustomerEmail(
 
   const { data: clientRecord } = await supabase
     .from('clients')
-    .select('account_no, users(id, email)')
+    .select('account_no, contacts(id, email), users(id, email)')
     .eq('account_no', clientAccountNo)
     .maybeSingle()
+
+  const contactRecord = Array.isArray(clientRecord?.contacts)
+    ? clientRecord.contacts[0]
+    : clientRecord?.contacts
 
   const userRecord = Array.isArray(clientRecord?.users)
     ? clientRecord.users[0]
     : clientRecord?.users
 
-  return userRecord?.email?.trim() || null
+  return contactRecord?.email?.trim() || userRecord?.email?.trim() || null
 }
 
 export async function POST(req: NextRequest) {

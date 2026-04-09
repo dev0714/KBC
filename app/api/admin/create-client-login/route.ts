@@ -88,6 +88,40 @@ export async function POST(req: NextRequest) {
       )
     }
 
+    const { error: contactError } = await supabase
+      .from('contacts')
+      .upsert(
+        {
+          client_account_no: account_no,
+          email: email,
+          updated_at: new Date().toISOString(),
+        },
+        {
+          onConflict: 'client_account_no',
+        }
+      )
+
+    if (contactError) {
+      console.error('[v0] Error upserting contact:', contactError)
+      await sendNotificationEmail({
+        customerEmail: email,
+        adminEmail: process.env.ADMIN_EMAIL,
+        action: 'Create Client Login',
+        status: 'failed',
+        message: 'Login was created, but the linked contact record could not be updated.',
+        details: {
+          'Email': email,
+          'Account Number': account_no,
+          'Error': contactError.message,
+          'Timestamp': new Date().toISOString(),
+        },
+      })
+      return NextResponse.json(
+        { error: `Failed to update contact record: ${contactError.message}` },
+        { status: 400 }
+      )
+    }
+
     // Send success email notification
     await sendNotificationEmail({
       customerEmail: email,
