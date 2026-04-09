@@ -1114,7 +1114,7 @@ export default function AdminPage() {
                             <td className="py-3 px-4 font-mono text-sm text-foreground">{product.sku}</td>
                             <td className="py-3 px-4 text-foreground">{product.description}</td>
                             <td className="py-3 px-4 text-foreground">R{product.price?.toFixed(2)}</td>
-                            <td className="py-3 px-4 text-foreground">{product.stock || 'N/A'}</td>
+                            <td className="py-3 px-4 text-foreground">{product.inventory_quantity ?? 'N/A'}</td>
                             <td className="py-3 px-4">
                               <div className="flex items-center gap-2">
                                 <Button 
