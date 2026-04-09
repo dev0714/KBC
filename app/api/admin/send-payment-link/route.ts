@@ -58,12 +58,57 @@ function buildPaymentEmailHtml(params: {
   </html>`
 }
 
+async function resolveCustomerEmail(
+  supabase: ReturnType<typeof createClient>,
+  orderId: string | number,
+  orderNumber: string,
+  providedEmail?: string | null
+) {
+  if (providedEmail && providedEmail.trim()) {
+    return providedEmail.trim()
+  }
+
+  const orderIdString = String(orderId).trim()
+  const orderNumberString = String(orderNumber).trim()
+
+  const { data: orderById } = await supabase
+    .from('orders')
+    .select('client_account_no')
+    .eq('id', orderIdString)
+    .maybeSingle()
+
+  const orderByNumber = orderById
+    ? orderById
+    : (await supabase
+        .from('orders')
+        .select('client_account_no')
+        .eq('order_number', orderNumberString)
+        .maybeSingle()).data
+
+  const clientAccountNo = String(orderByNumber?.client_account_no || '').trim()
+  if (!clientAccountNo) {
+    return null
+  }
+
+  const { data: clientRecord } = await supabase
+    .from('clients')
+    .select('account_no, users(id, email)')
+    .eq('account_no', clientAccountNo)
+    .maybeSingle()
+
+  const userRecord = Array.isArray(clientRecord?.users)
+    ? clientRecord.users[0]
+    : clientRecord?.users
+
+  return userRecord?.email?.trim() || null
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
     const { order_number, order_id, customer_email, customer_name, amount, item_name, item_description } = body
 
-    if (!order_number || !order_id || !customer_email || !amount || !item_name) {
+    if (!order_number || !order_id || !amount || !item_name) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
@@ -81,6 +126,20 @@ export async function POST(req: NextRequest) {
     }
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey)
+
+    const resolvedCustomerEmail = await resolveCustomerEmail(
+      supabase,
+      order_id,
+      order_number,
+      customer_email
+    )
+
+    if (!resolvedCustomerEmail) {
+      return NextResponse.json(
+        { error: 'Customer email not found for this order' },
+        { status: 404 }
+      )
+    }
 
     const { data: paymentConfig, error: configError } = await supabase
       .from('payfast_payment_configs')
@@ -107,7 +166,7 @@ export async function POST(req: NextRequest) {
       item_name: String(item_name).trim(),
       name_first: customer_name ? String(customer_name).trim().split(' ')[0] : 'Customer',
       name_last: customer_name ? String(customer_name).trim().split(' ').slice(1).join(' ') : '',
-      email_address: String(customer_email).trim(),
+      email_address: resolvedCustomerEmail,
       custom_str1: String(order_id),
       custom_int1: '1',
     }
@@ -133,7 +192,7 @@ export async function POST(req: NextRequest) {
         apikey: supabaseServiceKey,
       },
       body: JSON.stringify({
-        to: customer_email,
+        to: resolvedCustomerEmail,
         subject: `PayFast payment link for order ${order_number}`,
         html: buildPaymentEmailHtml({
           customerName: String(customer_name || 'Customer'),

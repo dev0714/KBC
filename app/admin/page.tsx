@@ -2209,7 +2209,7 @@ export default function AdminPage() {
                       <Button
                         variant="outline"
                         className="flex-1 border-slate-400/50 text-slate-300 hover:text-slate-200 hover:bg-slate-400/10 font-bold bg-transparent gap-2"
-                        disabled={sendingPaymentLink || !viewingOrderEmail}
+                        disabled={sendingPaymentLink}
                         onClick={async () => {
                           try {
                             setSendingPaymentLink(true)
