@@ -78,12 +78,13 @@ export async function GET(request: Request) {
 
     // Transform clients data to flatten the joined user info
     const enrichedClients = clients?.map((client: any) => ({
+      ...client,
       client_name: client.client_name,
       account_no: client.account_no,
       address: client.address,
-      email: client.users?.[0]?.email || null,
-      status: client.users?.[0]?.status || null,
-      user_id: client.users?.[0]?.id || null,
+      email: (Array.isArray(client.users) ? client.users[0] : client.users)?.email || null,
+      status: (Array.isArray(client.users) ? client.users[0] : client.users)?.status || null,
+      user_id: (Array.isArray(client.users) ? client.users[0] : client.users)?.id || null,
       created_at: client.created_at,
     })) || []
 
@@ -99,7 +100,7 @@ export async function GET(request: Request) {
     const enrichedOrders = orders?.map((order: any) => {
       const clientData = Array.isArray(order.clients) ? order.clients[0] : order.clients
       const clientEmail = enrichedClients.find(
-        client => client.account_no === order.client_account_no
+        client => String(client.account_no) === String(order.client_account_no)
       )?.email || null
       // Normalise order_items so products is always an object, not an array
       const normalizedItems = (order.order_items || []).map((item: any) => ({
