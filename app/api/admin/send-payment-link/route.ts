@@ -141,6 +141,11 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
     const { order_number, order_id, customer_email, customer_name, amount, item_name, item_description } = body
+    const paymentUrl = typeof body.payment_url === 'string'
+      ? body.payment_url.trim()
+      : typeof body.paymentUrl === 'string'
+        ? body.paymentUrl.trim()
+        : ''
 
     if (!order_number || !order_id || !amount || !item_name) {
       return NextResponse.json(
@@ -179,41 +184,10 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const paymentResponse = await fetch(new URL('/api/payfast/create-payment', req.url), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        client_id: resolvedCustomerEmail.clientAccountNo,
-        amount: Number(amount).toFixed(2),
-        item_name: String(item_name).trim(),
-        item_description: item_description ? String(item_description).trim() : '',
-        name_first: customer_name ? String(customer_name).trim().split(' ')[0] : 'Customer',
-        name_last: customer_name ? String(customer_name).trim().split(' ').slice(1).join(' ') : '',
-        email_address: resolvedCustomerEmail.email,
-        cell_number: '',
-        custom_int1: '1',
-        custom_str1: String(order_id),
-      }),
-    })
-
-    if (!paymentResponse.ok) {
-      const paymentError = await paymentResponse.json().catch(() => null)
-      return NextResponse.json(
-        {
-          error: paymentError?.error || 'Failed to create payment link',
-          details: paymentError?.details || paymentError?.message || null,
-        },
-        { status: paymentResponse.status }
-      )
-    }
-
-    const paymentData = await paymentResponse.json()
-    const paymentUrl = paymentData.url
-
     if (!paymentUrl) {
       return NextResponse.json(
-        { error: 'No payment URL returned from payment API' },
-        { status: 500 }
+        { error: 'Missing payment URL' },
+        { status: 400 }
       )
     }
 

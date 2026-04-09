@@ -2387,29 +2387,56 @@ export default function AdminPage() {
                         onClick={async () => {
                           try {
                             setSendingPaymentLink(true)
-                            const response = await fetch('/api/admin/send-payment-link', {
+                            const paymentResponse = await fetch('/api/payfast/create-payment', {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({
-                                  order_number: viewingOrder.order_number,
-                                  order_id: viewingOrder.id,
-                                  customer_email: viewingOrderEmail,
-                                  customer_name: viewingOrder.client_name,
+                                  client_id: viewingOrder.client_account_no,
                                   amount: viewingOrder.total_amount,
                                   item_name: `Order ${viewingOrder.order_number}`,
                                   item_description: `KBC Order - ${viewingOrder.item_count || viewingOrder.order_items?.length || 0} items`,
+                                  name_first: viewingOrderContactName || viewingOrder.client_name || 'Customer',
+                                  name_last: '',
+                                  email_address: viewingOrderEmail,
+                                  cell_number: '',
+                                  custom_int1: '1',
+                                  custom_str1: String(viewingOrder.id),
                                 }),
+                            })
+
+                            const paymentData = await paymentResponse.json()
+                            if (!paymentResponse.ok) {
+                              throw new Error(paymentData.error || paymentData.details || paymentData.message || 'Failed to create payment link')
+                            }
+
+                            const paymentUrl = paymentData.url || paymentData.shortened_url
+                            if (!paymentUrl) {
+                              throw new Error('No payment URL returned from payment API')
+                            }
+
+                            setPaymentLinkPreview(paymentUrl)
+
+                            const response = await fetch('/api/admin/send-payment-link', {
+                              method: 'POST',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({
+                                order_number: viewingOrder.order_number,
+                                order_id: viewingOrder.id,
+                                customer_email: viewingOrderEmail,
+                                customer_name: viewingOrder.client_name,
+                                amount: viewingOrder.total_amount,
+                                item_name: `Order ${viewingOrder.order_number}`,
+                                item_description: `KBC Order - ${viewingOrder.item_count || viewingOrder.order_items?.length || 0} items`,
+                                payment_url: paymentUrl,
+                              }),
                             })
 
                             const result = await response.json()
                             if (!response.ok) {
-                              if (result?.paymentUrl) {
-                                setPaymentLinkPreview(result.paymentUrl)
-                              }
                               throw new Error(result.error || result.message || 'Failed to send payment link')
                             }
 
-                            setPaymentLinkPreview(result.paymentUrl || '')
+                            setPaymentLinkPreview(result.paymentUrl || paymentUrl)
                             alert('Payment link sent successfully via email')
                           } catch (error: any) {
                             console.error('[v0] Sending payment link via email failed:', error)
