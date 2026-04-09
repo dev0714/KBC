@@ -72,12 +72,13 @@ export default function DashboardPage() {
   const [showUploadModal, setShowUploadModal] = useState(false)
   const [uploadingDocument, setUploadingDocument] = useState(false)
   const [uploadDocumentError, setUploadDocumentError] = useState<string | null>(null)
-  const [selectedDocumentType, setSelectedDocumentType] = useState('Invoice')
-  const [editFormData, setEditFormData] = useState({
-    full_name: '',
-    phone_number: '',
-    business_type: '',
-    address: ''
+    const [selectedDocumentType, setSelectedDocumentType] = useState('Invoice')
+    const [editFormData, setEditFormData] = useState({
+      email: '',
+      full_name: '',
+      phone_number: '',
+      business_type: '',
+      address: ''
   })
   const [savingProfile, setSavingProfile] = useState(false)
   const [showPasswordModal, setShowPasswordModal] = useState(false)
@@ -207,12 +208,13 @@ export default function DashboardPage() {
 
   // Update edit form when entering edit mode or when client data changes
   useEffect(() => {
-    if (editMode && client) {
-      setEditFormData({
-        full_name: client.full_name || '',
-        phone_number: client.phone_number || '',
-        business_type: client.business_type || '',
-        address: client.address || ''
+      if (editMode && client) {
+        setEditFormData({
+          email: client.email || '',
+          full_name: client.full_name || '',
+          phone_number: client.phone_number || '',
+          business_type: client.business_type || '',
+          address: client.address || ''
       })
     }
   }, [editMode, client])
@@ -408,14 +410,15 @@ export default function DashboardPage() {
     
     setSavingProfile(true)
     try {
-      const supabase = createClient()
-      const { error } = await supabase
-        .from('users')
-        .update({
-          full_name: editFormData.full_name,
-          phone_number: editFormData.phone_number,
-          business_type: editFormData.business_type
-        })
+        const supabase = createClient()
+        const { error } = await supabase
+          .from('users')
+          .update({
+            email: editFormData.email,
+            full_name: editFormData.full_name,
+            phone_number: editFormData.phone_number,
+            business_type: editFormData.business_type
+          })
         .eq('id', userId)
 
       if (error) {
@@ -1268,14 +1271,18 @@ export default function DashboardPage() {
                         <p className="text-sm text-slate-400 font-medium mb-1">Member Since</p>
                         <p className="text-lg font-bold text-slate-200">{client?.created_at ? formatDate(client.created_at) : '-'}</p>
                       </div>
-                      <div className="pb-4 border-b border-slate-400/20">
-                        <p className="text-sm text-slate-400 font-medium mb-1">Contact Person</p>
-                        <p className="text-lg font-bold text-slate-200">{client?.full_name || '-'}</p>
-                      </div>
-                      <div className="pb-4 border-b border-slate-400/20">
-                        <p className="text-sm text-slate-400 font-medium mb-1">Phone Number</p>
-                        <p className="text-lg font-bold text-slate-200">{client?.phone_number || '-'}</p>
-                      </div>
+                        <div className="pb-4 border-b border-slate-400/20">
+                          <p className="text-sm text-slate-400 font-medium mb-1">Contact Person</p>
+                          <p className="text-lg font-bold text-slate-200">{client?.full_name || '-'}</p>
+                        </div>
+                        <div className="pb-4 border-b border-slate-400/20">
+                          <p className="text-sm text-slate-400 font-medium mb-1">Email Address</p>
+                          <p className="text-lg font-bold text-slate-200">{client?.email || '-'}</p>
+                        </div>
+                        <div className="pb-4 border-b border-slate-400/20">
+                          <p className="text-sm text-slate-400 font-medium mb-1">Phone Number</p>
+                          <p className="text-lg font-bold text-slate-200">{client?.phone_number || '-'}</p>
+                        </div>
                       <div>
                         <p className="text-sm text-slate-400 font-medium mb-1">Business Type</p>
                         <p className="text-lg font-bold text-slate-200">{client?.business_type || '-'}</p>
@@ -1346,20 +1353,31 @@ export default function DashboardPage() {
             </div>
 
             {/* Modal Content */}
-            <div className="p-6 space-y-4 overflow-y-auto flex-1">
-              <div>
-                <label className="block text-sm font-bold text-slate-300 mb-2">Contact Person</label>
-                <Input
-                  value={editFormData.full_name}
+              <div className="p-6 space-y-4 overflow-y-auto flex-1">
+                <div>
+                  <label className="block text-sm font-bold text-slate-300 mb-2">Contact Person</label>
+                  <Input
+                    value={editFormData.full_name}
                   onChange={(e) => setEditFormData({...editFormData, full_name: e.target.value})}
                   placeholder="Full name"
-                  className="border-slate-400/50 focus:border-red-500 bg-white/10 text-white placeholder:text-slate-400"
-                />
-              </div>
+                    className="border-slate-400/50 focus:border-red-500 bg-white/10 text-white placeholder:text-slate-400"
+                  />
+                </div>
 
-              <div>
-                <label className="block text-sm font-bold text-slate-300 mb-2">Phone Number</label>
-                <Input
+                <div>
+                  <label className="block text-sm font-bold text-slate-300 mb-2">Email Address</label>
+                  <Input
+                    type="email"
+                    value={editFormData.email}
+                    onChange={(e) => setEditFormData({...editFormData, email: e.target.value})}
+                    placeholder="Email address"
+                    className="border-slate-400/50 focus:border-red-500 bg-white/10 text-white placeholder:text-slate-400"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-bold text-slate-300 mb-2">Phone Number</label>
+                  <Input
                   value={editFormData.phone_number}
                   onChange={(e) => setEditFormData({...editFormData, phone_number: e.target.value})}
                   placeholder="Phone number"
