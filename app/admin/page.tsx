@@ -116,7 +116,11 @@ export default function AdminPage() {
   const orders = adminData?.orders || []
   const stats = adminData?.stats || { totalProducts: 0, activeCustomers: 0, totalOrders: 0, totalRevenue: 0 }
   const viewingOrderClient = viewingOrder
-    ? clients.find((client: any) => String(client.account_no) === String(viewingOrder.client_account_no)) || null
+    ? clients.find((client: any) =>
+        String(client.account_no) === String(viewingOrder.client_account_no) ||
+        String(client.client_name || '').toLowerCase() === String(viewingOrder.client_name || '').toLowerCase() ||
+        String(client.contact?.full_name || '').toLowerCase() === String(viewingOrder.client_name || '').toLowerCase()
+      ) || null
     : null
   const viewingOrderEmail = viewingOrder
     ? viewingOrder.client_contact_email ||

@@ -51,7 +51,7 @@ async function resolveCustomerEmail(
 
   const { data: orderById } = await supabase
     .from('orders')
-    .select('client_account_no')
+    .select('client_account_no, clients(client_name)')
     .eq('id', orderIdString)
     .maybeSingle()
 
@@ -59,20 +59,43 @@ async function resolveCustomerEmail(
     ? orderById
     : (await supabase
         .from('orders')
-        .select('client_account_no')
+        .select('client_account_no, clients(client_name)')
         .eq('order_number', orderNumberString)
         .maybeSingle()).data
 
   const clientAccountNo = String(orderByNumber?.client_account_no || '').trim()
+  const orderClientName = Array.isArray((orderByNumber as any)?.clients)
+    ? (orderByNumber as any)?.clients[0]?.client_name
+    : (orderByNumber as any)?.clients?.client_name
   if (!clientAccountNo) {
     return null
   }
 
-  const { data: clientRecord } = await supabase
-    .from('clients')
-    .select('account_no, contacts(id, email, full_name), users(id, email)')
-    .eq('account_no', clientAccountNo)
-    .maybeSingle()
+  const loadClientRecord = async (accountOrName: string) => {
+    const accountMatch = await supabase
+      .from('clients')
+      .select('account_no, client_name, contacts(id, email, full_name), users(id, email)')
+      .eq('account_no', accountOrName)
+      .maybeSingle()
+
+    if (accountMatch.data) return accountMatch.data
+
+    const nameMatch = await supabase
+      .from('clients')
+      .select('account_no, client_name, contacts(id, email, full_name), users(id, email)')
+      .eq('client_name', accountOrName)
+      .maybeSingle()
+
+    return nameMatch.data || null
+  }
+
+  let clientRecord = await loadClientRecord(clientAccountNo)
+  if (!clientRecord && customerName?.trim()) {
+    clientRecord = await loadClientRecord(customerName.trim())
+  }
+  if (!clientRecord && orderClientName?.trim()) {
+    clientRecord = await loadClientRecord(orderClientName.trim())
+  }
 
   const contactRecord = Array.isArray(clientRecord?.contacts)
     ? clientRecord.contacts[0]
