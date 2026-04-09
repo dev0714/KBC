@@ -5,7 +5,6 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import useSWR from 'swr'
 import { createClient } from '@/lib/supabase/client'
-import { Navbar } from '@/components/navigation/navbar'
 //import { Footer } from '@/components/navigation/footer' commented out to remove the Footer from the CRM 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -614,35 +613,41 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-b from-[#000034] via-[#002463] to-[#0056a1]">
-      <Navbar />
-
-      <main className="flex-1">
-        {/* Header Section */}
-        <section className="py-12 px-4 bg-gradient-to-br from-[#0056a1]/40 via-[#002463]/30 to-transparent border-b border-red-500/20 relative overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-red-500/10 rounded-full blur-3xl -z-10"></div>
-          <div className="absolute -bottom-20 -left-40 w-96 h-96 bg-slate-400/5 rounded-full blur-3xl -z-10"></div>
-          <div className="relative container mx-auto">
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-              <div className="animate-fade-in-down">
-                <img src="/kbc-logo.png" alt="KBC" className="h-12 w-auto mb-2" />
-                <h1 className="text-3xl font-bold text-white">{displayName}</h1>
-              </div>
-              <Button
-                onClick={handleLogout}
-                className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold shadow-lg shadow-red-600/50 hover:shadow-red-600/70 transition-all duration-300 gap-2 animate-fade-in-up"
-              >
-                <LogOut className="w-4 h-4" />
-                Logout
-              </Button>
+    <div className="relative flex min-h-screen overflow-hidden bg-gradient-to-b from-[#000034] via-[#002463] to-[#0056a1]">
+      <div className="fixed inset-x-0 top-0 z-40 border-b border-blue-500/30 bg-[#06123dcc]/90 text-white shadow-[0_18px_40px_rgba(0,0,0,0.25)] backdrop-blur-xl">
+        <div className="flex h-[72px] items-center justify-between px-4 lg:px-8">
+          <div className="flex items-center gap-4">
+            <img src="/kbc-logo.png" alt="KBC" className="h-10 w-auto" />
+            <div>
+              <p className="text-[11px] uppercase tracking-[0.45em] text-slate-400">Customer CRM</p>
+              <h1 className="text-lg font-black leading-tight text-white">{displayName}</h1>
             </div>
           </div>
-        </section>
+          <Button
+            onClick={handleLogout}
+            className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold shadow-lg shadow-red-600/40 hover:shadow-red-600/60 transition-all duration-300 gap-2"
+          >
+            <LogOut className="w-4 h-4" />
+            Logout
+          </Button>
+        </div>
+      </div>
 
-        <div className="container mx-auto px-4 py-12">
-          {/* Tabs */}
-          <div className="mb-8 border-b border-slate-400/30">
-            <div className="flex flex-wrap gap-2 pb-2">
+      <div className="relative z-10 flex flex-1 pt-[72px]">
+        <aside className="hidden md:flex w-64 fixed top-[72px] left-0 h-[calc(100vh-72px)] flex-col bg-[#06123d]/80 border-r border-white/10 backdrop-blur-xl shadow-[12px_0_40px_rgba(0,0,0,0.18)]">
+          <div className="border-b border-white/10 p-5">
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-4 shadow-[0_16px_30px_rgba(0,0,0,0.18)]">
+              <p className="text-[11px] uppercase tracking-[0.35em] text-slate-400 mb-2">Workspace</p>
+              <h2 className="text-lg font-bold text-white">Customer CRM</h2>
+              <p className="mt-2 text-sm text-slate-300 leading-relaxed">
+                Browse products, place orders, manage documents, and track payments from one panel.
+              </p>
+            </div>
+          </div>
+
+          <nav className="flex-1 overflow-y-auto p-4">
+            <div className="mb-3 px-3 text-[11px] uppercase tracking-[0.45em] text-slate-500">Navigation</div>
+            <div className="space-y-2">
               {[
                 { id: 'overview', label: 'Overview', icon: '📊' },
                 { id: 'shop', label: 'Shop Catalog', icon: '🛍️' },
@@ -655,18 +660,50 @@ export default function DashboardPage() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`px-4 py-3 font-bold whitespace-nowrap transition-all duration-300 border-b-2 text-sm ${
+                  className={`w-full flex items-center gap-3 rounded-2xl px-4 py-4 text-left font-bold transition-all duration-300 ${
                     activeTab === tab.id
-                      ? 'border-red-500 text-red-400 bg-gradient-to-b from-red-500/10 to-transparent'
-                      : 'border-transparent text-slate-400 hover:text-slate-200 hover:border-slate-400/30'
+                      ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-[0_16px_30px_rgba(37,99,235,0.35)]'
+                      : 'text-slate-300 hover:bg-white/5 hover:text-white'
                   }`}
                 >
-                  <span className="inline-block mr-2"></span>
-                  {tab.label}
+                  <span className={`flex h-9 w-9 items-center justify-center rounded-lg ${activeTab === tab.id ? 'bg-white/15' : 'bg-white/5'}`}>
+                    {tab.icon}
+                  </span>
+                  <span className="flex-1">{tab.label}</span>
+                  {activeTab === tab.id && <span className="h-2 w-2 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]" />}
                 </button>
               ))}
             </div>
-          </div>
+          </nav>
+        </aside>
+
+        <main className="relative flex-1 overflow-auto md:ml-64">
+          <div className="mx-auto w-full max-w-[1700px] px-4 py-8 lg:px-8">
+            <div className="mb-6 md:hidden">
+              <div className="flex gap-2 overflow-x-auto pb-2">
+                {[
+                  { id: 'overview', label: 'Overview' },
+                  { id: 'shop', label: 'Shop' },
+                  { id: 'wishlist', label: 'Wishlist' },
+                  { id: 'cart', label: 'Cart' },
+                  { id: 'orders', label: 'Orders' },
+                  { id: 'documents', label: 'Docs' },
+                  { id: 'account', label: 'Account' },
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-bold transition-colors ${
+                      activeTab === tab.id
+                        ? 'bg-red-500 text-white'
+                        : 'bg-white/5 text-slate-300'
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+            </div>
 
           {/* Tab Content */}
           <div>
@@ -1580,6 +1617,7 @@ export default function DashboardPage() {
           </div>
         </div>
       )}
+    </div>
     </div>
   )
 }
