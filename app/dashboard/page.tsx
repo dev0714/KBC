@@ -99,6 +99,7 @@ export default function DashboardPage() {
   const statsCards = [
     { label: 'Total Orders', value: String(stats.totalOrders), icon: ShoppingCart, color: 'from-blue-500 to-blue-600' },
     { label: 'Total Spent', value: `R${Number(stats.totalSpent).toLocaleString()}`, icon: TrendingUp, color: 'from-green-500 to-green-600' },
+    { label: 'Documents', value: String(documents.length), icon: FileText, color: 'from-purple-500 to-purple-600' },
     { label: 'Wishlist Items', value: String(favorites.size), icon: Heart, color: 'from-pink-500 to-pink-600' },
   ]
 
@@ -840,55 +841,114 @@ export default function DashboardPage() {
 
             {/* Overview Tab */}
             {activeTab === 'overview' && (
-              <div className="space-y-8 animate-fade-in-up">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="space-y-6 animate-fade-in-up">
+                <section className="rounded-[28px] border border-white/10 bg-gradient-to-br from-[#0056a1]/30 via-[#002463]/55 to-[#00143a]/70 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.22)] backdrop-blur-sm md:p-8">
+                  <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+                    <div className="max-w-3xl">
+                      <p className="text-[11px] uppercase tracking-[0.55em] text-slate-400">Customer snapshot</p>
+                      <h2 className="mt-3 text-4xl font-black leading-tight text-white md:text-5xl">
+                        {displayName}
+                      </h2>
+                      <p className="mt-4 max-w-2xl text-base leading-7 text-slate-200 md:text-lg">
+                        Your customer workspace keeps orders, documents, payments, and shopping in one place so you can move quickly without losing track of anything.
+                      </p>
+                    </div>
+                    <div className="flex flex-wrap gap-3">
+                      <Button onClick={() => setActiveTab('shop')} className="bg-gradient-to-r from-red-600 to-red-700 font-bold text-white shadow-lg shadow-red-600/30 hover:from-red-700 hover:to-red-800">
+                        Browse Shop
+                      </Button>
+                      <Button onClick={() => setActiveTab('orders')} variant="outline" className="border-white/15 bg-white/5 font-bold text-white hover:bg-white/10 hover:text-white">
+                        View Orders
+                      </Button>
+                    </div>
+                  </div>
+                </section>
+
+                <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
                   {statsCards.map((stat, idx) => {
                     const Icon = stat.icon
                     return (
-                      <div key={idx} className="bg-gradient-to-br from-[#0056a1]/30 to-[#002463]/30 border border-slate-400/40 rounded-xl p-6 shadow-xl shadow-red-500/10 backdrop-blur-sm animate-fade-in-up" style={{ animationDelay: `${idx * 0.1}s` }}>
-                        <div className="flex items-start justify-between">
+                      <div
+                        key={idx}
+                        className="rounded-2xl border border-white/10 bg-gradient-to-br from-[#0056a1]/30 to-[#002463]/55 p-5 shadow-[0_16px_40px_rgba(0,0,0,0.18)] backdrop-blur-sm"
+                        style={{ animationDelay: `${idx * 0.08}s` }}
+                      >
+                        <div className="flex items-start justify-between gap-4">
                           <div>
-                            <p className="text-sm text-slate-400 mb-2">{stat.label}</p>
-                            <p className="text-3xl font-bold text-white">{stat.value}</p>
+                            <p className="text-[11px] uppercase tracking-[0.42em] text-slate-400">{stat.label}</p>
+                            <p className="mt-4 text-3xl font-black text-white">{stat.value}</p>
                           </div>
-                          <div className={`bg-gradient-to-r ${stat.color} p-3 rounded-lg`}>
-                            <Icon className="w-6 h-6 text-white" />
+                          <div className={`rounded-2xl bg-gradient-to-r ${stat.color} p-3 shadow-lg shadow-black/20`}>
+                            <Icon className="h-6 w-6 text-white" />
                           </div>
                         </div>
                       </div>
                     )
                   })}
-                </div>
+                </section>
 
-                <div className="bg-gradient-to-br from-[#0056a1]/30 to-[#002463]/30 border border-slate-400/40 rounded-xl p-8 shadow-xl shadow-red-500/10 backdrop-blur-sm">
-                  <h2 className="text-2xl font-bold mb-6 text-white">Recent Orders</h2>
-                  {orders.length === 0 ? (
-                    <p className="text-slate-400 text-center py-8">No recent orders</p>
-                  ) : (
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-sm">
-                        <thead>
-                          <tr className="border-b-2 border-slate-400/30">
-                            <th className="text-left py-4 font-bold text-slate-200">Order ID</th>
-                            <th className="text-left py-4 font-bold text-slate-200">Date</th>
-                            <th className="text-left py-4 font-bold text-slate-200">Status</th>
-                            <th className="text-left py-4 font-bold text-slate-200">Total</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-400/10">
-                          {orders.slice(0, 5).map((order: any) => (
-                            <tr key={order.order_number} className="hover:bg-slate-400/5">
-                              <td className="py-4 font-bold text-red-400">{order.order_number}</td>
-                              <td className="py-4 text-slate-400">{formatDate(order.order_date)}</td>
-                              <td className="py-4"><span className={`inline-flex px-3 py-1.5 rounded-full text-xs font-bold border ${getStatusColor(order.payment_status)}`}>{order.payment_status}</span></td>
-                              <td className="py-4 font-bold text-slate-200">R{Number(order.total_amount).toLocaleString()}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                <section className="grid grid-cols-1 gap-6 xl:grid-cols-[1.5fr_0.9fr]">
+                  <div className="rounded-[26px] border border-white/10 bg-gradient-to-br from-[#0056a1]/30 to-[#002463]/55 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.18)] backdrop-blur-sm md:p-8">
+                    <div className="mb-6 flex items-center justify-between gap-4">
+                      <div>
+                        <p className="text-[11px] uppercase tracking-[0.45em] text-slate-400">Activity</p>
+                        <h3 className="mt-2 text-2xl font-black text-white">Recent Orders</h3>
+                      </div>
+                      <Button onClick={() => setActiveTab('orders')} variant="outline" className="border-red-500/40 bg-transparent text-red-300 hover:bg-red-500/10 hover:text-red-200">
+                        View All
+                      </Button>
                     </div>
-                  )}
-                </div>
+                    {orders.length === 0 ? (
+                      <p className="py-10 text-center text-slate-400">No recent orders</p>
+                    ) : (
+                      <div className="overflow-hidden rounded-2xl border border-white/10">
+                        <table className="w-full text-sm">
+                          <thead className="bg-white/5">
+                            <tr className="border-b border-white/10">
+                              <th className="px-4 py-4 text-left font-bold text-slate-200">Order ID</th>
+                              <th className="px-4 py-4 text-left font-bold text-slate-200">Date</th>
+                              <th className="px-4 py-4 text-left font-bold text-slate-200">Status</th>
+                              <th className="px-4 py-4 text-left font-bold text-slate-200">Total</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-white/10">
+                            {orders.slice(0, 5).map((order: any) => (
+                              <tr key={order.order_number} className="hover:bg-white/5">
+                                <td className="px-4 py-4 font-bold text-red-300">{order.order_number}</td>
+                                <td className="px-4 py-4 text-slate-300">{formatDate(order.order_date)}</td>
+                                <td className="px-4 py-4">
+                                  <span className={`inline-flex rounded-full border px-3 py-1 text-xs font-bold ${getStatusColor(order.payment_status)}`}>
+                                    {order.payment_status}
+                                  </span>
+                                </td>
+                                <td className="px-4 py-4 font-bold text-slate-100">R{Number(order.total_amount).toLocaleString()}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="rounded-[26px] border border-white/10 bg-gradient-to-br from-[#0056a1]/30 to-[#002463]/55 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.18)] backdrop-blur-sm md:p-8">
+                    <p className="text-[11px] uppercase tracking-[0.45em] text-slate-400">Quick actions</p>
+                    <h3 className="mt-2 text-2xl font-black text-white">Move faster</h3>
+                    <div className="mt-6 space-y-3">
+                      <Button onClick={() => setActiveTab('shop')} className="h-11 w-full justify-start bg-white/5 text-white hover:bg-white/10">
+                        Browse catalog
+                      </Button>
+                      <Button onClick={() => setActiveTab('wishlist')} className="h-11 w-full justify-start bg-white/5 text-white hover:bg-white/10">
+                        Open wishlist
+                      </Button>
+                      <Button onClick={() => setActiveTab('documents')} className="h-11 w-full justify-start bg-white/5 text-white hover:bg-white/10">
+                        View documents
+                      </Button>
+                      <Button onClick={() => setActiveTab('account')} className="h-11 w-full justify-start bg-white/5 text-white hover:bg-white/10">
+                        Account settings
+                      </Button>
+                    </div>
+                  </div>
+                </section>
               </div>
             )}
 
