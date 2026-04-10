@@ -106,7 +106,7 @@ export default function ProductDetailPage() {
       </div>
 
       <div className="relative z-10 flex pt-[72px]">
-        <aside className="hidden md:fixed md:inset-y-[72px] md:left-0 md:flex md:w-64 md:flex-col border-r border-white/10 bg-[#06123d]/80 backdrop-blur-xl shadow-[12px_0_40px_rgba(0,0,0,0.18)]">
+        <aside className="hidden md:fixed md:top-[72px] md:bottom-0 md:left-0 md:flex md:w-64 md:flex-col border-r border-white/10 bg-[#06123d]/80 backdrop-blur-xl shadow-[12px_0_40px_rgba(0,0,0,0.18)]">
           <div className="border-b border-white/10 p-4">
             <div className="rounded-2xl border border-white/10 bg-white/5 p-3.5 shadow-[0_16px_30px_rgba(0,0,0,0.18)]">
               <p className="mb-1.5 text-[11px] uppercase tracking-[0.35em] text-slate-400">Workspace</p>
