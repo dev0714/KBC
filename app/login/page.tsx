@@ -106,16 +106,16 @@ export default function LoginPage() {
         </div>
       </header>
 
-      <main className="mx-auto grid min-h-[calc(100vh-72px)] max-w-7xl grid-cols-1 lg:grid-cols-2">
-        <section className="relative flex items-center overflow-hidden px-4 py-12 lg:px-8 lg:py-16">
+      <main className="grid min-h-[calc(100vh-72px)] grid-cols-1 lg:grid-cols-2">
+        <section className="relative flex min-h-[420px] items-center overflow-hidden px-4 py-12 lg:border-r lg:border-white/10 lg:px-10 lg:py-16">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(239,68,68,0.22),transparent_35%),radial-gradient(circle_at_bottom_right,rgba(59,130,246,0.18),transparent_30%)]" />
-          <div className="relative z-10 max-w-xl">
+          <div className="relative z-10 max-w-lg">
             <div className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.45em] text-slate-300">
               <span className="h-2 w-2 rounded-full bg-red-500 shadow-[0_0_16px_rgba(239,68,68,0.9)]" />
               KBC Customer Portal
             </div>
 
-            <h1 className="mt-6 text-4xl font-black leading-tight text-white sm:text-5xl lg:text-6xl">
+            <h1 className="mt-6 text-4xl font-black leading-tight text-white sm:text-5xl lg:text-[4.15rem] lg:leading-[1.02]">
               A cleaner way to manage your KBC account.
             </h1>
 
@@ -147,7 +147,7 @@ export default function LoginPage() {
           </div>
         </section>
 
-        <section className="flex items-center px-4 py-12 lg:px-8 lg:py-16">
+        <section className="flex items-center px-4 py-12 lg:px-10 lg:py-16">
           <div className="w-full">
             <div className="mx-auto w-full max-w-md rounded-[28px] border border-slate-400/30 bg-[#06123d]/80 p-6 shadow-[0_24px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:p-8">
               <div className="mb-8 text-center">
