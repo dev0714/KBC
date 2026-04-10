@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Eye, EyeOff, ArrowLeft, Loader2, CheckCircle2, Clock3, Shield, Truck } from 'lucide-react'
+
 export default function LoginPage() {
   const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
@@ -29,7 +30,6 @@ export default function LoginPage() {
     setError('')
 
     try {
-      // Sign in with custom auth endpoint
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -47,7 +47,6 @@ export default function LoginPage() {
         return
       }
 
-      // Check role and redirect accordingly
       setCheckingRole(true)
       if (data.role === 'admin') {
         router.push('/admin')
@@ -116,18 +115,18 @@ export default function LoginPage() {
             </div>
 
             <h1 className="mt-6 text-4xl font-black leading-tight text-white sm:text-5xl lg:text-[4.15rem] lg:leading-[1.02]">
-              A cleaner way to manage your KBC account.
+              Welcome back to your KBC customer portal.
             </h1>
 
             <p className="mt-5 max-w-lg text-base leading-7 text-slate-200 sm:text-lg">
-              Access your products, orders, documents, and payments in one place. The portal keeps your business moving with a simple login and a focused dashboard built around day-to-day work.
+              Sign in to access your products, orders, documents, and payments in one secure place. Everything you need is organized for quick day-to-day work.
             </p>
 
             <div className="mt-8 grid gap-3 sm:grid-cols-2">
               {[
-                { title: 'Fast access', text: 'Jump straight into your order and product workspace.', icon: CheckCircle2 },
-                { title: 'Secure login', text: 'Protected customer access for approved accounts only.', icon: Shield },
-                { title: 'Live updates', text: 'Track orders, documents, and payment activity in real time.', icon: Clock3 },
+                { title: 'Fast access', text: 'Jump straight into your portal without extra steps.', icon: CheckCircle2 },
+                { title: 'Secure login', text: 'Approved customer accounts only.', icon: Shield },
+                { title: 'Live updates', text: 'Stay on top of orders, documents, and payments.', icon: Clock3 },
                 { title: 'Quick support', text: 'Reach KBC support whenever you need help.', icon: Truck },
               ].map((item) => {
                 const Icon = item.icon
