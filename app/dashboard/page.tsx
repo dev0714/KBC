@@ -8,6 +8,7 @@ import { createClient } from '@/lib/supabase/client'
 //import { Footer } from '@/components/navigation/footer' commented out to remove the Footer from the CRM 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { buildPayFastPaymentPayload } from '@/lib/payfast-payment.mjs'
 import { LogOut, ShoppingCart, FileText, User, Settings, Download, Clock, CheckCircle2, AlertCircle, TrendingUp, Phone, Mail, Loader2, Heart, X, ChevronDown } from 'lucide-react'
 
 const fetcher = (url: string) => fetch(url).then(res => res.json())
@@ -548,23 +549,29 @@ export default function DashboardPage() {
       // If PayFast payment, redirect to payment gateway
       if (paymentMethod === 'payfast') {
         try {
+            const paymentClientId = accountNo || client?.account_no
+            if (!paymentClientId) {
+              throw new Error('Business ID not found in session')
+            }
+
             const response = await fetch('/api/payfast/create-payment', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-              id: 1,
-              client_id: businessId,
-              amount: pendingOrder.total.toString(),
-              item_name: `Order ${orderNumber}`,
-              item_description: `KBC Order - ${pendingOrder.items.length} items`,
-              custom_str1: String(createdOrderId),
-              custom_int1: '1',
-              name_first: client?.full_name?.split(' ')[0] || 'Customer',
-              name_last: client?.full_name?.split(' ')[1] || '',
-              email_address: client?.email || '',
-              cell_number: client?.phone_number || ''
+              body: JSON.stringify(
+                buildPayFastPaymentPayload({
+                  accountNo: paymentClientId,
+                  orderNumber: orderNumber || '',
+                  orderId: createdOrderId || orderNumber || '',
+                  amount: pendingOrder.total,
+                  itemCount: pendingOrder.items.length,
+                  customer: {
+                    fullName: client?.full_name || client?.client_name || 'Customer',
+                    email: client?.email || '',
+                    phone: client?.phone_number || '',
+                  },
+                })
+              )
             })
-          })
           
           const paymentData = await response.json()
           console.log('[v0] Payment API response:', { status: response.status, hasUrl: !!paymentData.url, error: paymentData.error })
