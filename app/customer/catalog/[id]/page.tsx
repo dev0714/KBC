@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
+import { addCartItem, getCartStorageKey, parseCartItems, serializeCartItems } from '@/lib/cart-storage.mjs'
 import { ArrowLeft, CheckCircle2, Download, Heart, Share2, ShoppingCart, Shield, Truck, Loader2, ImageIcon } from 'lucide-react'
 
 type ProductImage = {
@@ -32,6 +33,8 @@ export default function ProductDetailPage() {
   const [activeImageIndex, setActiveImageIndex] = useState(0)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [cartMessage, setCartMessage] = useState<string | null>(null)
+  const [addingToCart, setAddingToCart] = useState(false)
 
   const productId = useMemo(() => {
     const rawId = Array.isArray(params?.id) ? params.id[0] : params?.id
@@ -83,6 +86,46 @@ export default function ProductDetailPage() {
   }, [product])
 
   const activeImage = images[activeImageIndex]?.url || product?.image_url || ''
+
+  const showCartMessage = (message: string) => {
+    setCartMessage(message)
+    window.setTimeout(() => setCartMessage(null), 2500)
+  }
+
+  const handleAddToCart = () => {
+    if (!product) return
+
+    const availableStock = Number(product.inventory_quantity || 0)
+    if (availableStock <= 0) {
+      showCartMessage('This product is out of stock.')
+      return
+    }
+
+    setAddingToCart(true)
+    try {
+      const storedCart = parseCartItems(sessionStorage.getItem(getCartStorageKey()))
+      const existingItem = storedCart.find((item) => item.id === product.id)
+      const nextCart = addCartItem(storedCart, {
+        id: product.id,
+        sku: product.sku,
+        name: product.title,
+        price: Number(product.price || 0),
+        inventory_quantity: availableStock,
+      })
+
+      sessionStorage.setItem(getCartStorageKey(), serializeCartItems(nextCart))
+
+      const updatedItem = nextCart.find((item) => item.id === product.id)
+      if (existingItem && updatedItem && updatedItem.qty === existingItem.qty) {
+        showCartMessage(`Only ${availableStock} units available.`)
+        return
+      }
+
+      showCartMessage(`${product.title} added to your cart.`)
+    } finally {
+      setAddingToCart(false)
+    }
+  }
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-[#000034] via-[#002463] to-[#0056a1]">
@@ -297,11 +340,20 @@ export default function ProductDetailPage() {
                         <Heart className="h-4 w-4" />
                         Wishlist
                       </Button>
-                      <Button className="h-10 gap-2 bg-gradient-to-r from-red-600 to-red-700 text-sm font-bold text-white shadow-lg shadow-red-600/30 hover:from-red-700 hover:to-red-800">
+                      <Button
+                        className="h-10 gap-2 bg-gradient-to-r from-red-600 to-red-700 text-sm font-bold text-white shadow-lg shadow-red-600/30 hover:from-red-700 hover:to-red-800 disabled:cursor-not-allowed disabled:opacity-60"
+                        onClick={handleAddToCart}
+                        disabled={addingToCart || Number(product.inventory_quantity || 0) <= 0}
+                      >
                         <ShoppingCart className="h-4 w-4" />
-                        Add to Cart
+                        {addingToCart ? 'Adding...' : 'Add to Cart'}
                       </Button>
                     </div>
+                    {cartMessage && (
+                      <p className="mt-3 rounded-xl border border-green-500/30 bg-green-500/10 px-4 py-3 text-sm font-medium text-green-200">
+                        {cartMessage}
+                      </p>
+                    )}
                   </div>
                 </div>
 

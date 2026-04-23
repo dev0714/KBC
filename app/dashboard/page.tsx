@@ -9,6 +9,7 @@ import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { buildPayFastPaymentPayload } from '@/lib/payfast-payment.mjs'
+import { getCartStorageKey, parseCartItems, serializeCartItems } from '@/lib/cart-storage.mjs'
 import { LogOut, ShoppingCart, FileText, User, Settings, Download, Clock, CheckCircle2, AlertCircle, TrendingUp, Phone, Mail, Loader2, Heart, X, ChevronDown } from 'lucide-react'
 
 const fetcher = (url: string) => fetch(url).then(res => res.json())
@@ -90,6 +91,7 @@ export default function DashboardPage() {
   const [passwordError, setPasswordError] = useState('')
   const [passwordSuccess, setPasswordSuccess] = useState('')
   const [updatingPassword, setUpdatingPassword] = useState(false)
+  const [cartReady, setCartReady] = useState(false)
   const client = dashData?.client
   const displayName = client?.business_name || client?.client_name || client?.full_name || 'Customer'
   const orders = dashData?.orders || []
@@ -113,6 +115,17 @@ export default function DashboardPage() {
       setActiveTab(tab)
     }
   }, [])
+
+  useEffect(() => {
+    const storedCart = parseCartItems(sessionStorage.getItem(getCartStorageKey()))
+    setCart(storedCart)
+    setCartReady(true)
+  }, [])
+
+  useEffect(() => {
+    if (!cartReady) return
+    sessionStorage.setItem(getCartStorageKey(), serializeCartItems(cart))
+  }, [cart, cartReady])
 
   const handleLogout = async () => {
     try {
