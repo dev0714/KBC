@@ -644,13 +644,25 @@ export default function DashboardPage() {
               <h1 className="text-lg font-black leading-tight text-white">{displayName}</h1>
             </div>
           </div>
-          <Button
-            onClick={handleLogout}
-            className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold shadow-lg shadow-red-600/40 hover:shadow-red-600/60 transition-all duration-300 gap-2"
-          >
-            <LogOut className="w-4 h-4" />
-            Logout
-          </Button>
+          <div className="flex items-center gap-3">
+            <Button
+              asChild
+              variant="outline"
+              className="border-white/15 bg-white/5 text-white font-bold shadow-lg shadow-black/20 hover:bg-white/10 hover:text-white transition-all duration-300 gap-2"
+            >
+              <Link href="/dashboard?tab=cart">
+                <ShoppingCart className="w-4 h-4" />
+                Cart
+              </Link>
+            </Button>
+            <Button
+              onClick={handleLogout}
+              className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold shadow-lg shadow-red-600/40 hover:shadow-red-600/60 transition-all duration-300 gap-2"
+            >
+              <LogOut className="w-4 h-4" />
+              Logout
+            </Button>
+          </div>
         </div>
       </div>
 
