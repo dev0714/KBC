@@ -137,6 +137,7 @@ export default function AdminPage() {
   const [manualPaymentLoading, setManualPaymentLoading] = useState(false)
   const [manualPaymentError, setManualPaymentError] = useState<string | null>(null)
   const [manualPaymentSuccess, setManualPaymentSuccess] = useState<string | null>(null)
+  const [loginActionLoading, setLoginActionLoading] = useState<'reset' | 'revoke' | null>(null)
   const PRODUCTS_PER_PAGE = 15
 
   const [customerPage, setCustomerPage] = useState(1)
@@ -483,6 +484,69 @@ export default function AdminPage() {
       setManualPaymentError(error?.message || 'Failed to send payment link')
     } finally {
       setManualPaymentLoading(false)
+    }
+  }
+
+  const handleResetClientPassword = async () => {
+    if (!editingCustomer?.user_id) {
+      alert('This customer does not have an active login to reset.')
+      return
+    }
+
+    const newPassword = Math.random().toString(36).substring(2, 10)
+    setLoginActionLoading('reset')
+    try {
+      const response = await fetch('/api/admin/reset-client-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          account_no: editingCustomer.account_no,
+          newPassword,
+        }),
+      })
+
+      const result = await response.json()
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to reset password')
+      }
+
+      setFormData((prev: any) => ({ ...prev, resetPassword: newPassword }))
+      alert(`Password reset successfully. New password: ${newPassword}`)
+    } catch (err: any) {
+      console.error('[v0] Password reset error:', err)
+      alert(`Error resetting password: ${err.message}`)
+    } finally {
+      setLoginActionLoading(null)
+    }
+  }
+
+  const handleRevokeClientAccess = async () => {
+    if (!editingCustomer?.user_id) {
+      alert('This customer does not have an active login to revoke.')
+      return
+    }
+
+    setLoginActionLoading('revoke')
+    try {
+      const supabase = createClient()
+      const { error } = await supabase
+        .from('users')
+        .update({ status: 'rejected' })
+        .eq('id', editingCustomer.user_id)
+
+      if (error) {
+        throw error
+      }
+
+      setFormData((prev: any) => ({ ...prev, revokeAccess: true }))
+      setEditingCustomer((prev: any) => prev ? { ...prev, user_id: null, user_status: 'rejected' } : prev)
+      mutate()
+      alert('Client access revoked successfully.')
+    } catch (err: any) {
+      console.error('[v0] Error revoking access:', err)
+      alert(`Error revoking access: ${err.message}`)
+    } finally {
+      setLoginActionLoading(null)
     }
   }
 
@@ -2112,18 +2176,27 @@ export default function AdminPage() {
                       <div className="border-t border-slate-400/30 pt-4 space-y-3">
                         <Button
                           className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold gap-2"
-                          onClick={() => {
-                            const newPassword = Math.random().toString(36).substring(2, 10)
-                            setFormData({ ...formData, resetPassword: newPassword })
-                          }}
+                          onClick={handleResetClientPassword}
+                          disabled={loginActionLoading === 'reset'}
                         >
-                          Reset Password
+                          {loginActionLoading === 'reset' ? (
+                            <>
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                              Resetting...
+                            </>
+                          ) : 'Reset Password'}
                         </Button>
                         <Button
                           className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold gap-2"
-                          onClick={() => setFormData({ ...formData, revokeAccess: true })}
+                          onClick={handleRevokeClientAccess}
+                          disabled={loginActionLoading === 'revoke'}
                         >
-                          Revoke Access
+                          {loginActionLoading === 'revoke' ? (
+                            <>
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                              Revoking...
+                            </>
+                          ) : 'Revoke Access'}
                         </Button>
                       </div>
                     </>

@@ -137,42 +137,30 @@ export async function GET(request: Request) {
       full_name: (Array.isArray(client.contacts) ? client.contacts[0] : client.contacts)?.full_name
         || (() => {
           const users = Array.isArray(client.users) ? client.users : (client.users ? [client.users] : [])
-          return users.find((user: any) => user?.status === 'approved' || user?.status === 'active')?.full_name
-            || users[0]?.full_name
-            || null
+          return users.find((user: any) => ['approved', 'active'].includes(String(user?.status || '').toLowerCase()))?.full_name || null
         })(),
       email: (Array.isArray(client.contacts) ? client.contacts[0] : client.contacts)?.email
         || (() => {
           const users = Array.isArray(client.users) ? client.users : (client.users ? [client.users] : [])
-          return users.find((user: any) => user?.status === 'approved' || user?.status === 'active')?.email
-            || users[0]?.email
-            || null
+          return users.find((user: any) => ['approved', 'active'].includes(String(user?.status || '').toLowerCase()))?.email || null
         })(),
       phone_number: (Array.isArray(client.contacts) ? client.contacts[0] : client.contacts)?.phone_number
         || (() => {
           const users = Array.isArray(client.users) ? client.users : (client.users ? [client.users] : [])
-          return users.find((user: any) => user?.status === 'approved' || user?.status === 'active')?.phone_number
-            || users[0]?.phone_number
-            || null
+          return users.find((user: any) => ['approved', 'active'].includes(String(user?.status || '').toLowerCase()))?.phone_number || null
         })(),
       business_type: (Array.isArray(client.contacts) ? client.contacts[0] : client.contacts)?.business_type
         || (() => {
           const users = Array.isArray(client.users) ? client.users : (client.users ? [client.users] : [])
-          return users.find((user: any) => user?.status === 'approved' || user?.status === 'active')?.business_type
-            || users[0]?.business_type
-            || null
+          return users.find((user: any) => ['approved', 'active'].includes(String(user?.status || '').toLowerCase()))?.business_type || null
         })(),
       status: (() => {
         const users = Array.isArray(client.users) ? client.users : (client.users ? [client.users] : [])
-        return users.find((user: any) => user?.status === 'approved' || user?.status === 'active')?.status
-          || users[0]?.status
-          || null
+        return users.find((user: any) => ['approved', 'active'].includes(String(user?.status || '').toLowerCase()))?.status || null
       })(),
       user_id: (() => {
         const users = Array.isArray(client.users) ? client.users : (client.users ? [client.users] : [])
-        return users.find((user: any) => user?.status === 'approved' || user?.status === 'active')?.id
-          || users[0]?.id
-          || null
+        return users.find((user: any) => ['approved', 'active'].includes(String(user?.status || '').toLowerCase()))?.id || null
       })(),
       created_at: client.created_at,
     })) || []
