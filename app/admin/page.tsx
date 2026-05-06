@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { LogOut, Package, Users, ShoppingCart, BarChart3, Menu, X, Edit2, Trash2, Plus, CheckCircle2, AlertCircle, Clock, Loader2, Send, Mail, MessageSquare, Check, XCircle, Upload, ImageIcon, TrendingUp, ChevronDown, Lock, Shield, Bell, Database, Globe, Palette, CreditCard, Building2, Settings, User, Search } from 'lucide-react'
+import { ReportingDashboard } from '@/components/admin/reporting/reporting-dashboard'
+import { buildReportingModel } from '@/lib/admin/reporting'
 import { createClient } from '@/lib/supabase/client'
 
 const fetcher = (url: string) => fetch(url).then(res => res.json())
@@ -151,6 +153,7 @@ export default function AdminPage() {
   const products = adminData?.products || EMPTY_ARRAY
   const clients = adminData?.clients || EMPTY_ARRAY
   const orders = adminData?.orders || EMPTY_ARRAY
+  const reporting = buildReportingModel({ orders, clients })
   const stats = adminData?.stats || { totalProducts: 0, activeCustomers: 0, totalOrders: 0, totalRevenue: 0 }
   const paidOrders = orders.filter((order: any) => Number(order.total_amount || 0) > 0)
   const averagePayment = paidOrders.length
@@ -976,6 +979,7 @@ export default function AdminPage() {
             <p className="px-3 pb-2 text-[11px] uppercase tracking-[0.35em] text-slate-500">Navigation</p>
             {[
   { id: 'overview', label: 'Overview', icon: BarChart3 },
+  { id: 'reporting', label: 'Reporting', icon: Database },
   { id: 'products', label: 'Products', icon: Package },
   { id: 'customers', label: 'Customers', icon: Users },
               { id: 'orders', label: 'Orders', icon: ShoppingCart },
@@ -1190,6 +1194,11 @@ export default function AdminPage() {
                   </div>
                 </div>
               </div>
+            )}
+
+            {/* Reporting Tab */}
+            {activeTab === 'reporting' && (
+              <ReportingDashboard orders={orders} clients={clients} reporting={reporting} />
             )}
 
             {/* Products Tab */}
