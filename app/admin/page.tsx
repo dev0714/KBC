@@ -74,6 +74,7 @@ export default function AdminPage() {
   const [editingProduct, setEditingProduct] = useState<any>(null)
   const [productFormData, setProductFormData] = useState<any>({})
   const [createLoginEmail, setCreateLoginEmail] = useState('')
+  const [createLoginSearch, setCreateLoginSearch] = useState('')
   
   // Settings modal states
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false)
@@ -482,6 +483,54 @@ export default function AdminPage() {
       setManualPaymentError(error?.message || 'Failed to send payment link')
     } finally {
       setManualPaymentLoading(false)
+    }
+  }
+
+  const handleCreateClientLogin = async () => {
+    if (!selectedCustomerForLogin) {
+      return
+    }
+
+    if (!createLoginEmail.trim()) {
+      setCreateLoginError('Please enter an email address')
+      return
+    }
+
+    setCreatingLogin(selectedCustomerForLogin.account_no)
+    setCreateLoginError('')
+    setCreateLoginSuccess('')
+
+    try {
+      const response = await fetch('/api/admin/create-client-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: createLoginEmail.trim(),
+          account_no: selectedCustomerForLogin.account_no,
+        })
+      })
+
+      const result = await response.json()
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to create login')
+      }
+
+      setCreatedLoginCredentials({
+        email: result.email || createLoginEmail.trim(),
+        password: result.password || '',
+      })
+      setCreateLoginSuccess(`Login created for ${selectedCustomerForLogin.client_name || selectedCustomerForLogin.full_name || selectedCustomerForLogin.account_no}`)
+      setSelectedCustomerForLogin(null)
+      setShowCreateLoginModal(false)
+      setCreateLoginEmail('')
+      setCreateLoginSearch('')
+      mutate()
+    } catch (err: any) {
+      console.error('[v0] Create login error:', err)
+      setCreateLoginError(`Error creating login: ${err.message}`)
+    } finally {
+      setCreatingLogin(null)
     }
   }
 
@@ -1226,7 +1275,12 @@ export default function AdminPage() {
                       className="w-64 bg-slate-800/50 border-slate-600/50"
                     />
                     <Button 
-                      onClick={() => setShowCreateLoginModal(true)}
+                      onClick={() => {
+                        setCreateLoginSearch('')
+                        setCreateLoginError('')
+                        setCreateLoginSuccess('')
+                        setShowCreateLoginModal(true)
+                      }}
                       className="bg-gradient-to-r from-primary to-secondary hover:from-primary/80 hover:to-secondary/80 text-white font-bold gap-2"
                     >
                       <Plus className="w-4 h-4" />
@@ -2274,6 +2328,86 @@ export default function AdminPage() {
               >
                 Done
               </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Create Login Customer Picker */}
+      {showCreateLoginModal && !selectedCustomerForLogin && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <div className="bg-gradient-to-br from-[#0056a1]/40 to-[#002463]/40 border border-slate-400/30 rounded-xl shadow-xl max-w-2xl w-full max-h-[80vh] overflow-hidden">
+            <div className="bg-gradient-to-r from-blue-600/80 to-blue-700/80 text-white border-b border-slate-400/30 p-6 flex items-center justify-between">
+              <div>
+                <h2 className="text-xl font-bold">Create Client Login</h2>
+                <p className="text-sm text-blue-100/90 mt-1">Choose the customer who needs access</p>
+              </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-white hover:bg-white/10"
+                onClick={() => setShowCreateLoginModal(false)}
+              >
+                <X className="w-5 h-5" />
+              </Button>
+            </div>
+
+            <div className="p-6 space-y-4">
+              <Input
+                placeholder="Search customers by name, account, or email..."
+                value={createLoginSearch}
+                onChange={(e) => setCreateLoginSearch(e.target.value)}
+                className="border-slate-400/50 focus:border-blue-500 bg-white/10 text-white placeholder:text-slate-400"
+              />
+
+              <div className="max-h-[50vh] overflow-y-auto space-y-2 pr-1">
+                {clients
+                  .filter((customer: any) => {
+                    const q = createLoginSearch.toLowerCase()
+                    return !q ||
+                      customer.client_name?.toLowerCase().includes(q) ||
+                      customer.full_name?.toLowerCase().includes(q) ||
+                      customer.account_no?.toLowerCase().includes(q) ||
+                      customer.email?.toLowerCase().includes(q)
+                  })
+                  .slice(0, 30)
+                  .map((customer: any) => (
+                    <button
+                      key={customer.account_no}
+                      type="button"
+                      onClick={() => {
+                        setSelectedCustomerForLogin(customer)
+                        setCreateLoginEmail(customer.email || '')
+                        setShowCreateLoginModal(false)
+                        setCreateLoginError('')
+                        setCreateLoginSuccess('')
+                      }}
+                      className="w-full text-left rounded-xl border border-slate-400/20 bg-white/5 px-4 py-3 transition-all hover:border-blue-400/50 hover:bg-white/10"
+                    >
+                      <div className="flex items-center justify-between gap-3">
+                        <div>
+                          <p className="font-bold text-white">{customer.client_name || customer.full_name || 'Unnamed customer'}</p>
+                          <p className="text-xs text-slate-400">{customer.account_no}</p>
+                          <p className="text-xs text-slate-300 mt-1 break-all">{customer.email || 'No email on file'}</p>
+                        </div>
+                        <Plus className="w-4 h-4 text-blue-300" />
+                      </div>
+                    </button>
+                  ))}
+
+                {clients.filter((customer: any) => {
+                  const q = createLoginSearch.toLowerCase()
+                  return !q ||
+                    customer.client_name?.toLowerCase().includes(q) ||
+                    customer.full_name?.toLowerCase().includes(q) ||
+                    customer.account_no?.toLowerCase().includes(q) ||
+                    customer.email?.toLowerCase().includes(q)
+                }).length === 0 && (
+                  <div className="rounded-xl border border-dashed border-slate-400/30 px-4 py-8 text-center text-slate-400">
+                    No customers match your search.
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
