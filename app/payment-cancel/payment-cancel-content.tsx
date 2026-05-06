@@ -27,7 +27,7 @@ export default function PaymentCancelContent() {
     const markCancelled = async () => {
       try {
         const source = searchParams.get('source')
-        const isAdminFlow = source === 'admin'
+        const sourceIndicatesAdmin = source === 'admin'
         const orderIdFromQuery = searchParams.get('order_id')
         const orderNumberFromQuery = searchParams.get('order_number')
         const mPaymentId = searchParams.get('m_payment_id')
@@ -37,6 +37,19 @@ export default function PaymentCancelContent() {
         const paymentStatus = searchParams.get('pf_payment_status') || 'CANCELLED'
         const adminReturnHref = '/admin?tab=orders&refresh=true'
         const customerReturnHref = '/dashboard?refresh=true'
+
+        let isAdminFlow = sourceIndicatesAdmin
+        if (!isAdminFlow) {
+          try {
+            const sessionResponse = await fetch('/api/auth/session')
+            if (sessionResponse.ok) {
+              const session = await sessionResponse.json()
+              isAdminFlow = session?.role === 'admin'
+            }
+          } catch {
+            // Ignore session lookup errors and fall back to customer dashboard.
+          }
+        }
 
         const orderReference = orderIdFromQuery || customStr1 || storedOrderId || orderNumberFromQuery || storedOrderNumber
         const resolvedReturnHref = isAdminFlow ? adminReturnHref : customerReturnHref

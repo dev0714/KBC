@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -8,10 +9,33 @@ import Link from "next/link"
 
 export default function PaymentSuccessContent() {
   const searchParams = useSearchParams()
-  const source = searchParams.get('source')
-  const isAdminFlow = source === 'admin'
-  const returnHref = isAdminFlow ? '/admin?tab=orders&refresh=true' : '/dashboard?refresh=true'
-  const returnLabel = isAdminFlow ? 'Return to Admin Portal' : 'Return to Dashboard'
+  const [returnHref, setReturnHref] = useState('/dashboard?refresh=true')
+  const [returnLabel, setReturnLabel] = useState('Return to Dashboard')
+
+  useEffect(() => {
+    const resolveReturnTarget = async () => {
+      const source = searchParams.get('source')
+      const sourceIndicatesAdmin = source === 'admin'
+
+      try {
+        const response = await fetch('/api/auth/session')
+        if (response.ok) {
+          const session = await response.json()
+          const isAdmin = sourceIndicatesAdmin || session?.role === 'admin'
+          setReturnHref(isAdmin ? '/admin?tab=orders&refresh=true' : '/dashboard?refresh=true')
+          setReturnLabel(isAdmin ? 'Return to Admin Portal' : 'Return to Dashboard')
+          return
+        }
+      } catch {
+        // Fall back to the default dashboard target below.
+      }
+
+      setReturnHref(sourceIndicatesAdmin ? '/admin?tab=orders&refresh=true' : '/dashboard?refresh=true')
+      setReturnLabel(sourceIndicatesAdmin ? 'Return to Admin Portal' : 'Return to Dashboard')
+    }
+
+    resolveReturnTarget()
+  }, [searchParams])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-950 via-background to-blue-900 flex items-center justify-center py-12 px-4">

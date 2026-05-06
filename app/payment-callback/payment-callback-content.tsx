@@ -17,13 +17,32 @@ export default function PaymentCallbackContent() {
         // Get payment status from URL params
         const paymentStatus = searchParams.get('pf_payment_status')
         const mPaymentId = searchParams.get('m_payment_id')
+        const source = searchParams.get('source')
         
         console.log('[v0] Payment callback received:', { paymentStatus, mPaymentId })
+
+        const resolveReturnTarget = async () => {
+          if (source === 'admin') return '/admin?tab=orders&refresh=true'
+
+          try {
+            const sessionResponse = await fetch('/api/auth/session')
+            if (sessionResponse.ok) {
+              const session = await sessionResponse.json()
+              if (session?.role === 'admin') {
+                return '/admin?tab=orders&refresh=true'
+              }
+            }
+          } catch {
+            // Ignore session lookup errors and use the customer dashboard fallback.
+          }
+
+          return '/dashboard'
+        }
 
         if (!mPaymentId) {
           setStatus('success')
           setMessage('Payment received. We are confirming your order now.')
-          setTimeout(() => router.push('/dashboard'), 3000)
+          setTimeout(async () => router.push(await resolveReturnTarget()), 3000)
           return
         }
 
@@ -43,7 +62,7 @@ export default function PaymentCallbackContent() {
           setStatus('success')
           setMessage('Payment successful! Your order has been confirmed.')
           // Redirect to dashboard after 3 seconds
-          setTimeout(() => router.push('/dashboard'), 3000)
+          setTimeout(async () => router.push(await resolveReturnTarget()), 3000)
         } else {
           setStatus('failed')
           setMessage(data.message || 'Payment verification failed')
@@ -83,8 +102,20 @@ export default function PaymentCallbackContent() {
             <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-4" />
             <h1 className="text-2xl font-bold text-white mb-2">Payment Failed</h1>
             <p className="text-slate-300 mb-6">{message}</p>
-            <Button
-              onClick={() => router.push('/dashboard')}
+          <Button
+              onClick={async () => router.push(await (async () => {
+                if (searchParams.get('source') === 'admin') return '/admin?tab=orders&refresh=true'
+                try {
+                  const sessionResponse = await fetch('/api/auth/session')
+                  if (sessionResponse.ok) {
+                    const session = await sessionResponse.json()
+                    if (session?.role === 'admin') return '/admin?tab=orders&refresh=true'
+                  }
+                } catch {
+                  // Fall back below.
+                }
+                return '/dashboard'
+              })())}
               className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold w-full"
             >
               Return to Dashboard
