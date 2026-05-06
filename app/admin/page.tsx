@@ -1191,7 +1191,7 @@ export default function AdminPage() {
               const paginatedCustomers = filteredCustomers.slice((customerPage - 1) * CUSTOMERS_PER_PAGE, customerPage * CUSTOMERS_PER_PAGE)
               
               return (
-              <div className="space-y-6 animate-fade-in-up">
+              <div id="customers" className="space-y-6 scroll-mt-24 animate-fade-in-up">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div>
                     <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-1">Customers</h1>
@@ -1292,7 +1292,7 @@ export default function AdminPage() {
               const paginatedOrders = filteredOrders.slice((orderPage - 1) * ORDERS_PER_PAGE, orderPage * ORDERS_PER_PAGE)
               
               return (
-              <div className="space-y-6 animate-fade-in-up">
+              <div id="orders" className="space-y-6 scroll-mt-24 animate-fade-in-up">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div>
                     <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-1">Orders</h1>
