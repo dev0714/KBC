@@ -190,7 +190,7 @@ export async function POST(req: NextRequest) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          id: 1,
+          id: 2,
           client_id: resolvedCustomerEmail.clientAccountNo,
           amount: Number(amount).toFixed(2),
           item_name: String(item_name).trim(),

@@ -180,7 +180,7 @@ export async function POST(req: NextRequest) {
           Authorization: `Bearer ${payFastKey}`,
         },
         body: JSON.stringify({
-          id: 1,
+          id: 2,
           client_id: resolvedCustomer.accountNo,
           amount: amount.toFixed(2),
           item_name: `Order ${manualOrder.order_number}`,
