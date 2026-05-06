@@ -3,6 +3,7 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 import useSWR from 'swr'
 import { createClient } from '@/lib/supabase/client'
 //import { Footer } from '@/components/navigation/footer' commented out to remove the Footer from the CRM 
@@ -43,6 +44,7 @@ function formatDate(dateStr: string) {
 }
 
 export default function DashboardPage() {
+  const searchParams = useSearchParams()
   const [accountNo, setAccountNo] = useState<string | null>(null)
   const [userId, setUserId] = useState<string | null>(null)
   const [loadingAccountNo, setLoadingAccountNo] = useState(true)
@@ -107,14 +109,14 @@ export default function DashboardPage() {
   ]
 
   useEffect(() => {
-    const tab = new URLSearchParams(window.location.search).get('tab')
+    const tab = searchParams.get('tab')
     if (!tab) return
 
     const allowedTabs = new Set(['overview', 'shop', 'wishlist', 'cart', 'orders', 'documents', 'account'])
     if (allowedTabs.has(tab)) {
       setActiveTab(tab)
     }
-  }, [])
+  }, [searchParams])
 
   useEffect(() => {
     const storedCart = parseCartItems(sessionStorage.getItem(getCartStorageKey()))
