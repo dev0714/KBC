@@ -4,9 +4,9 @@ import { createClient } from '@supabase/supabase-js'
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    const { pf_payment_status, m_payment_id, custom_str1, order_id } = body
+    const { pf_payment_status, m_payment_id, custom_str1, order_id, order_number } = body
 
-    if (!m_payment_id && !custom_str1 && !order_id) {
+    if (!m_payment_id && !custom_str1 && !order_id && !order_number) {
       return NextResponse.json(
         { success: false, message: 'Invalid payment reference' },
         { status: 400 }
@@ -21,6 +21,7 @@ export async function POST(req: NextRequest) {
     const paymentReference = m_payment_id ? String(m_payment_id) : ''
     const orderReference = custom_str1 ? String(custom_str1) : ''
     const explicitOrderId = order_id && /^\d+$/.test(String(order_id)) ? Number.parseInt(String(order_id), 10) : null
+    const explicitOrderNumber = order_number ? String(order_number) : (orderReference && String(orderReference).startsWith('ORD-') ? orderReference : '')
 
     let orderId: number | null = null
 
@@ -39,6 +40,18 @@ export async function POST(req: NextRequest) {
 
       if (itnLog?.order_id) {
         orderId = Number(itnLog.order_id)
+      }
+    }
+
+    if (!orderId && explicitOrderNumber) {
+      const { data: orderByNumber } = await supabase
+        .from('orders')
+        .select('id, payment_status')
+        .eq('order_number', explicitOrderNumber)
+        .maybeSingle()
+
+      if (orderByNumber?.id) {
+        orderId = Number(orderByNumber.id)
       }
     }
 

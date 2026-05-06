@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
       custom_int1: body.custom_int1 || '1',
       custom_str1: body.custom_str1,
       return_url: `${siteOrigin}/payment-success?order_id=${encodeURIComponent(orderReference)}`,
-      cancel_url: `${siteOrigin}/payment-cancel?order_id=${encodeURIComponent(orderReference)}`,
+      cancel_url: `${siteOrigin}/payment-cancel?order_id=${encodeURIComponent(orderReference)}&order_number=${encodeURIComponent(body.item_name || '')}`,
       notify_url: `${siteOrigin}/api/payfast/notify`,
     }
     

@@ -24,31 +24,17 @@ export default function PaymentCancelContent() {
   }
 
   useEffect(() => {
-    const resolveReturnTarget = async () => {
-      try {
-        const response = await fetch('/api/auth/session')
-        if (response.ok) {
-          setReturnHref('/dashboard?refresh=true')
-          setReturnLabel('Return to Dashboard')
-        } else {
-          setReturnHref('/customer-portal')
-          setReturnLabel('Return to Portal')
-        }
-      } catch {
-        setReturnHref('/customer-portal')
-        setReturnLabel('Return to Portal')
-      }
-    }
-
     const markCancelled = async () => {
       try {
         const orderIdFromQuery = searchParams.get('order_id')
+        const orderNumberFromQuery = searchParams.get('order_number')
         const mPaymentId = searchParams.get('m_payment_id')
         const customStr1 = searchParams.get('custom_str1')
         const storedOrderId = sessionStorage.getItem('kbc_pending_order_id') || readCookie('kbc_pending_order_id')
+        const storedOrderNumber = sessionStorage.getItem('kbc_pending_order_number') || readCookie('kbc_pending_order_number')
         const paymentStatus = searchParams.get('pf_payment_status') || 'CANCELLED'
 
-        const orderReference = orderIdFromQuery || customStr1 || storedOrderId
+        const orderReference = orderIdFromQuery || customStr1 || storedOrderId || orderNumberFromQuery || storedOrderNumber
 
         if (!mPaymentId && !orderReference) {
           setMessage('Your payment was cancelled. We could not identify the order from the return URL.')
@@ -64,6 +50,7 @@ export default function PaymentCancelContent() {
             m_payment_id: mPaymentId,
             custom_str1: orderReference,
             order_id: orderIdFromQuery || storedOrderId || undefined,
+            order_number: orderNumberFromQuery || storedOrderNumber || undefined,
           }),
         })
 
@@ -90,7 +77,6 @@ export default function PaymentCancelContent() {
       }
     }
 
-    resolveReturnTarget()
     markCancelled()
   }, [searchParams])
 
@@ -120,13 +106,13 @@ export default function PaymentCancelContent() {
           </div>
           <div className="flex flex-col gap-2">
             <Button asChild className="w-full">
-              <Link href={returnHref}>{returnLabel}</Link>
+              <Link href="/customer-portal">{returnLabel}</Link>
             </Button>
             <Button
               type="button"
               variant="outline"
               className="w-full bg-transparent"
-              onClick={() => router.push(returnHref)}
+              onClick={() => router.push('/customer-portal')}
             >
               Try Again
             </Button>
