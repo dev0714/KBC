@@ -12,6 +12,8 @@ export default function PaymentCancelContent() {
   const router = useRouter()
   const [isUpdating, setIsUpdating] = useState(true)
   const [message, setMessage] = useState('Updating your order status...')
+  const [returnHref, setReturnHref] = useState('/customer-portal')
+  const [returnLabel, setReturnLabel] = useState('Return to Portal')
 
   const readCookie = (name: string) => {
     if (typeof document === 'undefined') return null
@@ -22,6 +24,22 @@ export default function PaymentCancelContent() {
   }
 
   useEffect(() => {
+    const resolveReturnTarget = async () => {
+      try {
+        const response = await fetch('/api/auth/session')
+        if (response.ok) {
+          setReturnHref('/dashboard?refresh=true')
+          setReturnLabel('Return to Dashboard')
+        } else {
+          setReturnHref('/customer-portal')
+          setReturnLabel('Return to Portal')
+        }
+      } catch {
+        setReturnHref('/customer-portal')
+        setReturnLabel('Return to Portal')
+      }
+    }
+
     const markCancelled = async () => {
       try {
         const orderIdFromQuery = searchParams.get('order_id')
@@ -72,6 +90,7 @@ export default function PaymentCancelContent() {
       }
     }
 
+    resolveReturnTarget()
     markCancelled()
   }, [searchParams])
 
@@ -101,13 +120,13 @@ export default function PaymentCancelContent() {
           </div>
           <div className="flex flex-col gap-2">
             <Button asChild className="w-full">
-              <Link href="/dashboard?refresh=true">Return to Dashboard</Link>
+              <Link href={returnHref}>{returnLabel}</Link>
             </Button>
             <Button
               type="button"
               variant="outline"
               className="w-full bg-transparent"
-              onClick={() => router.push('/dashboard?refresh=true')}
+              onClick={() => router.push(returnHref)}
             >
               Try Again
             </Button>
