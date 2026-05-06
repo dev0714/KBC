@@ -18,6 +18,11 @@ export default function PaymentCallbackContent() {
         const paymentStatus = searchParams.get('pf_payment_status')
         const mPaymentId = searchParams.get('m_payment_id')
         const source = searchParams.get('source')
+        const orderIdFromQuery = searchParams.get('order_id')
+        const orderNumberFromQuery = searchParams.get('order_number')
+        const customStr1FromQuery = searchParams.get('custom_str1')
+        const storedOrderId = sessionStorage.getItem('kbc_pending_order_id')
+        const storedOrderNumber = sessionStorage.getItem('kbc_pending_order_number')
         
         console.log('[v0] Payment callback received:', { paymentStatus, mPaymentId })
 
@@ -39,7 +44,37 @@ export default function PaymentCallbackContent() {
           return '/dashboard'
         }
 
-        if (!mPaymentId) {
+        const orderReference = orderIdFromQuery || customStr1FromQuery || storedOrderId || orderNumberFromQuery || storedOrderNumber || null
+
+        if (paymentStatus === 'CANCELLED') {
+          const response = await fetch('/api/payfast/verify-payment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              pf_payment_status: paymentStatus,
+              m_payment_id: mPaymentId,
+              custom_str1: orderReference,
+              order_id: orderIdFromQuery || storedOrderId || undefined,
+              order_number: orderNumberFromQuery || storedOrderNumber || undefined,
+            }),
+          })
+
+          const data = await response.json()
+
+          if (response.ok) {
+            setStatus('success')
+            setMessage(data.newStatus === 'Cancelled'
+              ? 'Your payment was cancelled and the order has been updated.'
+              : data.message || 'Your payment was cancelled.')
+            setTimeout(async () => router.push(await resolveReturnTarget()), 3000)
+          } else {
+            setStatus('failed')
+            setMessage(data.message || 'Payment cancellation could not be confirmed')
+          }
+          return
+        }
+
+        if (!mPaymentId && !orderReference) {
           setStatus('success')
           setMessage('Payment received. We are confirming your order now.')
           setTimeout(async () => router.push(await resolveReturnTarget()), 3000)
@@ -53,6 +88,9 @@ export default function PaymentCallbackContent() {
           body: JSON.stringify({
             pf_payment_status: paymentStatus,
             m_payment_id: mPaymentId,
+            custom_str1: orderReference || undefined,
+            order_id: orderIdFromQuery || storedOrderId || undefined,
+            order_number: orderNumberFromQuery || storedOrderNumber || undefined,
           }),
         })
 
