@@ -3,9 +3,9 @@ import { createClient } from '@supabase/supabase-js'
 
 function buildPaymentEmailHtml(params: {
   customerName: string
+  orderNumber: string
   amount: string
   paymentUrl: string
-  note?: string
 }) {
   return `<!DOCTYPE html>
   <html>
@@ -14,14 +14,13 @@ function buildPaymentEmailHtml(params: {
         <div style="background:#0b2a5b;border-radius:16px;overflow:hidden;box-shadow:0 10px 30px rgba(11,42,91,.18);">
           <div style="background:linear-gradient(135deg,#c1121f,#e11d48);color:#fff;padding:28px 32px;">
             <h1 style="margin:0;font-size:28px;line-height:1.2;">Your KBC Payment Link</h1>
-            <p style="margin:10px 0 0;font-size:14px;opacity:.95;">Manual payment request</p>
+            <p style="margin:10px 0 0;font-size:14px;opacity:.95;">Order ${params.orderNumber}</p>
           </div>
           <div style="padding:32px;color:#e2e8f0;">
             <p style="margin:0 0 16px;font-size:16px;">Hi ${params.customerName || 'Customer'},</p>
             <p style="margin:0 0 20px;font-size:15px;line-height:1.7;color:#cbd5e1;">
-              Your PayFast payment link is ready. Click the button below to complete payment for <strong>R${params.amount}</strong>.
+              Your PayFast payment link is ready. Click the button below to complete payment for <strong>Order ${params.orderNumber}</strong>.
             </p>
-            ${params.note ? `<p style="margin:0 0 20px;font-size:14px;line-height:1.6;color:#94a3b8;">${params.note}</p>` : ''}
             <div style="margin:28px 0;">
               <a href="${params.paymentUrl}" style="display:inline-block;background:#ef4444;color:#fff;text-decoration:none;padding:14px 22px;border-radius:10px;font-weight:bold;">
                 Pay R${params.amount}
@@ -279,12 +278,12 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify({
         to: resolvedCustomer.email,
         from: fromEmail,
-        subject: `PayFast payment link for ${resolvedCustomer.name}`,
+        subject: `PayFast payment link for order ${manualOrder.order_number}`,
         html: buildPaymentEmailHtml({
           customerName: resolvedCustomer.name,
+          orderNumber: manualOrder.order_number,
           amount: amount.toFixed(2),
           paymentUrl,
-          note: note || undefined,
         }),
       }),
     })
