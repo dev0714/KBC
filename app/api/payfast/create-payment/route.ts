@@ -1,6 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
+function rewritePayFastRedirectUrls(paymentUrl: string, params: {
+  siteOrigin: string
+  orderReference: string
+  orderNumber: string
+  isAdminFlow: boolean
+}) {
+  try {
+    const url = new URL(paymentUrl)
+    url.searchParams.set(
+      'return_url',
+      `${params.siteOrigin}/payment-success?order_id=${encodeURIComponent(params.orderReference)}${params.orderNumber ? `&order_number=${encodeURIComponent(params.orderNumber)}` : ''}${params.isAdminFlow ? '&source=admin' : ''}`
+    )
+    url.searchParams.set(
+      'cancel_url',
+      `${params.siteOrigin}/payment-cancel?order_id=${encodeURIComponent(params.orderReference)}${params.orderNumber ? `&order_number=${encodeURIComponent(params.orderNumber)}` : ''}${params.isAdminFlow ? '&source=admin' : ''}`
+    )
+    return url.toString()
+  } catch {
+    return paymentUrl
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
@@ -82,7 +104,13 @@ export async function POST(req: NextRequest) {
       throw new Error('No payment URL returned from PaySync')
     }
 
-    const paymentUrl = paymentData.shortened_url || paymentData.url
+    const rawPaymentUrl = paymentData.shortened_url || paymentData.url
+    const paymentUrl = rewritePayFastRedirectUrls(rawPaymentUrl, {
+      siteOrigin,
+      orderReference,
+      orderNumber,
+      isAdminFlow,
+    })
     const paymentIdMatch = String(paymentUrl).match(/[?&]m_payment_id=([^&]+)/)
     const paymentId = paymentIdMatch ? decodeURIComponent(paymentIdMatch[1]) : String(body.custom_str1 || '')
 

@@ -1,6 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
+function rewritePayFastRedirectUrls(paymentUrl: string, params: {
+  siteOrigin: string
+  orderId: string
+  orderNumber: string
+  isAdminFlow: boolean
+}) {
+  try {
+    const url = new URL(paymentUrl)
+    url.searchParams.set(
+      'return_url',
+      `${params.siteOrigin}/payment-success?order_id=${encodeURIComponent(params.orderId)}&order_number=${encodeURIComponent(params.orderNumber)}${params.isAdminFlow ? '&source=admin' : ''}`
+    )
+    url.searchParams.set(
+      'cancel_url',
+      `${params.siteOrigin}/payment-cancel?order_id=${encodeURIComponent(params.orderId)}&order_number=${encodeURIComponent(params.orderNumber)}${params.isAdminFlow ? '&source=admin' : ''}`
+    )
+    return url.toString()
+  } catch {
+    return paymentUrl
+  }
+}
+
 function buildPaymentEmailHtml(params: {
   customerName: string
   orderNumber: string
@@ -210,7 +232,12 @@ export async function POST(req: NextRequest) {
         )
       }
 
-      paymentUrl = paymentData.url || paymentData.shortened_url || ''
+      paymentUrl = rewritePayFastRedirectUrls(paymentData.url || paymentData.shortened_url || '', {
+        siteOrigin,
+        orderId: String(manualOrder.id),
+        orderNumber: manualOrder.order_number,
+        isAdminFlow: true,
+      })
 
       const paymentIdMatch = String(paymentUrl).match(/[?&]m_payment_id=([^&]+)/)
       const paymentId = paymentIdMatch ? decodeURIComponent(paymentIdMatch[1]) : ''
