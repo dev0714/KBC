@@ -201,6 +201,8 @@ export async function POST(req: NextRequest) {
           cell_number: '',
           custom_int1: '1',
           custom_str1: String(order_id),
+          order_number: String(order_number),
+          source: 'admin',
         }),
       })
 

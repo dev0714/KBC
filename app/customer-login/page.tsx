@@ -41,7 +41,7 @@ export default function CustomerLoginPage() {
     <div className="flex flex-col min-h-screen bg-background">
       <div className="sticky top-0 z-50 bg-transparent px-4 py-4 flex justify-end">
         <Button asChild variant="outline" className="border-accent/30 text-accent hover:bg-accent/10 bg-transparent">
-          <Link href="/customer-portal">Back</Link>
+          <Link href="/dashboard">Back</Link>
         </Button>
       </div>
 
@@ -157,8 +157,8 @@ export default function CustomerLoginPage() {
             </div>
 
             <div className="mt-8 text-center">
-              <Link href="/customer-portal" className="text-sm text-accent hover:text-accent/70 font-bold transition-colors">
-                Back to Customer Portal
+              <Link href="/dashboard" className="text-sm text-accent hover:text-accent/70 font-bold transition-colors">
+                Back to Dashboard
               </Link>
             </div>
           </div>

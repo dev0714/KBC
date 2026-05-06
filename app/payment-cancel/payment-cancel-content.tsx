@@ -12,8 +12,8 @@ export default function PaymentCancelContent() {
   const router = useRouter()
   const [isUpdating, setIsUpdating] = useState(true)
   const [message, setMessage] = useState('Updating your order status...')
-  const [returnHref, setReturnHref] = useState('/customer-portal')
-  const [returnLabel, setReturnLabel] = useState('Return to Portal')
+  const [returnHref, setReturnHref] = useState('/dashboard?refresh=true')
+  const [returnLabel, setReturnLabel] = useState('Return to Dashboard')
 
   const readCookie = (name: string) => {
     if (typeof document === 'undefined') return null
@@ -36,7 +36,7 @@ export default function PaymentCancelContent() {
         const storedOrderNumber = sessionStorage.getItem('kbc_pending_order_number') || readCookie('kbc_pending_order_number')
         const paymentStatus = searchParams.get('pf_payment_status') || 'CANCELLED'
         const adminReturnHref = '/admin?tab=orders&refresh=true'
-        const customerReturnHref = '/customer-portal'
+        const customerReturnHref = '/dashboard?refresh=true'
 
         const orderReference = orderIdFromQuery || customStr1 || storedOrderId || orderNumberFromQuery || storedOrderNumber
         const resolvedReturnHref = isAdminFlow ? adminReturnHref : customerReturnHref
