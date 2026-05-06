@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { Suspense } from 'react'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
@@ -43,8 +43,27 @@ function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString('en-ZA', { year: 'numeric', month: 'short', day: 'numeric' })
 }
 
-export default function DashboardPage() {
+function DashboardTabSync({
+  setActiveTab,
+}: {
+  setActiveTab: (tab: string) => void
+}) {
   const searchParams = useSearchParams()
+
+  useEffect(() => {
+    const tab = searchParams.get('tab')
+    if (!tab) return
+
+    const allowedTabs = new Set(['overview', 'shop', 'wishlist', 'cart', 'orders', 'documents', 'account'])
+    if (allowedTabs.has(tab)) {
+      setActiveTab(tab)
+    }
+  }, [searchParams, setActiveTab])
+
+  return null
+}
+
+export default function DashboardPage() {
   const [accountNo, setAccountNo] = useState<string | null>(null)
   const [userId, setUserId] = useState<string | null>(null)
   const [loadingAccountNo, setLoadingAccountNo] = useState(true)
@@ -107,16 +126,6 @@ export default function DashboardPage() {
     { label: 'Documents', value: String(documents.length), icon: FileText, color: 'from-purple-500 to-purple-600' },
     { label: 'Wishlist Items', value: String(favorites.size), icon: Heart, color: 'from-pink-500 to-pink-600' },
   ]
-
-  useEffect(() => {
-    const tab = searchParams.get('tab')
-    if (!tab) return
-
-    const allowedTabs = new Set(['overview', 'shop', 'wishlist', 'cart', 'orders', 'documents', 'account'])
-    if (allowedTabs.has(tab)) {
-      setActiveTab(tab)
-    }
-  }, [searchParams])
 
   useEffect(() => {
     const storedCart = parseCartItems(sessionStorage.getItem(getCartStorageKey()))
@@ -637,6 +646,9 @@ export default function DashboardPage() {
 
   return (
     <div className="relative flex min-h-screen overflow-hidden bg-gradient-to-b from-[#000034] via-[#002463] to-[#0056a1]">
+      <Suspense fallback={null}>
+        <DashboardTabSync setActiveTab={setActiveTab} />
+      </Suspense>
       <div className="fixed inset-x-0 top-0 z-40 border-b border-blue-500/30 bg-[#06123dcc]/90 text-white shadow-[0_18px_40px_rgba(0,0,0,0.25)] backdrop-blur-xl">
         <div className="flex h-[72px] items-center justify-between px-4 lg:px-8">
           <div className="flex items-center gap-4">
