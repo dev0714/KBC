@@ -10,6 +10,7 @@ import { LogOut, Package, Users, ShoppingCart, BarChart3, Menu, X, Edit2, Trash2
 import { createClient } from '@/lib/supabase/client'
 
 const fetcher = (url: string) => fetch(url).then(res => res.json())
+const EMPTY_ARRAY: any[] = []
 
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString('en-ZA', { year: 'numeric', month: 'short', day: 'numeric' })
@@ -146,9 +147,9 @@ export default function AdminPage() {
   const ORDERS_PER_PAGE = 15
   const [orderPage, setOrderPage] = useState(1)
 
-  const products = adminData?.products || []
-  const clients = adminData?.clients || []
-  const orders = adminData?.orders || []
+  const products = adminData?.products || EMPTY_ARRAY
+  const clients = adminData?.clients || EMPTY_ARRAY
+  const orders = adminData?.orders || EMPTY_ARRAY
   const stats = adminData?.stats || { totalProducts: 0, activeCustomers: 0, totalOrders: 0, totalRevenue: 0 }
   const paidOrders = orders.filter((order: any) => Number(order.total_amount || 0) > 0)
   const averagePayment = paidOrders.length
