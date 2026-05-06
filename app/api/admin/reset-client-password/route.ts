@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Find user by business_id (account_no)
     const { data: users, error: findError } = await supabase
