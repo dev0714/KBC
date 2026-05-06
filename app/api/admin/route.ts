@@ -135,19 +135,45 @@ export async function GET(request: Request) {
       account_no: client.account_no,
       address: client.address,
       full_name: (Array.isArray(client.contacts) ? client.contacts[0] : client.contacts)?.full_name
-        || (Array.isArray(client.users) ? client.users[0] : client.users)?.full_name
-        || null,
+        || (() => {
+          const users = Array.isArray(client.users) ? client.users : (client.users ? [client.users] : [])
+          return users.find((user: any) => user?.status === 'approved' || user?.status === 'active')?.full_name
+            || users[0]?.full_name
+            || null
+        })(),
       email: (Array.isArray(client.contacts) ? client.contacts[0] : client.contacts)?.email
-        || (Array.isArray(client.users) ? client.users[0] : client.users)?.email
-        || null,
+        || (() => {
+          const users = Array.isArray(client.users) ? client.users : (client.users ? [client.users] : [])
+          return users.find((user: any) => user?.status === 'approved' || user?.status === 'active')?.email
+            || users[0]?.email
+            || null
+        })(),
       phone_number: (Array.isArray(client.contacts) ? client.contacts[0] : client.contacts)?.phone_number
-        || (Array.isArray(client.users) ? client.users[0] : client.users)?.phone_number
-        || null,
+        || (() => {
+          const users = Array.isArray(client.users) ? client.users : (client.users ? [client.users] : [])
+          return users.find((user: any) => user?.status === 'approved' || user?.status === 'active')?.phone_number
+            || users[0]?.phone_number
+            || null
+        })(),
       business_type: (Array.isArray(client.contacts) ? client.contacts[0] : client.contacts)?.business_type
-        || (Array.isArray(client.users) ? client.users[0] : client.users)?.business_type
-        || null,
-      status: (Array.isArray(client.users) ? client.users[0] : client.users)?.status || null,
-      user_id: (Array.isArray(client.users) ? client.users[0] : client.users)?.id || null,
+        || (() => {
+          const users = Array.isArray(client.users) ? client.users : (client.users ? [client.users] : [])
+          return users.find((user: any) => user?.status === 'approved' || user?.status === 'active')?.business_type
+            || users[0]?.business_type
+            || null
+        })(),
+      status: (() => {
+        const users = Array.isArray(client.users) ? client.users : (client.users ? [client.users] : [])
+        return users.find((user: any) => user?.status === 'approved' || user?.status === 'active')?.status
+          || users[0]?.status
+          || null
+      })(),
+      user_id: (() => {
+        const users = Array.isArray(client.users) ? client.users : (client.users ? [client.users] : [])
+        return users.find((user: any) => user?.status === 'approved' || user?.status === 'active')?.id
+          || users[0]?.id
+          || null
+      })(),
       created_at: client.created_at,
     })) || []
 

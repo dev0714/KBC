@@ -2377,7 +2377,7 @@ export default function AdminPage() {
                       type="button"
                       onClick={() => {
                         setSelectedCustomerForLogin(customer)
-                        setCreateLoginEmail(customer.email || '')
+                        setCreateLoginEmail('')
                         setShowCreateLoginModal(false)
                         setCreateLoginError('')
                         setCreateLoginSuccess('')
