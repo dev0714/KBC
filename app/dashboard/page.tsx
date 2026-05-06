@@ -588,6 +588,7 @@ export default function DashboardPage() {
                   orderId: createdOrderId || orderNumber || '',
                   amount: pendingOrder.total,
                   itemCount: pendingOrder.items.length,
+                  source: 'customer',
                   customer: {
                     fullName: client?.full_name || client?.client_name || 'Customer',
                     email: client?.email || '',

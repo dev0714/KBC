@@ -2730,11 +2730,12 @@ export default function AdminPage() {
                             const paymentResponse = await fetch('/api/payfast/create-payment', {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({
+                              body: JSON.stringify({
                                   id: 2,
                                   client_id: viewingOrder.client_account_no,
                                   amount: viewingOrder.total_amount,
                                   item_name: `Order ${viewingOrder.order_number}`,
+                                  order_number: viewingOrder.order_number,
                                   item_description: `KBC Order - ${viewingOrder.item_count || viewingOrder.order_items?.length || 0} items`,
                                   name_first: viewingOrderContactName || viewingOrder.client_name || 'Customer',
                                   name_last: '',
@@ -2742,6 +2743,7 @@ export default function AdminPage() {
                                   cell_number: '',
                                   custom_int1: '1',
                                   custom_str1: String(viewingOrder.id),
+                                  source: 'admin',
                                 }),
                             })
 

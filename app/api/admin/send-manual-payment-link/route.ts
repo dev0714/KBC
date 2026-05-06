@@ -193,8 +193,8 @@ export async function POST(req: NextRequest) {
           cell_number: '',
           custom_int1: '1',
           custom_str1: orderReference,
-          return_url: `${siteOrigin}/payment-success?order_id=${encodeURIComponent(orderReference)}`,
-          cancel_url: `${siteOrigin}/payment-cancel?order_id=${encodeURIComponent(orderReference)}&order_number=${encodeURIComponent(manualOrder.order_number)}`,
+          return_url: `${siteOrigin}/payment-success?order_id=${encodeURIComponent(orderReference)}&source=admin`,
+          cancel_url: `${siteOrigin}/payment-cancel?order_id=${encodeURIComponent(orderReference)}&order_number=${encodeURIComponent(manualOrder.order_number)}&source=admin`,
           notify_url: `${siteOrigin}/api/payfast/notify`,
         }),
       })

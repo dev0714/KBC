@@ -1,11 +1,18 @@
 'use client'
 
+import { useSearchParams } from 'next/navigation'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { CheckCircle } from "lucide-react"
 import Link from "next/link"
 
 export default function PaymentSuccessContent() {
+  const searchParams = useSearchParams()
+  const source = searchParams.get('source')
+  const isAdminFlow = source === 'admin'
+  const returnHref = isAdminFlow ? '/admin?tab=orders&refresh=true' : '/dashboard?refresh=true'
+  const returnLabel = isAdminFlow ? 'Return to Admin Portal' : 'Return to Dashboard'
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-950 via-background to-blue-900 flex items-center justify-center py-12 px-4">
       <Card className="max-w-md w-full bg-card/95 backdrop-blur-sm border-border/50">
@@ -29,10 +36,10 @@ export default function PaymentSuccessContent() {
           </div>
           <div className="flex flex-col gap-2">
             <Button asChild className="w-full">
-              <Link href="/dashboard?refresh=true">Return to Dashboard</Link>
+              <Link href={returnHref}>{returnLabel}</Link>
             </Button>
             <Button asChild variant="outline" className="w-full bg-transparent">
-              <Link href="/dashboard?refresh=true">View Orders</Link>
+              <Link href={returnHref}>View Orders</Link>
             </Button>
           </div>
         </CardContent>
