@@ -13,13 +13,21 @@ export default function PaymentCancelContent() {
   const [isUpdating, setIsUpdating] = useState(true)
   const [message, setMessage] = useState('Updating your order status...')
 
+  const readCookie = (name: string) => {
+    if (typeof document === 'undefined') return null
+    const match = document.cookie
+      .split('; ')
+      .find((entry) => entry.startsWith(`${name}=`))
+    return match ? decodeURIComponent(match.split('=').slice(1).join('=')) : null
+  }
+
   useEffect(() => {
     const markCancelled = async () => {
       try {
         const orderIdFromQuery = searchParams.get('order_id')
         const mPaymentId = searchParams.get('m_payment_id')
         const customStr1 = searchParams.get('custom_str1')
-        const storedOrderId = sessionStorage.getItem('kbc_pending_order_id')
+        const storedOrderId = sessionStorage.getItem('kbc_pending_order_id') || readCookie('kbc_pending_order_id')
         const paymentStatus = searchParams.get('pf_payment_status') || 'CANCELLED'
 
         const orderReference = orderIdFromQuery || customStr1 || storedOrderId
@@ -34,11 +42,11 @@ export default function PaymentCancelContent() {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-          pf_payment_status: paymentStatus,
-          m_payment_id: mPaymentId,
-          custom_str1: orderReference,
-          order_id: orderIdFromQuery || storedOrderId || undefined,
-        }),
+            pf_payment_status: paymentStatus,
+            m_payment_id: mPaymentId,
+            custom_str1: orderReference,
+            order_id: orderIdFromQuery || storedOrderId || undefined,
+          }),
         })
 
         const data = await response.json()
@@ -50,6 +58,9 @@ export default function PaymentCancelContent() {
           sessionStorage.removeItem('kbc_pending_order_id')
           sessionStorage.removeItem('kbc_pending_order_number')
           sessionStorage.removeItem('kbc_pending_payment_method')
+          document.cookie = 'kbc_pending_order_id=; path=/; max-age=0; samesite=lax'
+          document.cookie = 'kbc_pending_order_number=; path=/; max-age=0; samesite=lax'
+          document.cookie = 'kbc_pending_payment_method=; path=/; max-age=0; samesite=lax'
         } else {
           setMessage(data.message || 'Your payment was cancelled, but the order could not be updated automatically.')
         }

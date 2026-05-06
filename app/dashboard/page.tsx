@@ -604,7 +604,10 @@ export default function DashboardPage() {
             throw new Error(paymentData.error || paymentData.details || `HTTP ${response.status}`)
           }
           
-            if (paymentData.url) {
+          if (paymentData.url) {
+              document.cookie = `kbc_pending_order_id=${encodeURIComponent(String(createdOrderId))}; path=/; max-age=3600; samesite=lax`
+              document.cookie = `kbc_pending_order_number=${encodeURIComponent(String(orderNumber))}; path=/; max-age=3600; samesite=lax`
+              document.cookie = `kbc_pending_payment_method=payfast; path=/; max-age=3600; samesite=lax`
               sessionStorage.setItem('kbc_pending_order_id', String(createdOrderId))
               sessionStorage.setItem('kbc_pending_order_number', String(orderNumber))
               sessionStorage.setItem('kbc_pending_payment_method', 'payfast')
