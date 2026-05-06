@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
+    const requestUrl = new URL(req.url)
+    const siteOrigin = requestUrl.origin
     
     console.log('[v0] PayFast payment request received:', { amount: body.amount, item_name: body.item_name, id: body.id })
     
@@ -29,6 +31,7 @@ export async function POST(req: NextRequest) {
     }
 
     const edgeFunctionUrl = `${payFastUrl}/functions/v1/PaySync`
+    const orderReference = String(body.custom_str1 || clientId)
     
     const paymentPayload = {
       id: String(clientId),
@@ -42,6 +45,9 @@ export async function POST(req: NextRequest) {
       cell_number: body.cell_number || '',
       custom_int1: body.custom_int1 || '1',
       custom_str1: body.custom_str1,
+      return_url: `${siteOrigin}/payment-success?order_id=${encodeURIComponent(orderReference)}`,
+      cancel_url: `${siteOrigin}/payment-cancel?order_id=${encodeURIComponent(orderReference)}`,
+      notify_url: `${siteOrigin}/api/payfast/notify`,
     }
     
     console.log('[v0] Payment payload:', paymentPayload)

@@ -165,6 +165,9 @@ export async function POST(req: NextRequest) {
     if (!paymentUrl) {
       const payFastUrl = process.env.NEXT_PUBLIC_PAYFAST_MERCHANT_URL
       const payFastKey = process.env.NEXT_PUBLIC_PAYFAST_MERCHANT_KEY
+      const requestUrl = new URL(req.url)
+      const siteOrigin = requestUrl.origin
+      const orderReference = String(manualOrder.id)
 
       if (!payFastUrl || !payFastKey) {
         return NextResponse.json(
@@ -189,7 +192,10 @@ export async function POST(req: NextRequest) {
           name_last: resolvedCustomer.name.split(' ').slice(1).join(' '),
           cell_number: '',
           custom_int1: '1',
-          custom_str1: String(manualOrder.id),
+          custom_str1: orderReference,
+          return_url: `${siteOrigin}/payment-success?order_id=${encodeURIComponent(orderReference)}`,
+          cancel_url: `${siteOrigin}/payment-cancel?order_id=${encodeURIComponent(orderReference)}`,
+          notify_url: `${siteOrigin}/api/payfast/notify`,
         }),
       })
 

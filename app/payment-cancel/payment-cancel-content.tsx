@@ -16,12 +16,13 @@ export default function PaymentCancelContent() {
   useEffect(() => {
     const markCancelled = async () => {
       try {
+        const orderIdFromQuery = searchParams.get('order_id')
         const mPaymentId = searchParams.get('m_payment_id')
         const customStr1 = searchParams.get('custom_str1')
         const storedOrderId = sessionStorage.getItem('kbc_pending_order_id')
         const paymentStatus = searchParams.get('pf_payment_status') || 'CANCELLED'
 
-        const orderReference = customStr1 || storedOrderId
+        const orderReference = orderIdFromQuery || customStr1 || storedOrderId
 
         if (!mPaymentId && !orderReference) {
           setMessage('Your payment was cancelled. We could not identify the order from the return URL.')
@@ -33,10 +34,11 @@ export default function PaymentCancelContent() {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            pf_payment_status: paymentStatus,
-            m_payment_id: mPaymentId,
-            custom_str1: orderReference,
-          }),
+          pf_payment_status: paymentStatus,
+          m_payment_id: mPaymentId,
+          custom_str1: orderReference,
+          order_id: orderIdFromQuery || storedOrderId || undefined,
+        }),
         })
 
         const data = await response.json()

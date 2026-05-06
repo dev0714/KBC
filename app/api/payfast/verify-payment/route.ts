@@ -4,9 +4,9 @@ import { createClient } from '@supabase/supabase-js'
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    const { pf_payment_status, m_payment_id, custom_str1 } = body
+    const { pf_payment_status, m_payment_id, custom_str1, order_id } = body
 
-    if (!m_payment_id && !custom_str1) {
+    if (!m_payment_id && !custom_str1 && !order_id) {
       return NextResponse.json(
         { success: false, message: 'Invalid payment reference' },
         { status: 400 }
@@ -20,10 +20,13 @@ export async function POST(req: NextRequest) {
 
     const paymentReference = m_payment_id ? String(m_payment_id) : ''
     const orderReference = custom_str1 ? String(custom_str1) : ''
+    const explicitOrderId = order_id && /^\d+$/.test(String(order_id)) ? Number.parseInt(String(order_id), 10) : null
 
     let orderId: number | null = null
 
-    if (/^\d+$/.test(paymentReference)) {
+    if (explicitOrderId) {
+      orderId = explicitOrderId
+    } else if (/^\d+$/.test(paymentReference)) {
       orderId = Number.parseInt(paymentReference, 10)
     } else if (/^\d+$/.test(orderReference)) {
       orderId = Number.parseInt(orderReference, 10)
