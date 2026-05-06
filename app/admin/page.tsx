@@ -1011,8 +1011,14 @@ export default function AdminPage() {
                         <p className="text-[11px] uppercase tracking-[0.35em] text-slate-400 mb-2">Activity</p>
                         <h2 className="text-xl font-bold text-white">Recent Orders</h2>
                       </div>
-                      <Button asChild variant="outline" size="sm" className="border-red-500/50 text-red-300 hover:bg-red-500/10 font-bold bg-transparent">
-                        <Link href="#orders">View All</Link>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="border-red-500/50 text-red-300 hover:bg-red-500/10 font-bold bg-transparent"
+                        onClick={() => setActiveTab('orders')}
+                      >
+                        View All
                       </Button>
                     </div>
                     <div className="space-y-3">
@@ -1043,8 +1049,14 @@ export default function AdminPage() {
                         <p className="text-[11px] uppercase tracking-[0.35em] text-slate-400 mb-2">Relationship view</p>
                         <h2 className="text-xl font-bold text-white">Top Customers</h2>
                       </div>
-                      <Button asChild variant="outline" size="sm" className="border-red-500/50 text-red-300 hover:bg-red-500/10 font-bold bg-transparent">
-                        <Link href="#customers">View All</Link>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="border-red-500/50 text-red-300 hover:bg-red-500/10 font-bold bg-transparent"
+                        onClick={() => setActiveTab('customers')}
+                      >
+                        View All
                       </Button>
                     </div>
                     <div className="space-y-3">
