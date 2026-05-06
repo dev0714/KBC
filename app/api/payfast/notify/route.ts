@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
     const parsedOrderId = Number.parseInt(String(orderReference), 10)
     const processedAt = new Date().toISOString()
 
-    const { error: logError } = await supabase.from('payfast_itn_logs').insert({
+    const logEntry = {
       order_id: Number.isFinite(parsedOrderId) ? parsedOrderId : null,
       item_name: body.item_name ? String(body.item_name) : null,
       name_first: body.name_first ? String(body.name_first) : null,
@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
       signature: body.signature ? String(body.signature) : null,
       amount_fee: body.amount_fee ? Number(body.amount_fee) : null,
       amount_net: body.amount_net ? Number(body.amount_net) : null,
-      amount_gross: body.amount_gross ? Number(body.amount_gross) : null,
+      amount_gross: body.amount_gross ? Number(body.amount_gross) : body.mc_gross ? Number(body.mc_gross) : null,
       custom_int1: body.custom_int1 ? String(body.custom_int1) : null,
       custom_int2: body.custom_int2 ? String(body.custom_int2) : null,
       custom_int3: body.custom_int3 ? String(body.custom_int3) : null,
@@ -66,11 +66,24 @@ export async function POST(req: NextRequest) {
       pf_payment_id: body.pf_payment_id ? String(body.pf_payment_id) : null,
       payment_status: String(paymentStatus),
       item_description: body.item_description ? String(body.item_description) : null,
-      amount_gross: body.amount_gross ? Number(body.amount_gross) : body.mc_gross ? Number(body.mc_gross) : null,
       raw_payload: body,
       processing_status: 'received',
       received_at: processedAt,
-    })
+      processed_at: processedAt,
+    }
+
+    const { data: existingLog } = await supabase
+      .from('payfast_itn_logs')
+      .select('id')
+      .eq('m_payment_id', String(paymentReference))
+      .maybeSingle()
+
+    const { error: logError } = existingLog?.id
+      ? await supabase
+        .from('payfast_itn_logs')
+        .update(logEntry)
+        .eq('id', existingLog.id)
+      : await supabase.from('payfast_itn_logs').insert(logEntry)
 
     if (logError) {
       console.error('[v0] Error saving ITN log:', logError)

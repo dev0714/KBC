@@ -43,27 +43,6 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    if (!orderId && paymentReference) {
-      const { data: paymentRecord } = await supabase
-        .from('payfast_client_payments')
-        .select('payment_id, item_name')
-        .eq('payment_id', paymentReference)
-        .maybeSingle()
-
-      const orderNumberFromPayment = paymentRecord?.item_name?.match(/Order\s+(ORD-[A-Za-z0-9-]+)/i)?.[1]
-      if (orderNumberFromPayment) {
-        const { data: orderByNumber } = await supabase
-          .from('orders')
-          .select('id, payment_status')
-          .eq('order_number', orderNumberFromPayment)
-          .maybeSingle()
-
-        if (orderByNumber?.id) {
-          orderId = Number(orderByNumber.id)
-        }
-      }
-    }
-
     if (!orderId && explicitOrderNumber) {
       const { data: orderByNumber } = await supabase
         .from('orders')

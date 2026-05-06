@@ -217,19 +217,39 @@ export async function POST(req: NextRequest) {
       const paymentId = paymentIdMatch ? decodeURIComponent(paymentIdMatch[1]) : ''
       if (paymentId) {
         try {
-          await supabase.from('payfast_client_payments').upsert({
-            client_id: resolvedCustomer.accountNo,
-            payment_id: paymentId,
-            amount: amount.toFixed(2),
+          const { data: existingLog } = await supabase
+            .from('payfast_itn_logs')
+            .select('id')
+            .eq('m_payment_id', paymentId)
+            .maybeSingle()
+
+          const paymentLog = {
+            order_id: Number(manualOrder.id),
             item_name: `Order ${manualOrder.order_number}`,
             item_description: note || `Manual payment for ${resolvedCustomer.name}`,
-            email_address: resolvedCustomer.email,
-            cell_number: '',
-            name_first: resolvedCustomer.name.split(' ')[0] || 'Customer',
-            name_last: resolvedCustomer.name.split(' ').slice(1).join(' '),
-            status: 'pending',
-            updated_at: new Date().toISOString(),
-          }, { onConflict: 'payment_id' })
+            custom_str1: String(manualOrder.id),
+            m_payment_id: paymentId,
+            payment_status: 'CREATED',
+            processing_status: 'created',
+            raw_payload: {
+              client_id: resolvedCustomer.accountNo,
+              amount: amount.toFixed(2),
+              email_address: resolvedCustomer.email,
+              name_first: resolvedCustomer.name.split(' ')[0] || 'Customer',
+              name_last: resolvedCustomer.name.split(' ').slice(1).join(' '),
+              source: 'admin',
+            },
+            received_at: new Date().toISOString(),
+          }
+
+          if (existingLog?.id) {
+            await supabase
+              .from('payfast_itn_logs')
+              .update(paymentLog)
+              .eq('id', existingLog.id)
+          } else {
+            await supabase.from('payfast_itn_logs').insert(paymentLog)
+          }
         } catch (persistError) {
           console.error('[v0] Failed to persist manual PayFast payment mapping:', persistError)
         }

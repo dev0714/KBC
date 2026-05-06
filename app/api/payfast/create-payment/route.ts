@@ -90,22 +90,36 @@ export async function POST(req: NextRequest) {
       try {
         const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
         const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+        const resolvedOrderId = /^\d+$/.test(orderReference) ? Number.parseInt(orderReference, 10) : null
 
         if (supabaseUrl && supabaseServiceKey) {
           const supabase = createClient(supabaseUrl, supabaseServiceKey)
-          await supabase.from('payfast_client_payments').upsert({
-            client_id: String(body.client_id || body.accountNo || ''),
-            payment_id: paymentId,
-            amount: parseFloat(body.amount),
+          const { data: existingLog } = await supabase
+            .from('payfast_itn_logs')
+            .select('id')
+            .eq('m_payment_id', paymentId)
+            .maybeSingle()
+
+          const paymentLog = {
+            order_id: resolvedOrderId,
             item_name: String(body.item_name || ''),
             item_description: String(body.item_description || ''),
-            email_address: String(body.email_address || ''),
-            cell_number: String(body.cell_number || ''),
-            name_first: String(body.name_first || ''),
-            name_last: String(body.name_last || ''),
-            status: 'pending',
-            updated_at: new Date().toISOString(),
-          }, { onConflict: 'payment_id' })
+            custom_str1: orderReference,
+            m_payment_id: paymentId,
+            payment_status: 'CREATED',
+            processing_status: 'created',
+            raw_payload: paymentPayload,
+            received_at: new Date().toISOString(),
+          }
+
+          if (existingLog?.id) {
+            await supabase
+              .from('payfast_itn_logs')
+              .update(paymentLog)
+              .eq('id', existingLog.id)
+          } else {
+            await supabase.from('payfast_itn_logs').insert(paymentLog)
+          }
         }
       } catch (persistError) {
         console.error('[v0] Failed to persist PayFast payment mapping:', persistError)
