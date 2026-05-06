@@ -29,21 +29,9 @@ export const metadata: Metadata = {
   publisher: 'KBC Brake & Clutch',
   category: 'E-Commerce',
   icons: {
-    icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: '/apple-icon.png',
+    icon: [{ url: '/kbc-logo-official.png', type: 'image/png' }],
+    shortcut: '/kbc-logo-official.png',
+    apple: '/kbc-logo-official.png',
   },
   openGraph: {
     type: 'website',
