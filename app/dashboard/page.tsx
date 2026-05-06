@@ -660,14 +660,13 @@ export default function DashboardPage() {
           </div>
           <div className="flex items-center gap-3">
             <Button
-              asChild
+              type="button"
               variant="outline"
               className="border-white/15 bg-white/5 text-white font-bold shadow-lg shadow-black/20 hover:bg-white/10 hover:text-white transition-all duration-300 gap-2"
+              onClick={() => setActiveTab('cart')}
             >
-              <Link href="/dashboard?tab=cart">
-                <ShoppingCart className="w-4 h-4" />
-                Cart
-              </Link>
+              <ShoppingCart className="w-4 h-4" />
+              Cart
             </Button>
             <Button
               onClick={handleLogout}
