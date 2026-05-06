@@ -212,6 +212,28 @@ export async function POST(req: NextRequest) {
       }
 
       paymentUrl = paymentData.url || paymentData.shortened_url || ''
+
+      const paymentIdMatch = String(paymentUrl).match(/[?&]m_payment_id=([^&]+)/)
+      const paymentId = paymentIdMatch ? decodeURIComponent(paymentIdMatch[1]) : ''
+      if (paymentId) {
+        try {
+          await supabase.from('payfast_client_payments').upsert({
+            client_id: resolvedCustomer.accountNo,
+            payment_id: paymentId,
+            amount: amount.toFixed(2),
+            item_name: `Order ${manualOrder.order_number}`,
+            item_description: note || `Manual payment for ${resolvedCustomer.name}`,
+            email_address: resolvedCustomer.email,
+            cell_number: '',
+            name_first: resolvedCustomer.name.split(' ')[0] || 'Customer',
+            name_last: resolvedCustomer.name.split(' ').slice(1).join(' '),
+            status: 'pending',
+            updated_at: new Date().toISOString(),
+          }, { onConflict: 'payment_id' })
+        } catch (persistError) {
+          console.error('[v0] Failed to persist manual PayFast payment mapping:', persistError)
+        }
+      }
     }
 
     if (!paymentUrl) {

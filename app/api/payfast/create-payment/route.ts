@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
 
 export async function POST(req: NextRequest) {
   try {
@@ -82,6 +83,34 @@ export async function POST(req: NextRequest) {
     }
 
     const paymentUrl = paymentData.shortened_url || paymentData.url
+    const paymentIdMatch = String(paymentUrl).match(/[?&]m_payment_id=([^&]+)/)
+    const paymentId = paymentIdMatch ? decodeURIComponent(paymentIdMatch[1]) : String(body.custom_str1 || '')
+
+    if (paymentId) {
+      try {
+        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+        const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+        if (supabaseUrl && supabaseServiceKey) {
+          const supabase = createClient(supabaseUrl, supabaseServiceKey)
+          await supabase.from('payfast_client_payments').upsert({
+            client_id: String(body.client_id || body.accountNo || ''),
+            payment_id: paymentId,
+            amount: parseFloat(body.amount),
+            item_name: String(body.item_name || ''),
+            item_description: String(body.item_description || ''),
+            email_address: String(body.email_address || ''),
+            cell_number: String(body.cell_number || ''),
+            name_first: String(body.name_first || ''),
+            name_last: String(body.name_last || ''),
+            status: 'pending',
+            updated_at: new Date().toISOString(),
+          }, { onConflict: 'payment_id' })
+        }
+      } catch (persistError) {
+        console.error('[v0] Failed to persist PayFast payment mapping:', persistError)
+      }
+    }
 
     console.log('[v0] PayFast URL returned from PaySync:', paymentUrl)
 
