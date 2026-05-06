@@ -15,7 +15,7 @@ export function PortalButton() {
       className={clicked ? "bg-slate-500 text-white font-semibold cursor-default hover:bg-slate-500" : "bg-accent hover:bg-accent/90 text-white font-semibold"}
       disabled={clicked}
     >
-      <Link href={clicked ? "#" : "/customer-portal"}>Go to Portal</Link>
+      <Link href={clicked ? "#" : "/dashboard"}>Go to Portal</Link>
     </Button>
   )
 }

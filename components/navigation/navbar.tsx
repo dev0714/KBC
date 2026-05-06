@@ -12,7 +12,7 @@ export function Navbar() {
   const pathname = usePathname()
 
   // Hide navbar on all portal pages
-  if (pathname?.includes('/customer-portal') || pathname?.includes('/customer-login') || pathname?.includes('/admin') || pathname?.includes('/dashboard') || pathname?.includes('/enquiries')) {
+  if (pathname?.includes('/customer-login') || pathname?.includes('/admin') || pathname?.includes('/dashboard') || pathname?.includes('/enquiries')) {
     return null
   }
 
