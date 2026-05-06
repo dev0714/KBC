@@ -104,17 +104,18 @@ export function buildReportingModel(input: ReportingInput): ReportingModel {
 
     orderRankings.push({
       order_number: order.order_number,
-      client_name: resolveClientName(order.client_account_no, order.client_name, clientNameByAccount),
+      client_name: resolveCustomerName(normalizeString(order.client_account_no) || normalizeString(order.client_name), order.client_name, clientNameByAccount),
       total_amount: order.total_amount,
       order_date: order.order_date,
       payment_status: order.payment_status,
     })
 
-    const accountNo = normalizeString(order.client_account_no)
-    if (accountNo) {
-      const customerName = resolveClientName(accountNo, order.client_name, clientNameByAccount)
-      const existing = customerMap.get(accountNo) || {
-        account_no: accountNo,
+    const customerAccountNo = normalizeString(order.client_account_no)
+    const customerName = resolveCustomerName(customerAccountNo || normalizeString(order.client_name), order.client_name, clientNameByAccount)
+    const customerKey = customerAccountNo || normalizeString(order.client_name) || '__unknown_customer__'
+    if (customerKey || customerName) {
+      const existing = customerMap.get(customerKey) || {
+        account_no: customerAccountNo,
         client_name: customerName,
         orderCount: 0,
         totalSpend: 0,
@@ -123,15 +124,15 @@ export function buildReportingModel(input: ReportingInput): ReportingModel {
       existing.orderCount += 1
       existing.totalSpend += order.total_amount
       existing.client_name = existing.client_name || customerName
-      customerMap.set(accountNo, existing)
+      customerMap.set(customerKey, existing)
     }
 
-    const dayKey = getUtcDayKey(order.order_date)
+    const dayKey = getLocalDayKey(order.order_date)
     if (dayKey) {
       dailyRevenueMap.set(dayKey, (dailyRevenueMap.get(dayKey) || 0) + order.total_amount)
     }
 
-    const hour = getUtcHour(order.order_date)
+    const hour = getLocalHour(order.order_date)
     if (hour !== null) {
       peakTimeMap.set(hour, (peakTimeMap.get(hour) || 0) + 1)
     }
@@ -228,8 +229,8 @@ function buildClientNameLookup(clients: ReportingClient[]) {
   return lookup
 }
 
-function resolveClientName(accountNo: string, orderClientName: string, lookup: Map<string, string>) {
-  return normalizeString(orderClientName) || lookup.get(normalizeString(accountNo)) || normalizeString(accountNo) || 'Unknown'
+function resolveCustomerName(customerKey: string, orderClientName: string, lookup: Map<string, string>) {
+  return normalizeString(orderClientName) || lookup.get(normalizeString(customerKey)) || normalizeString(customerKey) || 'Unknown'
 }
 
 function getOrderItems(order: ReportingOrder): ReportingOrderItem[] {
@@ -286,16 +287,19 @@ function normalizeDateString(value: unknown) {
   return Number.isNaN(parsed.getTime()) ? raw : parsed.toISOString()
 }
 
-function getUtcDayKey(value: string) {
+function getLocalDayKey(value: string) {
   const parsed = new Date(value)
   if (Number.isNaN(parsed.getTime())) return ''
-  return parsed.toISOString().slice(0, 10)
+  const year = parsed.getFullYear()
+  const month = String(parsed.getMonth() + 1).padStart(2, '0')
+  const day = String(parsed.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
 }
 
-function getUtcHour(value: string) {
+function getLocalHour(value: string) {
   const parsed = new Date(value)
   if (Number.isNaN(parsed.getTime())) return null
-  return parsed.getUTCHours()
+  return parsed.getHours()
 }
 
 function compareDateStringsDesc(a: string, b: string) {
