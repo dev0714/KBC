@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import Link from 'next/link'
 import useSWR from 'swr'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -916,11 +915,20 @@ export default function AdminPage() {
                       </p>
                     </div>
                     <div className="flex flex-wrap gap-3">
-                      <Button asChild className="bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg shadow-red-600/30">
-                        <Link href="#orders">Review Orders</Link>
+                      <Button
+                        type="button"
+                        onClick={() => setActiveTab('orders')}
+                        className="bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg shadow-red-600/30"
+                      >
+                        Review Orders
                       </Button>
-                      <Button asChild variant="outline" className="border-white/15 bg-white/5 text-slate-100 hover:bg-white/10">
-                        <Link href="#customers">Customer CRM</Link>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => setActiveTab('customers')}
+                        className="border-white/15 bg-white/5 text-slate-100 hover:bg-white/10"
+                      >
+                        Customer CRM
                       </Button>
                     </div>
                   </div>
