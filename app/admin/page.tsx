@@ -1216,7 +1216,15 @@ export default function AdminPage() {
                       onChange={(e) => { setProductSearch(e.target.value); setProductPage(1) }}
                       className="w-64 bg-slate-800/50 border-slate-600/50"
                     />
-                    <Button 
+                    <Button
+                      onClick={() => { window.location.href = '/admin/bulk-images' }}
+                      variant="outline"
+                      className="border-primary/40 text-foreground font-bold gap-2"
+                    >
+                      <Upload className="w-4 h-4" />
+                      Bulk Images
+                    </Button>
+                    <Button
                       onClick={() => setShowAddProductModal(true)}
                       className="bg-gradient-to-r from-primary to-secondary hover:from-primary/80 hover:to-secondary/80 text-white font-bold gap-2"
                     >
