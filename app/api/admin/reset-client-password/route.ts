@@ -1,9 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
+import { requireAdmin } from '@/lib/auth/session'
 import bcrypt from 'bcryptjs'
 
 export async function POST(request: NextRequest) {
   try {
+    if (!(await requireAdmin())) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
+
     const { account_no, newPassword } = await request.json()
 
     if (!account_no || !newPassword) {
@@ -13,7 +18,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const supabase = await createClient()
+    const supabase = createServiceClient()
 
     // Find user by business_id (account_no)
     const { data: users, error: findError } = await supabase

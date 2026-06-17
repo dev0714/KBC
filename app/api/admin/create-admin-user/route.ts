@@ -1,9 +1,14 @@
-import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
+import { requireAdmin } from '@/lib/auth/session'
 import bcrypt from 'bcryptjs'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(request: NextRequest) {
   try {
+    if (!(await requireAdmin())) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
+
     const { email, full_name, password } = await request.json()
 
     // Validate inputs
@@ -18,7 +23,7 @@ export async function POST(request: NextRequest) {
     const password_hash = await bcrypt.hash(password, 10)
 
     // Create admin user
-    const supabase = await createClient()
+    const supabase = createServiceClient()
     const { data, error } = await supabase
       .from('users')
       .insert({

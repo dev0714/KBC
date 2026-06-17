@@ -23,10 +23,11 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Create Supabase client with anon key for login queries
+    // Create Supabase client with the service role key. The users table is
+    // protected by RLS, so the anon key cannot read password hashes for login.
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+      process.env.SUPABASE_SERVICE_ROLE_KEY || ''
     )
 
     // Query users table for matching email

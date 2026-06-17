@@ -304,12 +304,14 @@ export default function AdminPage() {
         }
       }))
 
-      const { error: insertError } = await supabase
-        .from('product_images')
-        .insert(uploads)
+      const insertResponse = await fetch('/api/admin/product-images', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ images: uploads }),
+      })
 
-      if (insertError) {
-        console.error('[v0] Insert error:', insertError)
+      if (!insertResponse.ok) {
+        console.error('[v0] Insert error:', await insertResponse.text())
         setImageUploadError('Failed to save image record')
         return
       }
@@ -401,13 +403,13 @@ export default function AdminPage() {
         }
       }
 
-      const { error: deleteError } = await supabase
-        .from('product_images')
-        .delete()
-        .eq('product_sku', sku)
-        .eq('storage_path', imageUrl)
-      
-      if (deleteError) throw deleteError
+      const deleteResponse = await fetch('/api/admin/product-images', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ product_sku: sku, storage_path: imageUrl }),
+      })
+
+      if (!deleteResponse.ok) throw new Error(await deleteResponse.text())
 
       const nextGallery = (productGallery.length > 0 ? productGallery : (productImages[sku] || [])).filter((item) => item !== imageUrl)
 
@@ -531,14 +533,14 @@ export default function AdminPage() {
 
     setLoginActionLoading('revoke')
     try {
-      const supabase = createClient()
-      const { error } = await supabase
-        .from('users')
-        .update({ status: 'rejected' })
-        .eq('id', editingCustomer.user_id)
+      const response = await fetch('/api/admin/users', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: editingCustomer.user_id, updates: { status: 'rejected' } }),
+      })
 
-      if (error) {
-        throw error
+      if (!response.ok) {
+        throw new Error(await response.text())
       }
 
       setFormData((prev: any) => ({ ...prev, revokeAccess: true }))
@@ -707,8 +709,11 @@ export default function AdminPage() {
   const handleApproveCustomer = async (customer: any) => {
     setApprovingCustomer(customer.account_no)
     try {
-      const supabase = createClient()
-      await supabase.from('users').update({ status: 'approved' }).eq('id', customer.user_id)
+      await fetch('/api/admin/users', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: customer.user_id, updates: { status: 'approved' } }),
+      })
       mutate()
     } catch (err) {
       console.error('[v0] Error approving customer:', err)
@@ -720,8 +725,11 @@ export default function AdminPage() {
   const handleRejectCustomer = async (customer: any) => {
     setRejectingCustomer(customer.account_no)
     try {
-      const supabase = createClient()
-      await supabase.from('users').update({ status: 'rejected' }).eq('id', customer.user_id)
+      await fetch('/api/admin/users', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: customer.user_id, updates: { status: 'rejected' } }),
+      })
       mutate()
     } catch (err) {
       console.error('[v0] Error rejecting customer:', err)
@@ -809,17 +817,13 @@ export default function AdminPage() {
     const fetchProductImages = async () => {
       if (pagedProducts.length === 0) return
       try {
-        const supabase = createClient()
         const skus = pagedProducts.map((p: any) => p.sku)
-        const { data, error } = await supabase
-          .from('product_images')
-          .select('product_sku, storage_path')
-          .in('product_sku', skus)
-          .eq('is_primary', true)
-        if (error) {
-          console.error('[v0] Error fetching product images:', error)
+        const response = await fetch(`/api/admin/product-images?skus=${encodeURIComponent(skus.join(','))}`)
+        if (!response.ok) {
+          console.error('[v0] Error fetching product images:', await response.text())
           return
         }
+        const { images: data } = await response.json()
         const imageMap: {[sku: string]: string[]} = {}
         data?.forEach((img: any) => {
           if (!imageMap[img.product_sku]) {
@@ -839,16 +843,12 @@ export default function AdminPage() {
   useEffect(() => {
     const fetchTeamUsers = async () => {
       try {
-        const supabase = createClient()
-        const { data, error } = await supabase
-          .from('users')
-          .select('id, email, role, status, business_id')
-
-        if (error) {
-          console.error('[v0] Error fetching team users:', error)
+        const response = await fetch('/api/admin/users')
+        if (!response.ok) {
+          console.error('[v0] Error fetching team users:', await response.text())
           return
         }
-
+        const { users: data } = await response.json()
         setTeamUsers(data || [])
       } catch (err) {
         console.error('[v0] Error in fetchTeamUsers:', err)
@@ -862,16 +862,12 @@ export default function AdminPage() {
   useEffect(() => {
     const fetchProductImages = async () => {
       try {
-        const supabase = createClient()
-        const { data, error } = await supabase
-          .from('product_images')
-          .select('*')
-          .eq('is_primary', true)
-
-        if (error) {
-          console.error('[v0] Error fetching product images:', error)
+        const response = await fetch('/api/admin/product-images')
+        if (!response.ok) {
+          console.error('[v0] Error fetching product images:', await response.text())
           return
         }
+        const { images: data } = await response.json()
 
         // Map images by SKU
         const imageMap: {[key: string]: string[]} = {}
@@ -896,16 +892,12 @@ export default function AdminPage() {
   useEffect(() => {
     const fetchTeamUsers = async () => {
       try {
-        const supabase = createClient()
-        const { data: users, error } = await supabase
-          .from('users')
-          .select('id, email, full_name, role, status')
-          .eq('role', 'admin')
-        
-        if (error) {
-          console.error('[v0] Error fetching team users:', error)
+        const response = await fetch('/api/admin/users?role=admin')
+        if (!response.ok) {
+          console.error('[v0] Error fetching team users:', await response.text())
           return
         }
+        const { users } = await response.json()
         setTeamUsers(users || [])
       } catch (err) {
         console.error('[v0] Error in fetchTeamUsers:', err)
@@ -2253,13 +2245,15 @@ export default function AdminPage() {
                       business_type: formData.business_type ?? editingCustomer.business_type ?? null,
                     }
 
-                    const { error: contactError } = await supabase
-                      .from('contacts')
-                      .upsert(contactUpdates, { onConflict: 'client_account_no' })
+                    const contactResponse = await fetch('/api/admin/contacts', {
+                      method: 'PUT',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify(contactUpdates),
+                    })
 
-                    if (contactError) {
-                      console.error('[v0] Error updating contacts:', contactError)
-                      alert(contactError.message || 'Error updating contact details')
+                    if (!contactResponse.ok) {
+                      console.error('[v0] Error updating contacts:', await contactResponse.text())
+                      alert('Error updating contact details')
                       return
                     }
 
@@ -2275,20 +2269,24 @@ export default function AdminPage() {
                       )
 
                     if (hasUserUpdates) {
-                      const { error: userUpdateError } = await supabase
-                        .from('users')
-                        .update({
-                          full_name: formData.full_name ?? editingCustomer.full_name,
-                          phone_number: formData.phone_number ?? editingCustomer.phone_number,
-                          business_type: formData.business_type ?? editingCustomer.business_type,
-                          email: formData.email ?? editingCustomer.email,
-                          status: formData.status ?? editingCustomer.status,
-                        })
-                        .eq('id', editingCustomer.user_id)
+                      const userUpdateResponse = await fetch('/api/admin/users', {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                          id: editingCustomer.user_id,
+                          updates: {
+                            full_name: formData.full_name ?? editingCustomer.full_name,
+                            phone_number: formData.phone_number ?? editingCustomer.phone_number,
+                            business_type: formData.business_type ?? editingCustomer.business_type,
+                            email: formData.email ?? editingCustomer.email,
+                            status: formData.status ?? editingCustomer.status,
+                          },
+                        }),
+                      })
 
-                      if (userUpdateError) {
-                        console.error('[v0] Error updating users:', userUpdateError)
-                        alert(userUpdateError.message || 'Error updating contact details')
+                      if (!userUpdateResponse.ok) {
+                        console.error('[v0] Error updating users:', await userUpdateResponse.text())
+                        alert('Error updating contact details')
                         return
                       }
                     }
@@ -2318,13 +2316,14 @@ export default function AdminPage() {
 
                     // Handle revoke access
                     if (editingCustomer.user_id && formData.revokeAccess) {
-                      const { error: revokeError } = await supabase
-                        .from('users')
-                        .update({ status: 'rejected' })
-                        .eq('id', editingCustomer.user_id)
+                      const revokeResponse = await fetch('/api/admin/users', {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id: editingCustomer.user_id, updates: { status: 'rejected' } }),
+                      })
 
-                      if (revokeError) {
-                        console.error('[v0] Error revoking access:', revokeError)
+                      if (!revokeResponse.ok) {
+                        console.error('[v0] Error revoking access:', await revokeResponse.text())
                         alert('Error revoking access')
                         return
                       }
@@ -3171,11 +3170,8 @@ export default function AdminPage() {
                     alert('Admin user created successfully!')
                     setShowAddAdminModal(false)
                     setAddAdminFormData({ email: '', full_name: '', password: '' })
-                    const supabase = createClient()
-                    const { data: users } = await supabase
-                      .from('users')
-                      .select('id, email, full_name, role, status')
-                      .eq('role', 'admin')
+                    const refreshResponse = await fetch('/api/admin/users?role=admin')
+                    const { users } = refreshResponse.ok ? await refreshResponse.json() : { users: [] }
                     setTeamUsers(users || [])
                   } catch (err: any) {
                     alert('Error creating admin: ' + err.message)

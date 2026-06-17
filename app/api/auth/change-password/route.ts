@@ -2,7 +2,7 @@ import { jwtVerify } from 'jose'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
-import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 
 export async function POST(request: Request) {
   try {
@@ -47,7 +47,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'User information not found in token' }, { status: 401 })
     }
 
-    const supabase = await createClient()
+    const supabase = createServiceClient()
 
     // Get user from database
     const { data: user, error: userError } = await supabase

@@ -298,19 +298,20 @@ export default function DashboardPage() {
         .from('documents')
         .getPublicUrl(filePath)
 
-      // Insert into documents table
-      const { error: insertError } = await supabase
-        .from('documents')
-        .insert([{
-          client_account_no: accountNo,
+      // Insert into documents table (server-side; account is taken from session)
+      const insertResponse = await fetch('/api/dashboard/documents', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
           file_name: file.name,
           storage_path: data.publicUrl,
           document_type: selectedDocumentType,
           file_size: file.size,
-        }])
+        }),
+      })
 
-      if (insertError) {
-        console.error('[v0] Document insert error:', insertError)
+      if (!insertResponse.ok) {
+        console.error('[v0] Document insert failed:', await insertResponse.text())
         setUploadDocumentError('Failed to save document record')
         return
       }
@@ -337,20 +338,15 @@ export default function DashboardPage() {
 
     const fetchWishlists = async () => {
       try {
-        const supabase = createClient()
-        const { data, error } = await supabase
-          .from('wishlists')
-          .select('sku')
-          .eq('account_no', accountNo)
-        
-        if (error) {
-          console.error('[v0] Error fetching wishlists:', error)
+        const response = await fetch('/api/dashboard/wishlists')
+        if (!response.ok) {
+          console.error('[v0] Error fetching wishlists:', await response.text())
           setFavoritesLoading(false)
           return
         }
-        
-        const skus = new Set(data?.map(row => row.sku) || [])
-        setFavorites(skus)
+
+        const { skus: skuList } = await response.json()
+        setFavorites(new Set<string>(skuList || []))
       } catch (error) {
         console.error('[v0] Error in fetchWishlists:', error)
       } finally {
@@ -362,39 +358,37 @@ export default function DashboardPage() {
   }, [accountNo])
 
   const toggleFavorite = async (sku: string) => {
-    const supabase = createClient()
     const newFavorites = new Set(favorites)
-    
+
     try {
       if (newFavorites.has(sku)) {
         // Remove from wishlist
         newFavorites.delete(sku)
-        const { error } = await supabase
-          .from('wishlists')
-          .delete()
-          .eq('account_no', accountNo)
-          .eq('sku', sku)
-        
-        if (error) {
-          console.error('[v0] Error removing from wishlist:', error)
+        const response = await fetch('/api/dashboard/wishlists', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sku }),
+        })
+
+        if (!response.ok) {
+          console.error('[v0] Error removing from wishlist:', await response.text())
           return
         }
       } else {
         // Add to wishlist
         newFavorites.add(sku)
-        const { error } = await supabase
-          .from('wishlists')
-          .insert({
-            account_no: accountNo,
-            sku: sku
-          })
-        
-        if (error) {
-          console.error('[v0] Error adding to wishlist:', error)
+        const response = await fetch('/api/dashboard/wishlists', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sku }),
+        })
+
+        if (!response.ok) {
+          console.error('[v0] Error adding to wishlist:', await response.text())
           return
         }
       }
-      
+
       setFavorites(newFavorites)
     } catch (error) {
       console.error('[v0] Error toggling favorite:', error)
@@ -445,39 +439,21 @@ export default function DashboardPage() {
     
     setSavingProfile(true)
     try {
-        const supabase = createClient()
-        const contactPayload = {
-          client_account_no: client.account_no,
+      const response = await fetch('/api/dashboard/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
           full_name: editFormData.full_name || null,
           email: editFormData.email || null,
           phone_number: editFormData.phone_number || null,
           business_type: editFormData.business_type || null,
-        }
+        }),
+      })
 
-        const { error: contactError } = await supabase
-          .from('contacts')
-          .upsert(contactPayload, { onConflict: 'client_account_no' })
-
-      if (contactError) {
-        console.error('[v0] Error updating contact profile:', contactError)
+      if (!response.ok) {
+        console.error('[v0] Error updating profile:', await response.text())
         alert('Error updating profile. Please try again.')
         return
-      }
-
-      if (userId) {
-        const { error: userError } = await supabase
-          .from('users')
-          .update({
-            email: editFormData.email || null,
-            full_name: editFormData.full_name || null,
-            phone_number: editFormData.phone_number || null,
-            business_type: editFormData.business_type || null
-          })
-          .eq('id', userId)
-
-        if (userError) {
-          console.error('[v0] Error syncing login profile:', userError)
-        }
       }
 
       setEditMode(false)
