@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const result = quote({
+    const result = await quote({
       origin: body.origin.trim(),
       originPostcode: body.originPostcode?.trim(),
       destination: body.destination.trim(),
@@ -36,6 +36,28 @@ export async function POST(request: NextRequest) {
       weightKg,
       allowSplit: body.allowSplit !== false,
     })
+
+    // Best-effort audit trail; quoting must not fail if the courier tables
+    // haven't been migrated yet.
+    try {
+      const session = await requireAdmin()
+      const { createServiceClient } = await import('@/lib/supabase/service')
+      await createServiceClient().from('courier_quotes').insert({
+        quoted_by: session?.email ?? null,
+        origin: body.origin.trim(),
+        origin_postcode: body.originPostcode?.trim() || null,
+        destination: body.destination.trim(),
+        dest_postcode: body.destPostcode?.trim() || null,
+        service: body.service,
+        weight_kg: weightKg,
+        element: result.route.ok ? result.route.element : null,
+        sla_text: result.route.sla ?? null,
+        results: { quotes: result.quotes, comparison: result.comparison, warnings: result.warnings },
+      })
+    } catch {
+      /* table not migrated yet or db unreachable */
+    }
+
     return NextResponse.json(result)
   } catch (err) {
     console.error('[quote] POST error:', err)

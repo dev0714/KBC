@@ -12,6 +12,7 @@ import {
   loadDsvRateCards,
   loadMjvAreaRates,
 } from './csv-data'
+import { loadRatesFromDb } from './db-data'
 import { compare } from './compare'
 import { optimiseSplit } from './optimise-split'
 import { priceDSV, priceMJV } from './pricing'
@@ -35,23 +36,46 @@ export interface QuoteResponse {
   warnings: string[]
 }
 
-function buildContext() {
-  return {
+async function buildContext() {
+  const ctx = {
     data: loadCourierData(),
     dsvCards: loadDsvRateCards(),
     mjvRates: loadMjvAreaRates(),
     cityClasses: loadCityClassifications(),
+    ratesSource: 'csv' as 'csv' | 'database',
   }
+
+  // Rate cards are admin-editable, so prefer the database copy when the
+  // courier tables exist; the CSV extracts remain the fallback so quoting
+  // works before the migration/loader have run.
+  try {
+    const { createServiceClient } = await import('@/lib/supabase/service')
+    const dbRates = await loadRatesFromDb(createServiceClient())
+    if (dbRates) {
+      ctx.dsvCards = { ...ctx.dsvCards, ...dbRates.dsvCards }
+      if (dbRates.mjvRates.length) ctx.mjvRates = dbRates.mjvRates
+      if (dbRates.expiry) ctx.data = { ...ctx.data, rateCardExpiry: dbRates.expiry }
+      ctx.ratesSource = 'database'
+    }
+  } catch {
+    // No Supabase configuration available (e.g. local tests) — CSV fallback.
+  }
+  return ctx
 }
 
-let context: ReturnType<typeof buildContext> | null = null
-export function getQuoteContext() {
-  context ??= buildContext()
+let context: Awaited<ReturnType<typeof buildContext>> | null = null
+export async function getQuoteContext() {
+  context ??= await buildContext()
   return context
 }
 
-export function quote(req: QuoteRequest): QuoteResponse {
-  const ctx = getQuoteContext()
+/** Drops the cached context so the next quote re-reads rates (after edits). */
+export function invalidateQuoteContext() {
+  context = null
+}
+
+export async function quote(req: QuoteRequest): Promise<QuoteResponse> {
+  const ctx = await getQuoteContext()
   const warnings: string[] = []
 
   const route = resolveRoute(
@@ -108,8 +132,8 @@ export function quote(req: QuoteRequest): QuoteResponse {
 }
 
 /** Town-name autocomplete over every name the resolver can actually match. */
-export function searchTowns(query: string, limit = 12): { name: string; source: string }[] {
-  const ctx = getQuoteContext()
+export async function searchTowns(query: string, limit = 12): Promise<{ name: string; source: string }[]> {
+  const ctx = await getQuoteContext()
   const q = norm(query)
   if (q.length < 2) return []
 

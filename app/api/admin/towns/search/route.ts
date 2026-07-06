@@ -8,5 +8,5 @@ export async function GET(request: NextRequest) {
   if (!(await requireAdmin())) return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
 
   const q = request.nextUrl.searchParams.get('q') ?? ''
-  return NextResponse.json({ towns: searchTowns(q) })
+  return NextResponse.json({ towns: await searchTowns(q) })
 }

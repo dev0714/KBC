@@ -976,6 +976,7 @@ export default function AdminPage() {
   { id: 'customers', label: 'Customers', icon: Users },
               { id: 'orders', label: 'Orders', icon: ShoppingCart },
               { id: 'quote', label: 'Courier Quote', icon: Send },
+              { id: 'rate-cards', label: 'Rate Cards', icon: TrendingUp },
               { id: 'payment', label: 'Payment', icon: CreditCard },
               { id: 'settings', label: 'Settings', icon: AlertCircle },
             ].map((item) => {
@@ -984,8 +985,8 @@ export default function AdminPage() {
               <button
                 key={item.id}
                 onClick={() => {
-                  if (item.id === 'quote') {
-                    window.location.href = '/admin/quote'
+                  if (item.id === 'quote' || item.id === 'rate-cards') {
+                    window.location.href = `/admin/${item.id}`
                     return
                   }
                   setActiveTab(item.id)
