@@ -1,0 +1,1565 @@
+town_code,tariff_hub,ops_branch,town_name,province,town_type,town_type_abbr,remote_km,servicing_town,service_code,location,sla_facility,zone
+AND,KIM,KIM,AANDSTER,North West,Outlying,O,67,SRK,OR,LOC,Outlying Adhoc,5
+ANS,KIM,UTN,AANSLUIT,Northern Cape,Outlying,O,273,KUR,OR,LOC,Outlying Adhoc,8
+ADW,PLZ,CDO,ABERDEEN,Eastern Cape,Outlying,O,111,GRT,OR,LOC,Outlying Bi-weekly,7
+ABE,PLZ,PLZ,ABERDEEN ROAD,Eastern Cape,Outlying,O,139,GRT,OR,LOC,Outlying Bi-weekly,7
+AFY,NCS,BEM,ABERFELDY,Free State,Outlying,O,62,HRS,OR,LOC,Outlying Adhoc,3
+ACH,NLP,NLP,ACORNHOEK,Mpumalanga,Outlying,O,69,HDT,OR,LOC,Outlying Bi-weekly,4
+ADO,PLZ,PLZ,ADDO,Eastern Cape,Regional,R,NULL,PLZ,RM,LOC,Regional Daily,2
+ADD,ELS,CDO,ADELAIDE,Eastern Cape,Outlying,O,158,SEO,OR,LOC,Outlying Bi-weekly,4
+AFG,PTG,PTG,AFGUNS,Limpopo,Outlying,O,42,ELL,OR,LOC,Outlying Adhoc,6
+AKK,NCS,BEM,AFRIKASKOP,Free State,Outlying,O,83,PJB,OR,LOC,Outlying Adhoc,2
+AGG,CPT,UTN,AGGENEYS,Northern Cape,Outlying,O,223,SPU,OR,LOC,Outlying Bi-weekly,7
+AGS,PLZ,CDO,AGTER SNEEUBERG,Eastern Cape,Outlying,O,95,CDO,OR,LOC,Outlying Bi-weekly,2
+AGT,BFN,BFN,AGTERTANG,Northern Cape,Outlying,O,290,DER,OR,LOC,Outlying Adhoc,7
+AHR,PZB,DUR,AHRENS,KwaZulu-Natal,Outlying,O,36,GTN,OR,LOC,Outlying Adhoc,5
+AIR,NLP,NLP,AIRLIE,Mpumalanga,Outlying,O,121,BRL,OR,LOC,Outlying Adhoc,3
+AKA,PTA,JNB,AKASIA,Gauteng,Main (Suburb),S,NULL,PTA,SM,LOC,Hub,1
+ARA,GRJ,GRJ,ALBERTINIA,Western Cape,Outlying,O,70,SBI,OR,LOC,Outlying Bi-weekly,4
+ABT,JNB,JNB,ALBERTON,Gauteng,Main (Suburb),S,NULL,JNB,SM,LOC,Hub,1
+ALB,KPR,KPR,ALBERTSHOEK,North West,Outlying,O,44,SRK,OR,LOC,Outlying Adhoc,4
+ALD,ELS,ELS,ALDERLEY,Eastern Cape,Outlying,O,150,UTT,OR,LOC,Outlying Adhoc,3
+ALT,KPR,KPR,ALETTASRUS,North West,Outlying,O,87,VRU,OR,LOC,Outlying Adhoc,7
+AXB,CPT,UTN,ALEXANDER BAY,Northern Cape,Outlying,O,441,SPU,OR,LOC,Outlying Bi-weekly,10
+ALX,PLZ,PLZ,ALEXANDRIA,Eastern Cape,Outlying,O,102,PAF,OR,LOC,Outlying Bi-weekly,3
+ALC,ELS,ELS,ALICE,Eastern Cape,Outlying,O,121,KWT,OR,LOC,Outlying Bi-weekly,4
+ALI,PLZ,PLZ,ALICEDALE,Eastern Cape,Outlying,O,102,GHO,OR,LOC,Outlying Adhoc,3
+AWL,BFN,BFN,ALIWAL NORTH,Eastern Cape,Regional,R,NULL,BFN,RM,LOC,Regional Daily,6
+ARD,KPR,BFN,ALLANRIDGE,Free State,Outlying,O,62,WEL,OR,LOC,Outlying Bi-weekly,5
+ALL,PTG,PTG,ALLDAYS,Limpopo,Outlying,O,183,BOC,OR,LOC,Outlying Bi-weekly,5
+ALA,KPR,BFN,ALMA (FS),Free State,Outlying,O,14,WEL,OR,LOC,Outlying Adhoc,5
+ALM,PTA,JNB,ALMA (LP),Gauteng,Outlying,O,90,NSR,OR,LOC,Outlying Adhoc,5
+APH,NCS,NCS,ALPHA,KwaZulu-Natal,Outlying,O,47,VYD,OR,LOC,Outlying Adhoc,4
+AMA,ELS,ELS,AMABELE,Eastern Cape,Outlying,O,53,BIS,OR,LOC,Outlying Adhoc,3
+AME,KPR,KPR,AMALIA,North West,Outlying,O,62,SRK,OR,LOC,Outlying Bi-weekly,5
+AZT,DUR,DUR,AMANZIMTOTI,KwaZulu-Natal,Main (Suburb),S,NULL,DUR,SM,LOC,Hub,2
+AMK,EMG,DUR,AMATIKULU,KwaZulu-Natal,Outlying,O,31,ISB,OR,LOC,Outlying Bi-weekly,4
+AFT,NCS,NCS,AMERSFOORT,Mpumalanga,Outlying,O,83,VRR,OR,LOC,Outlying Bi-weekly,4
+AMD,NCS,NCS,AMSTERDAM,Mpumalanga,Outlying,O,95,PFR,OR,LOC,Outlying Bi-weekly,5
+ADK,PLZ,PLZ,ANDRIESKRAAL,Eastern Cape,Outlying,O,35,PTI,OR,LOC,Outlying Adhoc,4
+ANN,PLZ,PLZ,ANNS VILLA,Eastern Cape,Outlying,O,108,ADO,OR,LOC,Outlying Adhoc,4
+ANY,GRJ,CPT,ANYSBERG,Western Cape,Outlying,O,142,LAI,OR,LOC,Outlying Adhoc,6
+ASS,NCS,NCS,ANYSSPRUIT,Mpumalanga,Outlying,O,50,PFR,OR,LOC,Outlying Adhoc,4
+ARB,WIR,WIR,ARBOR PARK,KwaZulu-Natal,Outlying,O,55,DMS,OR,LOC,Outlying Adhoc,2
+ARG,WIR,WIR,ARGENT,Mpumalanga,Outlying,O,39,DMS,OR,LOC,Outlying Adhoc,2
+ARI,KIM,UTN,ARIAMSVLEI,Northern Cape,Outlying,O,248,KAA,OR,LOC,Outlying Adhoc,5
+AIG,VDB,BEM,ARLINGTON,Free State,Outlying,O,87,SEN,OR,LOC,Outlying Bi-weekly,2
+RTK,WIR,WIR,ARNOT,Mpumalanga,Outlying,O,56,HDN,OR,LOC,Outlying Bi-weekly,3
+AST,CPT,CPT,ASHTON,Western Cape,Outlying,O,36,ROR,OR,LOC,Outlying Bi-weekly,5
+ASK,ELS,BFN,ASKEATON,Eastern Cape,Outlying,O,124,QQD,OR,LOC,Outlying Adhoc,8
+AKR,GRJ,GRJ,ASKRAAL,Western Cape,Outlying,O,86,RDS,OR,LOC,Outlying Adhoc,5
+ASG,PLZ,PLZ,ASSEGAAIBOS,Western Cape,Outlying,O,98,HDR,OR,LOC,Outlying Adhoc,5
+ASN,PTA,RTR,ASSEN,North West,Outlying,O,95,NRR,OR,LOC,Outlying Adhoc,3
+ABY,PLZ,PLZ,ASTON BAY,Eastern Cape,Outlying,O,10,JBY,OR,LOC,Outlying Bi-weekly,4
+ATL,PTA,RTR,ATLANTA,North West,Outlying,O,103,NRR,OR,LOC,Outlying Adhoc,3
+ALS,CPT,CPT,ATLANTIS,Western Cape,Regional,R,NULL,CPT,RM,LOC,Regional Daily,2
+ATT,PTA,JNB,ATTERIDGEVILLE,Gauteng,Main (Suburb),S,NULL,PTA,SM,LOC,Hub,1
+AUG,KIM,UTN,AUGRABIES,Northern Cape,Outlying,O,49,KAA,OR,LOC,Outlying Bi-weekly,4
+AUA,CPT,VDR,AURORA,Western Cape,Outlying,O,68,VLF,OR,LOC,Outlying Adhoc,2
+APT,BFN,BFN,AUSTINS POST,Free State,Outlying,O,129,PSG,OR,LOC,Outlying Adhoc,3
+AVC,NLP,NLP,AVOCA,Mpumalanga,Outlying,O,52,BNR,OR,LOC,Outlying Adhoc,2
+AVR,CPT,CPT,AVONDRUST,Western Cape,Outlying,O,184,WOR,OR,LOC,Outlying Adhoc,6
+AUU,GRJ,GRJ,AVONTUUR,Western Cape,Outlying,O,146,KYL,OR,LOC,Outlying Bi-weekly,4
+BAA,CPT,CPT,BAARDSKEERDERSBOS,Western Cape,Outlying,O,107,BDD,OR,LOC,Outlying Bi-weekly,5
+BBN,EMG,EMG,BABANANGO,KwaZulu-Natal,Outlying,O,96,ULD,OR,LOC,Outlying Adhoc,4
+BBG,PTA,JNB,BABELEGI,North West,Regional,R,NULL,PTA,RM,LOC,Regional Bi-weekly,3
+BAP,NLP,NLP,BADPLAAS,Mpumalanga,Outlying,O,135,BNR,OR,LOC,Outlying Bi-weekly,4
+BLY,ELS,BFN,BAILEY,Eastern Cape,Outlying,O,41,QTN,OR,LOC,Outlying Adhoc,8
+BLL,KPR,RTR,BAKERVILLE,North West,Outlying,O,42,LTX,OR,LOC,Outlying Adhoc,5
+BOR,VDB,JNB,BALFOUR,Mpumalanga,Regional,R,NULL,VDB,RM,LOC,Regional Daily,4
+BGN,PZB,DUR,BALGOWAN,KwaZulu-Natal,Outlying,O,47,HWR,OS,LOC,Outlying Bi-weekly,4
+BBY,DUR,DUR,BALLITO,KwaZulu-Natal,Regional,R,NULL,DUR,RM,LOC,Regional Daily,2
+BMR,WIR,WIR,BALMORAL,Mpumalanga,Outlying,O,44,CWL,OR,LOC,Outlying Adhoc,1
+BLA,PTG,PTG,BALTIMORE,Limpopo,Outlying,O,200,BOC,OR,LOC,Outlying Bi-weekly,5
+BDX,PTG,PTG,BANDELIERKOP,Limpopo,Outlying,O,67,LTT,OR,LOC,Outlying Adhoc,3
+BAU,PTG,PTG,BANDUR,Limpopo,Outlying,O,136,MES,OR,LOC,Outlying Adhoc,5
+BKP,WIR,NCS,BANKKOP,Mpumalanga,Outlying,O,55,EML,OR,LOC,Outlying Adhoc,5
+BRK,PLZ,CDO,BARAKKE,Eastern Cape,Outlying,O,97,GRT,OR,LOC,Outlying Adhoc,4
+BBP,KPR,KPR,BARBERSPAN,North West,Outlying,O,32,DLV,OR,LOC,Outlying Adhoc,5
+BNR,NLP,NLP,BARBERTON,Mpumalanga,Regional,R,NULL,NLP,RM,LOC,Regional Daily,2
+BYE,ELS,BFN,BARKLY EAST,Eastern Cape,Outlying,O,233,AWL,OR,LOC,Outlying Bi-weekly,8
+BPS,ELS,BFN,BARKLY PASS,Eastern Cape,Outlying,O,276,QQD,OR,LOC,Outlying Adhoc,8
+BKY,KIM,KIM,BARKLY WEST,Northern Cape,Regional,R,NULL,KIM,RM,LOC,Regional Daily,2
+BDA,PLZ,CDO,BARODA,Eastern Cape,Outlying,O,48,CDO,OR,LOC,Outlying Adhoc,1
+BAO,PLZ,PLZ,BAROE,Eastern Cape,Outlying,O,179,KKD,OR,LOC,Outlying Adhoc,4
+BAN,GRJ,GRJ,BARRINGTON,Western Cape,Outlying,O,46,SGF,OR,LOC,Outlying Adhoc,2
+BDL,GRJ,GRJ,BARRYDALE,Western Cape,Outlying,O,92,SWD,OR,LOC,Outlying Bi-weekly,6
+BVL,NLP,NLP,BARVALE,Mpumalanga,Outlying,O,46,BRL,OR,LOC,Outlying Bi-weekly,1
+BXS,ELS,ELS,BASHEE BRIDGE,Eastern Cape,Outlying,O,110,UTT,OR,LOC,Outlying Adhoc,2
+BUS,PLZ,PLZ,BATHURST,Eastern Cape,Outlying,O,30,PAF,OR,LOC,Outlying Bi-weekly,4
+BVN,GRJ,CPT,BAVIAAN,Western Cape,Outlying,O,215,LAI,OR,LOC,Outlying Adhoc,7
+BCB,ELS,ELS,BEACON BAY,Eastern Cape,Main (Suburb),S,NULL,ELS,SM,LOC,Hub,1
+BFU,GRJ,GRJ,BEAUFORT WEST,Western Cape,Regional,R,NULL,GRJ,RM,LOC,Regional Daily,6
+BED,PLZ,CDO,BEDFORD,Eastern Cape,Outlying,O,112,SEO,OR,LOC,Outlying Bi-weekly,3
+BEE,PTA,RTR,BEESTEKRAAL,North West,Outlying,O,79,BTR,OR,LOC,Outlying Adhoc,2
+BEH,PLZ,CDO,BEHULPSAAM,Eastern Cape,Outlying,O,75,GRT,OR,LOC,Outlying Adhoc,4
+BBQ,PTG,PTG,BEITBRIDGE,Limpopo,Outlying,O,30,MES,OR,LOC,Outlying Bi-weekly,6
+BEK,KIM,KIM,BEKKER,Northern Cape,Outlying,O,84,KUR,OR,LOC,Outlying Adhoc,5
+WSR,PTA,JNB,BELA-BELA,Limpopo,Regional,R,NULL,PTA,RM,LOC,Regional Daily,4
+BFZ,WIR,WIR,BELFAST,Mpumalanga,Outlying,O,134,MDR,OR,LOC,Outlying Bi-weekly,4
+BEL,ELS,ELS,BELL,Eastern Cape,Outlying,O,113,KWT,OR,LOC,Outlying Adhoc,3
+BLV,PLZ,PLZ,BELLEVUE,Eastern Cape,Outlying,O,90,ADO,OR,LOC,Outlying Adhoc,4
+VLL,CPT,CPT,BELLVILLE,Western Cape,Main (Suburb),S,NULL,CPT,SM,LOC,Hub,1
+BLT,KIM,KIM,BELMONT,Northern Cape,Outlying,O,73,HPT,OR,LOC,Outlying Adhoc,3
+BNI,JNB,JNB,BENONI,Gauteng,Main (Suburb),S,NULL,JNB,SM,LOC,Hub,1
+BCE,NCS,NCS,BERBICE,Mpumalanga,Outlying,O,94,PFR,OR,LOC,Outlying Adhoc,5
+BEN,NCS,NCS,BERGEN,Mpumalanga,Outlying,O,69,VRR,OR,LOC,Outlying Adhoc,3
+BGR,CPT,VDR,BERGRIVIER,Western Cape,Outlying,O,49,VLF,OR,LOC,Outlying Adhoc,2
+BRG,NCS,NCS,BERGVILLE,KwaZulu-Natal,Regional,R,NULL,NCS,RM,LOC,Regional Daily,5
+BLN,ELS,ELS,BERLIN,Eastern Cape,Outlying,O,30,BRB,OR,LOC,Outlying Bi-weekly,2
+BML,KIM,KIM,BERMOLLI,Northern Cape,Outlying,O,71,PMG,OR,LOC,Outlying Adhoc,6
+BZT,NCS,NCS,BESTERS,KwaZulu-Natal,Outlying,O,55,LAY,OR,LOC,Outlying Adhoc,4
+BXL,WIR,WIR,BETHAL,Mpumalanga,Regional,R,NULL,WIR,RM,LOC,Regional Daily,3
+BHD,PLZ,PLZ,BETHELSDORP,Eastern Cape,Main (Suburb),S,NULL,PLZ,SM,LOC,Hub,1
+BET,PLZ,CDO,BETHESDAWEG,Eastern Cape,Outlying,O,97,GRT,OR,LOC,Outlying Adhoc,4
+BEM,VDB,BEM,BETHLEHEM,Free State,Regional,R,NULL,VDB,RM,LOC,Regional Daily,1
+BSN,BFN,BFN,BETHULIE,Free State,Outlying,O,180,AWL,OR,LOC,Outlying Bi-weekly,5
+BIM,WIR,NCS,BETTIESDAM,Mpumalanga,Outlying,O,59,SNR,OR,LOC,Outlying Adhoc,5
+BEB,CPT,CPT,BETTYS BAY,Western Cape,Outlying,O,72,GDB,OS,LOC,Outlying Bi-weekly,3
+BWY,KPR,RTR,BEWLEY,North West,Outlying,O,76,MEI,OR,LOC,Outlying Adhoc,5
+BYA,MBE,MBE,BHUNYA,NULL,Regional,R,NULL,MBE,RM,BLNS,Regional Daily,10
+BSF,CPT,VDR,BIESIESFONTEIN,Western Cape,Outlying,O,212,VRE,OR,LOC,Outlying Adhoc,9
+BSP,GRJ,CDO,BIESIESPOORT,Northern Cape,Outlying,O,203,BFU,OR,LOC,Outlying Adhoc,8
+BSV,KPR,KPR,BIESIESVLEI,North West,Outlying,O,78,LTX,OR,LOC,Outlying Bi-weekly,4
+BBD,MBE,MBE,BIG BEND,NULL,Regional,R,NULL,MBE,RM,BLNS,Regional Daily,10
+BGG,NCS,NCS,BIGGARSBERG,KwaZulu-Natal,Outlying,O,76,DNE,OR,LOC,Outlying Adhoc,2
+BIS,ELS,ELS,BISHO,Eastern Cape,Regional,R,NULL,ELS,RM,LOC,Regional Daily,3
+BSI,PZB,PSH,BISI,Eastern Cape,Outlying,O,86,IXO,OR,LOC,Outlying Adhoc,4
+BYI,ELS,ELS,BITYI,Eastern Cape,Outlying,O,78,UTT,OR,LOC,Outlying Adhoc,2
+BIN,NCS,NCS,BIVANE,KwaZulu-Natal,Outlying,O,29,PPB,OR,LOC,Outlying Adhoc,4
+BZN,PZB,PSH,BIZANA,Eastern Cape,Outlying,O,118,FLG,OR,LOC,Outlying Bi-weekly,3
+BLD,KIM,UTN,BLADGROND,Northern Cape,Outlying,O,143,KAA,OR,LOC,Outlying Adhoc,5
+BLB,KPR,RTR,BLAIRBETH,North West,Outlying,O,55,ZST,OR,LOC,Outlying Adhoc,5
+BLS,KIM,KIM,BLESMANSPOS,Northern Cape,Outlying,O,151,JKP,OR,LOC,Outlying Adhoc,5
+BLI,KIM,KIM,BLIKFONTEIN,Northern Cape,Outlying,O,141,KUR,OR,LOC,Outlying Adhoc,5
+BPZ,WIR,WIR,BLINKPAN,Mpumalanga,Outlying,O,61,HDN,OR,LOC,Outlying Bi-weekly,2
+BLP,ELS,CDO,BLINKWATER (EC),Eastern Cape,Outlying,O,182,GHO,OR,LOC,Outlying Adhoc,5
+BLW,WIR,WIR,BLINKWATER (MP),Mpumalanga,Outlying,O,124,DLR,OR,LOC,Outlying Adhoc,3
+BFN,BFN,BFN,BLOEMFONTEIN,Free State,Main,M,NULL,BFN,MM,LOC,Hub,1
+BLH,CPT,UTN,BLOEMHOEK,Northern Cape,Outlying,O,244,SPU,OR,LOC,Outlying Adhoc,7
+BHR,KPR,BFN,BLOEMHOF,North West,Outlying,O,82,HST,OR,LOC,Outlying Bi-weekly,6
+BDR,NCS,NCS,BLOOD RIVER,KwaZulu-Natal,Outlying,O,57,VYD,OR,LOC,Outlying Adhoc,3
+BLO,BFN,BFN,BLOUDRIF,Free State,Outlying,O,35,VGA,OR,LOC,Outlying Adhoc,4
+BHA,PTG,PTG,BLOUHAAK,Limpopo,Outlying,O,72,BOC,OR,LOC,Outlying Adhoc,3
+BCC,PLZ,PLZ,BLUECLIFF,Eastern Cape,Outlying,O,28,KKD,OR,LOC,Outlying Adhoc,2
+BGU,BFN,BFN,BLUEGUMS,Eastern Cape,Outlying,O,139,AWL,OR,LOC,Outlying Adhoc,6
+BWO,CPT,CPT,BO-WADRIF,Western Cape,Outlying,O,324,CER,OR,LOC,Outlying Adhoc,7
+BOC,PTG,PTG,BOCHUM,Limpopo,Regional,R,NULL,PTG,RM,LOC,Regional Bi-weekly,3
+BDS,KPR,KPR,BODENSTEIN,North West,Outlying,O,33,COL,OR,LOC,Outlying Adhoc,3
+BGB,KIM,UTN,BOEGOEBERG,Northern Cape,Outlying,O,251,UTN,OR,LOC,Outlying Adhoc,4
+BOO,CPT,CPT,BOERBOONFONTEIN,Western Cape,Outlying,O,171,SWD,OR,LOC,Outlying Adhoc,6
+BMN,BFN,BFN,BOESMANSKOP,Free State,Outlying,O,186,AWL,OR,LOC,Outlying Bi-weekly,5
+BMM,PLZ,PLZ,BOESMANSRIVIERMOND,Eastern Cape,Outlying,O,56,PAF,OR,LOC,Outlying Bi-weekly,4
+BTP,KIM,KIM,BOETSAP,Northern Cape,Outlying,O,110,WAR,OR,LOC,Outlying Adhoc,4
+BOH,VDB,BEM,BOHLOKONG,Free State,Regional,R,NULL,VDB,RM,LOC,Regional Daily,1
+BKF,CPT,CPT,BOKFONTEIN,Western Cape,Outlying,O,92,CTS,OR,LOC,Outlying Adhoc,5
+BKS,PLZ,PLZ,BOKNESSTRAND,Eastern Cape,Outlying,O,77,PAF,OR,LOC,Outlying Bi-weekly,4
+BKB,JNB,JNB,BOKSBURG,Gauteng,Main (Suburb),S,NULL,JNB,SM,LOC,Hub,1
+BLE,ELS,ELS,BOLO,Eastern Cape,Outlying,O,131,BIS,OR,LOC,Outlying Adhoc,4
+BOA,ELS,ELS,BOLOTWA,Eastern Cape,Outlying,O,72,QTN,OR,LOC,Outlying Adhoc,6
+BNK,CPT,CPT,BONEKRAAL,Northern Cape,Outlying,O,470,BFU,OR,LOC,Outlying Adhoc,8
+BOV,CPT,CPT,BONNIEVALE,Western Cape,Outlying,O,61,ROR,OR,LOC,Outlying Bi-weekly,5
+BNY,PZB,PSH,BONNY RIDGE,KwaZulu-Natal,Outlying,O,44,KDX,OR,LOC,Outlying Adhoc,5
+BTD,PZB,PSH,BONTRAND,KwaZulu-Natal,Outlying,O,114,IXO,OR,LOC,Outlying Adhoc,4
+BNS,JNB,RTR,BOONS,North West,Outlying,O,86,RTR,OR,LOC,Outlying Bi-weekly,2
+BCH,PTG,PTG,BORCHERS,Limpopo,Outlying,O,75,LTT,OR,LOC,Outlying Adhoc,4
+BOS,NLP,NLP,BOSBOKRAND,Limpopo,Regional,R,NULL,NLP,RM,LOC,Regional Daily,3
+BHK,PTA,RTR,BOSHOEK,North West,Outlying,O,49,RTR,OR,LOC,Outlying Bi-weekly,5
+BHF,KIM,KIM,BOSHOF,Free State,Outlying,O,107,KIM,OM,LOC,Outlying Bi-weekly,2
+BOX,KPR,KPR,BOSKUIL,North West,Outlying,O,66,WMD,OR,LOC,Outlying Adhoc,4
+BPT,KPR,KPR,BOSPOORT,North West,Outlying,O,62,OTD,OR,LOC,Outlying Adhoc,3
+BSK,KIM,UTN,BOSSIEKOM,Northern Cape,Outlying,O,196,KAA,OR,LOC,Outlying Adhoc,5
+BSS,PTA,RTR,BOSSPRUIT,North West,Outlying,O,40,RTR,OR,LOC,Outlying Adhoc,1
+BHV,KPR,KPR,BOTHAVILLE,Free State,Regional,R,NULL,KPR,RM,LOC,Regional Daily,3
+BTK,PTG,PTG,BOTLOKWA,Limpopo,Outlying,O,52,BOC,OR,LOC,Outlying Bi-weekly,4
+BTS,CPT,CPT,BOTRIVIER,Western Cape,Outlying,O,45,GRB,OR,LOC,Outlying Bi-weekly,3
+BSB,BFN,BFN,BOTSHABELO,Free State,Regional,R,NULL,BFN,RM,LOC,Regional Daily,2
+OBW,GBE,GBE,BOTSWANA OTHER,NULL,Outlying,O,200,GBE,OM,BLNS,Outlying Adhoc,10
+BWP,ELS,CDO,BOWKERS PARK,Eastern Cape,Outlying,O,26,QTN,OR,LOC,Outlying Adhoc,4
+BNF,CPT,CPT,BRACKENFELL,Western Cape,Main (Suburb),S,NULL,CPT,SM,LOC,Hub,1
+BMA,DUR,PSH,BRAEMAR,KwaZulu-Natal,Outlying,O,56,MAR,OR,LOC,Outlying Bi-weekly,4
+BPN,JNB,JNB,BRAKPAN,Gauteng,Main (Suburb),S,NULL,JNB,SM,LOC,Hub,1
+BKT,KIM,GRJ,BRAKPOORT,Northern Cape,Outlying,O,221,DER,OR,LOC,Outlying Adhoc,8
+BSG,KPR,KPR,BRAKSPRUIT,North West,Outlying,O,44,HBR,OR,LOC,Outlying Bi-weekly,1
+BRD,NLP,NLP,BRANDDRAAI,Mpumalanga,Outlying,O,92,BGF,OR,LOC,Outlying Adhoc,5
+BDT,BFN,BFN,BRANDFORT,Free State,Regional,R,NULL,BFN,RM,LOC,Regional Bi-weekly,2
+BRR,GRJ,GRJ,BRANDRIVIER,Western Cape,Outlying,O,93,RDS,OR,LOC,Outlying Adhoc,5
+BDV,KIM,UTN,BRANDVLEI,Northern Cape,Outlying,O,466,KAA,OR,LOC,Outlying Bi-weekly,7
+BRS,ELS,ELS,BRAUNSCHWEIG,Eastern Cape,Outlying,O,25,KWT,OR,LOC,Outlying Adhoc,3
+BRV,ELS,BFN,BRAUNVILLE,Eastern Cape,Outlying,O,42,QQD,OR,LOC,Outlying Adhoc,8
+BRY,KPR,KPR,BRAY,North West,Outlying,O,419,VRU,OR,LOC,Outlying Adhoc,8
+BFV,ELS,ELS,BREAKFAST VLEI,Eastern Cape,Outlying,O,109,GHO,OR,LOC,Outlying Adhoc,4
+BDD,CPT,CPT,BREDASDORP,Western Cape,Regional,R,NULL,CPT,RM,LOC,Regional Daily,5
+BRB,ELS,ELS,BREIDBACH,Eastern Cape,Regional,R,NULL,ELS,RM,LOC,Regional Daily,2
+BRP,BFN,BFN,BREIPAAL,Free State,Outlying,O,197,AWL,OR,LOC,Outlying Adhoc,4
+BNN,WIR,WIR,BREYTEN,Mpumalanga,Outlying,O,59,EML,OR,LOC,Outlying Bi-weekly,4
+BGW,PTG,PTG,BRIDGEWATER,Limpopo,Outlying,O,187,MES,OR,LOC,Outlying Adhoc,5
+BTR,PTA,JNB,BRITS,North West,Regional,R,NULL,PTA,RM,LOC,Regional Daily,3
+BSW,KIM,KIM,BRITSTOWN,Northern Cape,Outlying,O,106,DER,OR,LOC,Outlying Bi-weekly,7
+BRT,KIM,KIM,BRITTEN,North West,Outlying,O,55,CSN,OR,LOC,Outlying Adhoc,5
+BRO,KPR,KPR,BROEDERSPUT,North West,Outlying,O,81,DLV,OR,LOC,Outlying Adhoc,5
+BBK,PTG,PTG,BROMBEEK,Limpopo,Outlying,O,168,MES,OR,LOC,Outlying Adhoc,5
+BRL,NLP,NLP,BRONDAL,Mpumalanga,Regional,R,NULL,NLP,RM,LOC,Regional Bi-weekly,1
+BHS,WIR,JNB,BRONKHORSTSPRUIT,Gauteng,Main (Suburb),S,NULL,WIR,SM,LOC,Hub,3
+BON,PZB,PSH,BROOKS NEK,Eastern Cape,Outlying,O,38,KDX,OR,LOC,Outlying Adhoc,4
+BJH,PLZ,CDO,BRUINTIESHOOGTE,Eastern Cape,Outlying,O,50,SEO,OR,LOC,Outlying Adhoc,3
+BDU,KIM,KIM,BUCKLANDS,Northern Cape,Outlying,O,25,DLS,OR,LOC,Outlying Adhoc,4
+BFF,GRJ,GRJ,BUFFELSDRIF,Western Cape,Outlying,O,118,GRJ,OM,LOC,Outlying Adhoc,3
+BVV,KPR,KPR,BUFFELSVLEI,Limpopo,Outlying,O,41,PCM,OR,LOC,Outlying Bi-weekly,3
+BRF,KPR,KPR,BUHRMANDRIFT,North West,Outlying,O,31,MEI,OR,LOC,Outlying Bi-weekly,5
+BUL,KIM,KIM,BULL HILL,Northern Cape,Outlying,O,50,WAR,OR,LOC,Outlying Adhoc,4
+BPL,CPT,UTN,BULLETRAP,Northern Cape,Outlying,O,62,SPU,OR,LOC,Outlying Adhoc,9
+BTN,BFN,BFN,BULTFONTEIN,Free State,Regional,R,NULL,BFN,RM,LOC,Regional Daily,4
+BUW,PZB,DUR,BULWER,KwaZulu-Natal,Outlying,O,75,UBR,OR,LOC,Outlying Bi-weekly,5
+BTV,ELS,ELS,BUNTINGVILLE,Eastern Cape,Outlying,O,25,UTT,OR,LOC,Outlying Adhoc,1
+BUP,BFN,BFN,BURGERSDORP,Eastern Cape,Outlying,O,112,AWL,OR,LOC,Outlying Bi-weekly,7
+BGF,NLP,NLP,BURGERSFORT,Mpumalanga,Regional,R,NULL,NLP,RM,LOC,Regional Daily,5
+BHP,JNB,JNB,BURGERSHOOP,Gauteng,Outlying,O,31,RDP,OS,LOC,Outlying Adhoc,2
+BVR,KIM,CDO,BURGERVILLE,Northern Cape,Outlying,O,70,DER,OR,LOC,Outlying Adhoc,6
+BOS,NLP,NLP,BUSHBUCKRIDGE,Limpopo,Regional,R,NULL,NLP,RM,LOC,Regional Daily,4
+BMM,PLZ,PLZ,BUSHMANS RIVER MOUTH,Eastern Cape,Outlying,O,56,PAF,OR,LOC,Outlying Bi-weekly,4
+BBE,MSU,MSU,BUTHE BUTHE,NULL,Outlying,O,216,MSU,OM,BLNS,Outlying Adhoc,10
+BWH,ELS,ELS,BUTTERWORTH,Eastern Cape,Regional,R,NULL,ELS,RM,LOC,Regional Daily,4
+BYY,PTG,PTG,BUYSDORP,Limpopo,Outlying,O,97,BOC,OR,LOC,Outlying Adhoc,4
+BYS,PTG,PTG,BYLSTEEL,Limpopo,Outlying,O,79,PTG,OM,LOC,Outlying Adhoc,2
+CAA,ELS,ELS,CALA,Eastern Cape,Outlying,O,179,QQD,OR,LOC,Outlying Bi-weekly,4
+CLR,ELS,BFN,CALA ROAD,Eastern Cape,Outlying,O,213,QQD,OR,LOC,Outlying Adhoc,8
+CLN,CPT,CPT,CALEDON,Western Cape,Regional,R,NULL,CPT,RM,LOC,Regional Daily,4
+CZR,GRJ,GRJ,CALITZDORP,Western Cape,Outlying,O,98,LAI,OR,LOC,Outlying Bi-weekly,4
+CAL,NCS,NCS,CALVERT,KwaZulu-Natal,Outlying,O,57,VYD,OR,LOC,Outlying Adhoc,4
+CLW,CPT,UTN,CALVINIA,Northern Cape,Outlying,O,287,VRE,OR,LOC,Outlying Bi-weekly,9
+CAM,PLZ,PLZ,CAMBRIA,Eastern Cape,Outlying,O,78,PTI,OR,LOC,Outlying Adhoc,5
+CMG,PLZ,CDO,CAMERONS GLEN,Eastern Cape,Outlying,O,157,SEO,OR,LOC,Outlying Adhoc,3
+CBL,KIM,KIM,CAMPBELL,Northern Cape,Outlying,O,61,DLS,OR,LOC,Outlying Adhoc,4
+CAO,EMG,EMG,CANDOVER,KwaZulu-Natal,Outlying,O,54,JOZ,OR,LOC,Outlying Adhoc,5
+CSF,PLZ,PLZ,CAPE ST FRANCIS,Eastern Cape,Outlying,O,47,HDR,OR,LOC,Outlying Adhoc,4
+CPT,CPT,CPT,CAPE TOWN,Western Cape,Main,M,NULL,CPT,MM,LOC,Hub,1
+CAR,VDB,JNB,CARLETONVILLE,Gauteng,Regional,R,NULL,VDB,RM,LOC,Regional Daily,4
+CBE,PLZ,CDO,CARLISLE BRIDGE,Eastern Cape,Outlying,O,84,GHO,OR,LOC,Outlying Adhoc,4
+CRS,KPR,RTR,CARLSONIA,North West,Outlying,O,49,LTX,OR,LOC,Outlying Adhoc,4
+CAN,BFN,CDO,CARLTON,Eastern Cape,Outlying,O,247,CDO,OR,LOC,Outlying Adhoc,4
+CVN,KIM,UTN,CARNARVON,Northern Cape,Outlying,O,338,PRK,OR,LOC,Outlying Bi-weekly,8
+CLA,WIR,WIR,CAROLINA,Mpumalanga,Outlying,O,87,HDN,OR,LOC,Outlying Bi-weekly,4
+CHC,ELS,ELS,CATHCART,Eastern Cape,Outlying,O,118,QTN,OR,LOC,Outlying Bi-weekly,4
+CTP,PZB,NCS,CATHEDRAL PEAK,KwaZulu-Natal,Outlying,O,83,BRG,OR,LOC,Outlying Adhoc,5
+CKP,PZB,DUR,CATHKIN PARK,KwaZulu-Natal,Outlying,O,82,BRG,OR,LOC,Outlying Adhoc,7
+CED,PZB,PSH,CEDARVILLE,KwaZulu-Natal,Outlying,O,48,MTL,OR,LOC,Outlying Bi-weekly,5
+SED,CPT,CPT,CEDERBERG,Western Cape,Outlying,O,114,CWM,OR,LOC,Outlying Adhoc,7
+CNT,JNB,JNB,CENTURION,Gauteng,Main (Suburb),S,NULL,JNB,SM,LOC,Hub,1
+CER,CPT,CPT,CERES,Western Cape,Regional,R,NULL,CPT,RM,LOC,Regional Daily,4
+CHM,ELS,ELS,CHALUMNA,Eastern Cape,Outlying,O,83,ELS,OM,LOC,Outlying Adhoc,2
+CHH,PZB,NCS,CHAMPAGNE CASTLE-DRAK RESORTS,KwaZulu-Natal,Outlying,O,57,WNO,OR,LOC,Outlying Adhoc,5
+CCI,WIR,WIR,CHARL CILLIERS,Mpumalanga,Outlying,O,45,SEC,OR,LOC,Outlying Adhoc,4
+CTW,DUR,DUR,CHATSWORTH,KwaZulu-Natal,Main (Suburb),S,NULL,DUR,SM,LOC,Hub,2
+CSS,WIR,WIR,CHRISSIESMEER,Mpumalanga,Outlying,O,74,EML,OR,LOC,Outlying Bi-weekly,4
+CSN,KIM,KIM,CHRISTIANA,North West,Regional,R,NULL,KIM,RM,LOC,Regional Daily,4
+CUR,PTG,PTG,CHUNIESPOORT,Limpopo,Outlying,O,10,LEB,OR,LOC,Outlying Adhoc,3
+CHN,CPT,VDR,CHURCHHAVEN,Western Cape,Outlying,O,65,LGN,OR,LOC,Outlying Adhoc,2
+CIO,ELS,ELS,CIKO,Eastern Cape,Outlying,O,102,BWH,OR,LOC,Outlying Adhoc,4
+CIA,ELS,ELS,CINTSA EAST,Eastern Cape,Outlying,O,59,BCB,OS,LOC,Outlying Adhoc,2
+CTS,CPT,VDR,CITRUSDAL,Western Cape,Regional,R,NULL,CPT,RM,LOC,Regional Daily,4
+CLL,BFN,BFN,CLANVILLE,Eastern Cape,Outlying,O,165,AWL,OR,LOC,Outlying Adhoc,7
+CWM,CPT,VDR,CLANWILLIAM,Western Cape,Regional,R,NULL,CPT,RM,LOC,Regional Daily,5
+CRN,VDB,BEM,CLARENS,Free State,Outlying,O,75,BEM,OR,LOC,Outlying Bi-weekly,2
+CRY,ELS,ELS,CLARKEBURY,Eastern Cape,Outlying,O,148,UTT,OR,LOC,Outlying Bi-weekly,3
+CLS,PLZ,PLZ,CLARKSON,Eastern Cape,Outlying,O,86,HDR,OR,LOC,Outlying Adhoc,5
+CAV,JNB,JNB,CLAYVILLE,Gauteng,Main (Suburb),S,NULL,JNB,SM,LOC,Hub,1
+CWL,WIR,WIR,CLEWER,Mpumalanga,Regional,R,NULL,WIR,RM,LOC,Regional Bi-weekly,1
+CDF,ELS,BFN,CLIFFORD,Eastern Cape,Outlying,O,237,QQD,OR,LOC,Outlying Adhoc,8
+CLC,BFN,BEM,CLOCOLAN,Free State,Regional,R,NULL,BFN,RM,LOC,Regional Daily,4
+CLV,WIR,WIR,COALVILLE,Mpumalanga,Outlying,O,36,CWL,OR,LOC,Outlying Bi-weekly,2
+COG,PLZ,PLZ,COEGA,Eastern Cape,Main (Suburb),S,NULL,PLZ,SM,LOC,Hub,1
+COE,PLZ,PLZ,COERNEY,Eastern Cape,Outlying,O,26,ADO,OR,LOC,Outlying Adhoc,2
+COZ,KIM,KPR,COETZERSDAM,North West,Outlying,O,109,VRU,OR,LOC,Outlying Adhoc,7
+CFB,ELS,ELS,COFFEE BAY,Eastern Cape,Outlying,O,155,UTT,OR,LOC,Outlying Bi-weekly,4
+CVB,ELS,ELS,COFIMVABA,Eastern Cape,Outlying,O,153,QTN,OR,LOC,Outlying Bi-weekly,5
+CGL,ELS,ELS,COGHLAN,Eastern Cape,Outlying,O,117,UTT,OR,LOC,Outlying Adhoc,2
+FAL,ELS,PLZ,COLCHESTER,Eastern Cape,Outlying,O,92,PAF,OR,LOC,Outlying Adhoc,1
+CLD,PZB,DUR,COLEFORD,KwaZulu-Natal,Outlying,O,53,UBR,OR,LOC,Outlying Adhoc,5
+CSO,NCS,NCS,COLENSO,KwaZulu-Natal,Outlying,O,55,LAY,OR,LOC,Outlying Bi-weekly,4
+CLG,BFN,BFN,COLESBERG,Northern Cape,Outlying,O,237,DER,OR,LOC,Outlying Bi-weekly,6
+CLP,PLZ,PLZ,COLESKEPLAAS,Eastern Cape,Outlying,O,188,PTI,OR,LOC,Outlying Adhoc,6
+COL,KPR,KPR,COLIGNY,North West,Regional,R,NULL,KPR,RM,LOC,Regional Bi-weekly,3
+CML,WIR,WIR,COMELIA,Free State,Outlying,O,212,SEC,OR,LOC,Outlying Adhoc,0
+CMM,ELS,ELS,COMMITTEES,Eastern Cape,Outlying,O,86,GHO,OR,LOC,Outlying Adhoc,4
+COM,NCS,NCS,COMMONDALE,Mpumalanga,Outlying,O,37,PPB,OR,LOC,Outlying Bi-weekly,4
+CCA,CPT,UTN,CONCORDIA,Northern Cape,Outlying,O,38,SPU,OR,LOC,Outlying Bi-weekly,8
+CNX,KIM,KIM,CONTENT,Northern Cape,Outlying,O,26,WAR,OR,LOC,Outlying Adhoc,3
+CNY,PLZ,CDO,CONWAY,Eastern Cape,Outlying,O,124,CDO,OR,LOC,Outlying Adhoc,3
+CHQ,PLZ,PLZ,COOKHOUSE,Eastern Cape,Outlying,O,49,SEO,OR,LOC,Outlying Bi-weekly,5
+CTN,KIM,UTN,COPPERTON,Northern Cape,Outlying,O,130,PRK,OR,LOC,Outlying Adhoc,6
+COR,VDB,NCS,CORNELIA,Free State,Outlying,O,80,FFO,OR,LOC,Outlying Adhoc,5
+CDO,PLZ,CDO,CRADOCK,Eastern Cape,Regional,R,NULL,PLZ,RM,LOC,Regional Daily,1
+CFT,KPR,KPR,CRAFTHOLE,North West,Outlying,O,187,VRU,OR,LOC,Outlying Adhoc,8
+CFH,NCS,NCS,CRAIGSFORTH,KwaZulu-Natal,Outlying,O,76,LAY,OR,LOC,Outlying Adhoc,3
+CCY,PTG,PTG,CRECY,Limpopo,Outlying,O,40,NBR,OR,LOC,Outlying Adhoc,4
+CRI,PZB,DUR,CREIGHTON,KwaZulu-Natal,Outlying,O,69,IXO,OR,LOC,Outlying Bi-weekly,4
+CUL,PTA,JNB,CULLINAN,Gauteng,Main (Suburb),S,NULL,PTA,SM,LOC,Hub,2
+CYY,NCS,NCS,CUNDYCLEUGH,KwaZulu-Natal,Outlying,O,110,NCS,OM,LOC,Outlying Adhoc,3
+DAA,CPT,UTN,DABENORIS,Northern Cape,Outlying,O,243,SPU,OR,LOC,Outlying Adhoc,8
+DAB,KIM,UTN,DAGBREEK,Northern Cape,Outlying,O,48,UTN,OR,LOC,Outlying Adhoc,2
+DGG,PLZ,CDO,DAGGABOERSNEK,Eastern Cape,Outlying,O,100,CDO,OR,LOC,Outlying Adhoc,3
+DMA,WIR,WIR,DALMANUTHA,Mpumalanga,Outlying,O,157,HDN,OR,LOC,Outlying Bi-weekly,4
+DTN,PZB,DUR,DALTON,KwaZulu-Natal,Regional,R,NULL,PZB,RM,LOC,Regional Daily,3
+DLR,WIR,WIR,DAMWAL,Mpumalanga,Regional,R,NULL,WIR,RM,LOC,Regional Bi-weekly,1
+DKL,KIM,KIM,DANIELSKUIL,Northern Cape,Outlying,O,110,PMG,OR,LOC,Outlying Bi-weekly,5
+DNR,VDB,BEM,DANIELSRUS,Free State,Outlying,O,48,BOH,OR,LOC,Outlying Adhoc,1
+DHR,NCS,NCS,DANNHAUSER,KwaZulu-Natal,Outlying,O,53,DNE,OR,LOC,Outlying Bi-weekly,2
+DRE,PZB,DUR,DARGLE,KwaZulu-Natal,Outlying,O,29,HWR,OS,LOC,Outlying Adhoc,4
+DAR,CPT,CPT,DARLING,Western Cape,Outlying,O,48,ALS,OR,LOC,Outlying Bi-weekly,3
+DSK,GRJ,GRJ,DASKOP,Western Cape,Outlying,O,105,GRJ,OM,LOC,Outlying Adhoc,2
+DAV,WIR,WIR,DAVEL,Mpumalanga,Outlying,O,43,BXL,OR,LOC,Outlying Adhoc,4
+DER,KIM,KIM,DE AAR,Northern Cape,Regional,R,NULL,KIM,RM,LOC,Regional Daily,6
+DBG,BFN,BFN,DE BRUG,Free State,Outlying,O,82,PSG,OR,LOC,Outlying Adhoc,2
+DOR,CPT,CPT,DE DOORNS,Western Cape,Outlying,O,64,WOR,OR,LOC,Outlying Bi-weekly,4
+DGR,PTG,PTG,DE GRACHT,Limpopo,Outlying,O,191,BOC,OR,LOC,Outlying Adhoc,5
+DEH,CPT,VDR,DE HOEK,Western Cape,Outlying,O,12,PQB,OR,LOC,Outlying Adhoc,3
+DHP,GRJ,GRJ,DE HOOP,Western Cape,Outlying,O,40,OUH,OR,LOC,Outlying Adhoc,6
+DKK,KIM,CDO,DE KLERK,Northern Cape,Outlying,O,183,DER,OR,LOC,Outlying Adhoc,7
+DEU,GRJ,GRJ,DE RUST,Western Cape,Outlying,O,70,OUH,OR,LOC,Outlying Bi-weekly,3
+DSV,BFN,BFN,DEALESVILLE,Free State,Outlying,O,122,BTN,OR,LOC,Outlying Bi-weekly,3
+DDB,KIM,UTN,DEDEBEN,Northern Cape,Outlying,O,166,KAT,OR,LOC,Outlying Adhoc,6
+DEE,KIM,CDO,DEELFONTEIN,Northern Cape,Outlying,O,97,DER,OR,LOC,Outlying Adhoc,7
+DEP,KPR,KPR,DEELPAN,North West,Outlying,O,95,DLV,OR,LOC,Outlying Adhoc,5
+DLV,KPR,KPR,DELAREYVILLE,North West,Regional,R,NULL,KPR,RM,LOC,Regional Daily,4
+DMS,JNB,WIR,DELMAS,Mpumalanga,Regional,R,NULL,JNB,RM,LOC,Regional Daily,3
+DLH,KIM,KIM,DELPORTSHOOP,Northern Cape,Outlying,O,58,BKY,OR,LOC,Outlying Bi-weekly,3
+DND,PTG,PTG,DENDRON,Limpopo,Outlying,O,39,BOC,OR,LOC,Outlying Bi-weekly,3
+DYE,VDB,JNB,DENEYSVILLE,Free State,Outlying,O,64,SBG,OS,LOC,Outlying Bi-weekly,4
+DNN,WIR,WIR,DENNILTON,Mpumalanga,Outlying,O,43,SBW,OR,LOC,Outlying Adhoc,4
+DBY,KPR,RTR,DERBY,North West,Outlying,O,87,RTR,OR,LOC,Outlying Adhoc,2
+DPT,PTA,RTR,DERDEPOORT,North West,Outlying,O,226,NRR,OR,LOC,Outlying Adhoc,5
+DSH,PLZ,PLZ,DESPATCH,Eastern Cape,Regional,R,NULL,PLZ,RM,LOC,Regional Daily,1
+DON,WIR,WIR,DEVON,Gauteng,Outlying,O,32,LND,OR,LOC,Outlying Bi-weekly,3
+DVL,KPR,KPR,DEVONLEA,North West,Outlying,O,75,VRU,OR,LOC,Outlying Adhoc,6
+DEW,BFN,BFN,DEWETSDORP,Free State,Outlying,O,97,BSB,OR,LOC,Outlying Bi-weekly,3
+DEG,KIM,KIM,DIBENG,Northern Cape,Outlying,O,44,KAT,OR,LOC,Outlying Bi-weekly,7
+DBO,CPT,CPT,DIE BOS,Northern Cape,Outlying,O,232,CWM,OR,LOC,Outlying Adhoc,8
+DIE,KIM,CDO,DIE PUT,Northern Cape,Outlying,O,35,DER,OR,LOC,Outlying Adhoc,7
+DEV,GRJ,GRJ,DIE VLUG,Western Cape,Outlying,O,108,KYL,OR,LOC,Outlying Adhoc,4
+DMP,KIM,UTN,DIEMANSPUTS,Northern Cape,Outlying,O,301,PRK,OR,LOC,Outlying Adhoc,5
+DPK,JNB,JNB,DIEPKLOOF,Gauteng,Main (Suburb),S,NULL,JNB,SM,LOC,Hub,6
+DPE,CPT,CPT,DIEPRIVIER,Western Cape,Main (Suburb),S,NULL,CPT,SM,LOC,Hub,4
+DST,JNB,JNB,DIEPSLOOT,Gauteng,Main (Suburb),S,NULL,JNB,SM,LOC,Hub,1
+DKV,KIM,KIM,DIKHUTING,North West,Outlying,O,57,HWA,OR,LOC,Outlying Adhoc,5
+DBZ,ELS,ELS,DIMBAZA,Eastern Cape,Outlying,O,40,KWT,OR,LOC,Outlying Bi-weekly,3
+DIN,KIM,KIM,DINGLE,KwaZulu-Natal,Outlying,O,60,KAT,OR,LOC,Outlying Adhoc,6
+DIP,NCS,NCS,DIRKIESDORP,Mpumalanga,Outlying,O,93,PFR,OR,LOC,Outlying Adhoc,4
+DII,PTG,LTT,DITI,Limpopo,Outlying,O,70,LTT,OR,LOC,Outlying Adhoc,0
+DLL,PZB,EMG,DLOLWANA,KwaZulu-Natal,Outlying,O,146,NQT,OR,LOC,Outlying Adhoc,5
+DBK,PZB,DUR,DONNYBROOK,KwaZulu-Natal,Outlying,O,70,IXO,OR,LOC,Outlying Bi-weekly,4
+DDX,ELS,BFN,DORDRECHT,Eastern Cape,Outlying,O,98,QQD,OR,LOC,Outlying Bi-weekly,8
+DGB,CPT,VDR,DORING BAY,Western Cape,Outlying,O,88,VRE,OR,LOC,Outlying Adhoc,5
+DSO,CPT,VDR,DORINGBOS,Western Cape,Outlying,O,116,CWM,OR,LOC,Outlying Adhoc,6
+DBT,KPR,KPR,DORINGBULT,North West,Outlying,O,71,COL,OR,LOC,Outlying Adhoc,3
+DLS,KIM,KIM,DOUGLAS,Northern Cape,Regional,R,NULL,KIM,RM,LOC,Regional Daily,4
+DVE,VDB,KPR,DOVER,Free State,Outlying,O,54,KPY,OR,LOC,Outlying Adhoc,4
+DOV,KPR,KPR,DOVESDALE,North West,Outlying,O,36,VSD,OR,LOC,Outlying Adhoc,3
+DRN,PLZ,CDO,DRENNAN,Eastern Cape,Outlying,O,76,CDO,OR,LOC,Outlying Adhoc,2
+DNF,NCS,NCS,DRIEFONTEIN,KwaZulu-Natal,Outlying,O,64,LAY,OR,LOC,Outlying Adhoc,5
+DTF,ELS,CDO,DRIVERS DRIFT,Eastern Cape,Outlying,O,33,QQD,OR,LOC,Outlying Adhoc,5
+DVR,GRJ,GRJ,DROERIVIER,Western Cape,Outlying,O,22,BFU,OR,LOC,Outlying Adhoc,6
+DVT,GRJ,GRJ,DROEVLAKTE,Western Cape,Outlying,O,27,SBI,OR,LOC,Outlying Adhoc,4
+DMM,PTG,PTG,DRUMMONDLEA,Limpopo,Outlying,O,33,PTR,OR,LOC,Outlying Bi-weekly,3
+DUN,CPT,CPT,DU NOON,Western Cape,Main (Suburb),S,NULL,CPT,SM,LOC,Hub,1
+DDZ,JNB,JNB,DUDUZA,Gauteng,Outlying,O,20,NLR,OS,LOC,Outlying Adhoc,3
+DVF,PTG,PTG,DUIWELSKLOOF,Limpopo,Outlying,O,45,TZN,OR,LOC,Outlying Bi-weekly,4
+DMR,WIR,WIR,DULLSTROOM,Northern Cape,Outlying,O,111,LDR,OR,LOC,Outlying Bi-weekly,4
+DNE,NCS,NCS,DUNDEE,KwaZulu-Natal,Regional,R,NULL,NCS,RM,LOC,Regional Daily,2
+DNA,NLP,WIR,DUNDONALD,Mpumalanga,Outlying,O,200,BNR,OR,LOC,Outlying Bi-weekly,6
+DUP,BFN,BFN,DUPLESTROOM,Free State,Outlying,O,172,AWL,OR,LOC,Outlying Adhoc,5
+DUR,DUR,DUR,DURBAN,KwaZulu-Natal,Main,M,NULL,DUR,MM,LOC,Hub,1
+DWB,PTA,RTR,DWAALBOOM,Limpopo,Outlying,O,122,NRR,OR,LOC,Outlying Bi-weekly,4
+DWL,BFN,CDO,DWAALFONTEIN,Northern Cape,Outlying,O,188,DER,OR,LOC,Outlying Adhoc,5
+DRR,PTG,PTG,DWARS RIVER,NULL,Outlying,O,100,LTT,OR,LOC,Outlying Bi-weekly,2
+DWG,PTA,RTR,DWARSBERG,North West,Outlying,O,145,NRR,OR,LOC,Outlying Adhoc,4
+DSS,CPT,VDR,DWARSKERSBOS,Western Cape,Outlying,O,28,VLF,OR,LOC,Outlying Adhoc,2
+DSA,DUR,PSH,DWESHULA,KwaZulu-Natal,Outlying,O,43,PSH,OR,LOC,Outlying Adhoc,2
+DWK,GRJ,GRJ,DWYKA,Western Cape,Outlying,O,260,BFU,OR,LOC,Outlying Adhoc,6
+DYS,GRJ,GRJ,DYSSELSDORP,Western Cape,Outlying,O,48,OUH,OR,LOC,Outlying Bi-weekly,3
+DZN,PTG,PTG,DZANANI,Limpopo,Outlying,O,71,LTT,OR,LOC,Outlying Bi-weekly,5
+ELS,ELS,ELS,EAST LONDON,Eastern Cape,Main,M,NULL,ELS,MM,LOC,Hub,1
+EBE,ELS,ELS,EBENDE,Eastern Cape,Outlying,O,81,BWH,OR,LOC,Outlying Adhoc,4
+EBR,BFN,BFN,EDENBURG,Free State,Outlying,O,152,BFN,OM,LOC,Outlying Bi-weekly,3
+EDV,VDB,BEM,EDENVILLE,Free State,Outlying,O,84,KPY,OR,LOC,Outlying Bi-weekly,4
+ENK,CPT,VDR,EENDEKUIL,Western Cape,Outlying,O,39,CTS,OR,LOC,Outlying Bi-weekly,4
+EEN,BFN,BFN,EENSGEVONDEN,Free State,Outlying,O,47,BDT,OR,LOC,Outlying Adhoc,3
+ERM,NCS,BEM,EERAM,Free State,Outlying,O,43,HRS,OR,LOC,Outlying Adhoc,4
+EKG,PTA,JNB,EKANGALA,Mpumalanga,Outlying,O,39,BHS,OS,LOC,Outlying Bi-weekly,3
+EKS,CPT,UTN,EKSTEENFONTEIN,Northern Cape,Outlying,O,272,SPU,OR,LOC,Outlying Adhoc,10
+ELB,CPT,VDR,ELANDS BAY,Western Cape,Outlying,O,137,CWM,OR,LOC,Outlying Bi-weekly,4
+ELH,ELS,BFN,ELANDS HEIGHT,Eastern Cape,Outlying,O,250,MTL,OR,LOC,Outlying Adhoc,8
+ELK,NCS,NCS,ELANDSKRAAL,KwaZulu-Natal,Outlying,O,84,NQT,OR,LOC,Outlying Adhoc,2
+ELG,NCS,NCS,ELANDSLAAGTE,KwaZulu-Natal,Outlying,O,52,LAY,OR,LOC,Outlying Adhoc,4
+ELP,KPR,RTR,ELANDSPUTTE,North West,Outlying,O,44,LTX,OR,LOC,Outlying Adhoc,5
+EGN,CPT,CPT,ELGIN,Western Cape,Outlying,O,7,GRB,OR,LOC,Outlying Adhoc,2
+ELI,CPT,CPT,ELIM (WC),Western Cape,Outlying,O,72,BDD,OR,LOC,Outlying Adhoc,5
+EMH,PTG,PTG,ELIM HOSPITAL,Limpopo,Outlying,O,46,LTT,OR,LOC,Outlying Bi-weekly,4
+ELT,ELS,ELS,ELLIOT,Eastern Cape,Outlying,O,234,QQD,OR,LOC,Outlying Bi-weekly,4
+ELD,ELS,ELS,ELLIOTDALE,Eastern Cape,Outlying,O,108,UTT,OR,LOC,Outlying Bi-weekly,2
+ELL,PTG,PTG,ELLISRAS,Limpopo,Regional,R,NULL,PTG,RM,LOC,Regional Daily,6
+ELM,PTG,RTR,ELMESTON,Limpopo,Outlying,O,80,ELL,OR,LOC,Outlying Adhoc,6
+ELF,JNB,WIR,ELOFF,Mpumalanga,Outlying,O,15,DMS,OR,LOC,Outlying Bi-weekly,3
+ELU,NLP,NLP,ELUKWATINI,Limpopo,Outlying,O,174,BNR,OR,LOC,Outlying Bi-weekly,4
+EGG,EMG,EMG,EMANGUZI,KwaZulu-Natal,Regional,R,NULL,EMG,RM,LOC,Regional Bi-weekly,7
+EMG,EMG,EMG,EMPANGENI,KwaZulu-Natal,Main,M,NULL,EMG,MM,LOC,Branch,1
+ENG,ELS,ELS,ENGCOBO,Eastern Cape,Outlying,O,162,UTT,OR,LOC,Outlying Bi-weekly,4
+ENT,EMG,EMG,ENTUMENI,KwaZulu-Natal,Outlying,O,38,ESH,OR,LOC,Outlying Bi-weekly,3
+EML,WIR,WIR,ERMELO,Mpumalanga,Regional,R,NULL,WIR,RM,LOC,Regional Daily,4
+ERT,WIR,WIR,ERTS,Limpopo,Outlying,O,132,JFH,OR,LOC,Outlying Adhoc,4
+ESH,EMG,EMG,ESHOWE,KwaZulu-Natal,Regional,R,NULL,EMG,RM,LOC,Regional Daily,2
+EPD,KIM,KIM,ESPAGSDRIF,North West,Outlying,O,52,JKP,OR,LOC,Outlying Adhoc,4
+ECT,PZB,DUR,ESTCOURT,KwaZulu-Natal,Regional,R,NULL,PZB,RM,LOC,Regional Daily,5
+EVD,WIR,WIR,EVANDER,Mpumalanga,Regional,R,NULL,WIR,RM,LOC,Regional Daily,3
+EVA,PTG,PTG,EVANGELINA,Limpopo,Outlying,O,204,MES,OR,LOC,Outlying Adhoc,6
+EWB,KIM,KIM,EWBANK,North West,Outlying,O,80,KUR,OR,LOC,Outlying Adhoc,7
+EXC,BFN,BFN,EXCELSIOR,Free State,Outlying,O,85,TCR,OR,LOC,Outlying Bi-weekly,4
+EZI,ELS,ELS,EZIBONDENI,Eastern Cape,Outlying,O,46,BWH,OR,LOC,Outlying Bi-weekly,4
+FAG,KIM,UTN,FAANS GROVE,North West,Outlying,O,166,KAT,OR,LOC,Outlying Adhoc,6
+FAU,CPT,CPT,FAURE,Western Cape,Regional,R,NULL,CPT,RM,LOC,Regional Bi-weekly,1
+FMR,BFN,BFN,FAURESMITH,Free State,Outlying,O,154,PSG,OR,LOC,Outlying Bi-weekly,4
+FNS,PZB,DUR,FAWNLEAS,KwaZulu-Natal,Outlying,O,21,DTN,OR,LOC,Outlying Adhoc,4
+FXT,EMG,EMG,FELIXTON,KwaZulu-Natal,Regional,R,NULL,EMG,RM,LOC,Regional Bi-weekly,1
+FXB,BFN,BEM,FICKSBURG,Free State,Regional,R,NULL,BFN,RM,LOC,Regional Daily,4
+FIS,PLZ,CDO,FISH RIVER,Eastern Cape,Outlying,O,72,CDO,OR,LOC,Outlying Adhoc,2
+FLG,PZB,ELS,FLAGSTAFF,Eastern Cape,Regional,R,NULL,PZB,RM,LOC,Regional Bi-weekly,5
+FLB,BFN,BFN,FLORISBAD,Free State,Outlying,O,88,BDT,OR,LOC,Outlying Adhoc,2
+FCR,VDB,JNB,FOCHVILLE,Gauteng,Regional,R,NULL,VDB,RM,LOC,Regional Daily,4
+FBF,ELS,ELS,FORT BEAUFORT,Eastern Cape,Outlying,O,160,GHO,OR,LOC,Outlying Bi-weekly,5
+FDD,PZB,PSH,FORT DONALD,Eastern Cape,Outlying,O,71,KDX,OR,LOC,Outlying Adhoc,4
+FTR,ELS,ELS,FORT HARE,Eastern Cape,Outlying,O,120,KWT,OR,LOC,Outlying Adhoc,4
+FJN,ELS,ELS,FORT JACKSON INDUSTRIAL,Eastern Cape,Main (Suburb),S,NULL,ELS,SM,LOC,Hub,2
+FMM,NCS,NCS,FORT MISTAKE,KwaZulu-Natal,Outlying,O,65,DNE,OR,LOC,Outlying Adhoc,2
+FMB,PZB,DUR,FORT MTOMBENI,KwaZulu-Natal,Outlying,O,79,SAE,OR,LOC,Outlying Adhoc,4
+FRR,BFN,BEM,FOURIESBURG,Free State,Outlying,O,96,BEM,OR,LOC,Outlying Bi-weekly,2
+FRW,GBE,GBE,FRANCISTOWN,NULL,Regional,R,NULL,GBE,RM,BLNS,Regional Daily,10
+FFO,VDB,BEM,FRANKFORT,Free State,Regional,R,NULL,VDB,RM,LOC,Regional Daily,4
+FKN,PZB,PSH,FRANKLIN,KwaZulu-Natal,Outlying,O,62,KDX,OR,LOC,Outlying Adhoc,5
+FSK,CPT,CPT,FRANSCHHOEK,Western Cape,Regional,R,NULL,CPT,RM,LOC,Regional Daily,3
+FSF,KIM,UTN,FRANSENHOF,Northern Cape,Outlying,O,78,PRK,OR,LOC,Outlying Adhoc,6
+FSG,GRJ,GRJ,FRASERBURG,Northern Cape,Outlying,O,267,BFU,OR,LOC,Outlying Bi-weekly,8
+FRH,PZB,DUR,FRERE,KwaZulu-Natal,Outlying,O,37,ECT,OR,LOC,Outlying Adhoc,5
+MSH,PTG,PTG,GA-MASHASHANE,Limpopo,Outlying,O,60,PTG,OM,LOC,Outlying Bi-weekly,2
+GMD,PTG,PTG,GA-MODJADJI,Limpopo,Outlying,O,71,TZN,OR,LOC,Outlying Adhoc,4
+GMP,KIM,KIM,GA-MOPEDI,North West,Outlying,O,77,KUR,OR,LOC,Outlying Adhoc,7
+GKA,PTA,JNB,GA-RANKUWA,Gauteng,Regional,R,NULL,PTA,RM,LOC,Regional Daily,2
+GBE,GBE,GBE,GABORONE,NULL,Main,M,NULL,GBE,MM,BLNS,Branch,4
+GSH,KIM,KIM,GALESHEWE,Northern Cape,Main (Suburb),S,NULL,KIM,SM,LOC,Branch,1
+GAM,CPT,UTN,GAMOEP,Northern Cape,Outlying,O,130,SPU,OR,LOC,Outlying Adhoc,8
+GAA,CPT,CPT,GANS BAY,Western Cape,Outlying,O,88,HER,OR,LOC,Outlying Bi-weekly,5
+GAA,CPT,CPT,GANSBAAI,Western Cape,Outlying,O,88,HER,OR,LOC,Outlying Bi-weekly,5
+GAN,PTA,RTR,GANSKUIL,Limpopo,Outlying,O,136,NRR,OR,LOC,Outlying Adhoc,4
+GSP,KIM,KIM,GANSPAN,Northern Cape,Outlying,O,24,JKP,OR,LOC,Outlying Adhoc,4
+GNY,KIM,KPR,GANYESA,North West,Outlying,O,141,VRU,OR,LOC,Outlying Bi-weekly,7
+HVD,BFN,BFN,GARIEP DAM,Free State,Outlying,O,282,AWL,OR,LOC,Outlying Bi-weekly,5
+GRS,CPT,UTN,GARIES,Northern Cape,Outlying,O,228,SPU,OR,LOC,Outlying Bi-weekly,9
+GAR,ELS,ELS,GARNERS DRIFT,Eastern Cape,Outlying,O,131,BWH,OR,LOC,Outlying Adhoc,5
+GAO,ELS,BFN,GARRYOWEN,Eastern Cape,Outlying,O,175,QQD,OR,LOC,Outlying Adhoc,8
+GEL,KIM,KPR,GELUK,North West,Outlying,O,94,VRU,OR,LOC,Outlying Adhoc,4
+GLB,NCS,BEM,GELUKSBURG,KwaZulu-Natal,Outlying,O,57,BRG,OR,LOC,Outlying Adhoc,4
+GLS,KIM,UTN,GELUKSPRUIT,Northern Cape,Outlying,O,102,UTN,OR,LOC,Outlying Adhoc,2
+GEM,KPR,KPR,GEMSBOKVLAKTE,North West,Outlying,O,250,MEI,OR,LOC,Outlying Adhoc,7
+GVE,PZB,PSH,GEMVALE,Eastern Cape,Outlying,O,52,LSK,OR,LOC,Outlying Adhoc,6
+GND,CPT,CPT,GENADENDAL,Western Cape,Outlying,O,65,CLN,OR,LOC,Outlying Adhoc,4
+GEN,KPR,KPR,GENEVA,Free State,Outlying,O,50,KRO,OR,LOC,Outlying Adhoc,4
+GRJ,GRJ,GRJ,GEORGE,Western Cape,Main,M,NULL,GRJ,MM,LOC,Branch,1
+GDY,KPR,KPR,GERDAU,North West,Outlying,O,64,COL,OR,LOC,Outlying Bi-weekly,3
+GMT,JNB,JNB,GERMISTON,Gauteng,Main (Suburb),S,NULL,JNB,SM,LOC,Hub,1
+GYD,KPR,KPR,GEYSDORP,North West,Outlying,O,47,DLV,OR,LOC,Outlying Adhoc,5
+GHZ,GBE,GBE,GHANZI,NULL,Outlying,O,200,GBE,OM,BLNS,Outlying Adhoc,10
+GIE,KIM,KIM,GIESENKRAAL,Northern Cape,Outlying,O,150,DER,OR,LOC,Outlying Adhoc,7
+GLL,PTG,PTG,GILEAD,Limpopo,Outlying,O,123,BOC,OR,LOC,Outlying Adhoc,3
+GIN,EMG,EMG,GINGINDLOVU,KwaZulu-Natal,Outlying,O,46,ESH,OR,LOC,Outlying Bi-weekly,2
+GIY,PTG,PTG,GIYANI,Limpopo,Regional,R,NULL,PTG,RM,LOC,Regional Daily,5
+GKK,PTG,PTG,GLADDEKOPPIES,Limpopo,Outlying,O,36,LEB,OR,LOC,Outlying Bi-weekly,2
+GLN,BFN,BFN,GLEN,Free State,Outlying,O,40,BFN,OM,LOC,Outlying Bi-weekly,1
+GLC,PTG,PTG,GLEN COWIE,Limpopo,Outlying,O,28,JFH,OR,LOC,Outlying Bi-weekly,4
+GJO,NCS,NCS,GLENCOE,KwaZulu-Natal,Outlying,O,16,DNE,OR,LOC,Outlying Bi-weekly,2
+GNQ,PLZ,PLZ,GLENCONNOR,Eastern Cape,Outlying,O,59,KKD,OR,LOC,Outlying Adhoc,3
+GLR,PLZ,CDO,GLENROCK (EC),Eastern Cape,Outlying,O,144,SEO,OR,LOC,Outlying Adhoc,3
+GFS,BFN,BFN,GLENROCK (FS),Free State,Outlying,O,80,TCR,OR,LOC,Outlying Adhoc,3
+GLO,WIR,WIR,GLORIA,Mpumalanga,Outlying,O,38,HDN,OR,LOC,Outlying Bi-weekly,2
+GLU,NCS,NCS,GLUCKSTADT,KwaZulu-Natal,Outlying,O,73,VYD,OR,LOC,Outlying Bi-weekly,5
+GBS,WDH,WDH,GOBABIS,NULL,Regional,R,NULL,WDH,RM,BLNS,Regional Daily,10
+GDW,NLP,NLP,GOEDEWIL,Mpumalanga,Outlying,O,81,LDR,OR,LOC,Outlying Adhoc,4
+GGM,BFN,BFN,GOEDGEMOED,Free State,Outlying,O,72,AWL,OR,LOC,Outlying Adhoc,5
+GVW,CPT,VDR,GOEDVERWAG,Western Cape,Outlying,O,43,PQB,OR,LOC,Outlying Bi-weekly,3
+GOL,EMG,EMG,GOLELA,KwaZulu-Natal,Outlying,O,74,PGL,OR,LOC,Outlying Adhoc,6
+GPS,PTG,PTG,GOMPIES,Limpopo,Outlying,O,54,LEB,OR,LOC,Outlying Bi-weekly,3
+GMV,BFN,BFN,GOMVLEI,Free State,Outlying,O,197,BFN,OM,LOC,Outlying Adhoc,4
+GNB,ELS,ELS,GONUBIE,Eastern Cape,Main (Suburb),S,NULL,ELS,SM,LOC,Hub,1
+GOO,CPT,UTN,GOODHOUSE,Northern Cape,Outlying,O,200,SPU,OR,LOC,Outlying Adhoc,8
+GWO,CPT,CPT,GOODWOOD,Western Cape,Main (Suburb),S,NULL,CPT,SM,LOC,Hub,1
+GDB,CPT,CPT,GORDON'S BAY,Western Cape,Main (Suburb),S,NULL,CPT,SM,LOC,Hub,1
+GDB,CPT,CPT,GORDONS BAY,Western Cape,Main (Suburb),S,NULL,CPT,SM,LOC,Hub,1
+GDA,CPT,CPT,GOUDA,Western Cape,Outlying,O,77,CER,OR,LOC,Outlying Bi-weekly,4
+GOM,GRJ,GRJ,GOURITSMOND,Western Cape,Outlying,O,97,MSB,OR,LOC,Outlying Adhoc,3
+GRT,PLZ,CDO,GRAAFF-REINET,Eastern Cape,Regional,R,NULL,PLZ,RM,LOC,Regional Daily,4
+GWS,CPT,VDR,GRAAFWATER,Western Cape,Outlying,O,62,CWM,OR,LOC,Outlying Bi-weekly,4
+GRB,CPT,CPT,GRABOUW,Western Cape,Regional,R,NULL,CPT,RM,LOC,Regional Daily,2
+GHO,PLZ,PLZ,GRAHAMSTOWN,Eastern Cape,Regional,R,NULL,PLZ,RM,LOC,Regional Daily,4
+GBK,CPT,UTN,GRANAATBOSKOLK,Northern Cape,Outlying,O,357,KAA,OR,LOC,Outlying Adhoc,7
+GRF,KPR,RTR,GRASFONTEIN,Mpumalanga,Outlying,O,97,VSD,OR,LOC,Outlying Adhoc,5
+GRX,NLP,NLP,GRASKOP,Mpumalanga,Outlying,O,57,SAB,OR,LOC,Outlying Bi-weekly,3
+GPA,KIM,KIM,GRASPAN,Northern Cape,Outlying,O,77,MRS,OR,LOC,Outlying Adhoc,5
+GVL,PTG,PTG,GRAVELOTTE,Limpopo,Outlying,O,58,LET,OR,LOC,Outlying Bi-weekly,5
+GRG,PTG,PTG,GREGORY,Limpopo,Outlying,O,226,BOC,OR,LOC,Outlying Adhoc,5
+GDR,VDB,JNB,GREYLINGSTAD,Mpumalanga,Outlying,O,38,BOR,OR,LOC,Outlying Bi-weekly,4
+GRY,PLZ,PLZ,GREYSTONE,Eastern Cape,Outlying,O,143,KKD,OR,LOC,Outlying Adhoc,4
+GYN,CPT,CPT,GREYTON,Western Cape,Outlying,O,71,CLN,OR,LOC,Outlying Bi-weekly,4
+GTN,PZB,DUR,GREYTOWN,KwaZulu-Natal,Regional,R,NULL,PZB,RM,LOC,Regional Daily,4
+GRI,KIM,KIM,GRIEKWASTAD,Northern Cape,Outlying,O,132,DLS,OR,LOC,Outlying Bi-weekly,5
+GSG,PTG,PTG,GROBLERSBURG,Limpopo,Outlying,O,188,ELL,OR,LOC,Outlying Adhoc,6
+GRO,WIR,WIR,GROBLERSDAL,Mpumalanga,Regional,R,NULL,WIR,RM,LOC,Regional Daily,4
+GBH,KIM,UTN,GROBLERSHOOP,Northern Cape,Outlying,O,217,UTN,OR,LOC,Outlying Bi-weekly,4
+GRV,NCS,NCS,GROENVLEI,KwaZulu-Natal,Outlying,O,92,VRR,OR,LOC,Outlying Adhoc,3
+GSB,PTG,PTG,GROESBEEK,Limpopo,Outlying,O,122,PTR,OR,LOC,Outlying Adhoc,4
+GNE,KIM,UTN,GRONDNEUS,Northern Cape,Outlying,O,139,UTN,OR,LOC,Outlying Adhoc,3
+GBR,GRJ,GRJ,GROOT BRAKRIVIER,Western Cape,Regional,R,NULL,GRJ,RM,LOC,Regional Bi-weekly,1
+GJF,GRJ,GRJ,GROOT JONGENSFONTEIN,Western Cape,Outlying,O,24,SBI,OR,LOC,Outlying Adhoc,4
+GMO,KPR,RTR,GROOT MARICO,North West,Outlying,O,79,ZST,OR,LOC,Outlying Bi-weekly,4
+GRD,CPT,VDR,GROOTDRIF,Western Cape,Outlying,O,104,VRE,OR,LOC,Outlying Adhoc,6
+GDK,KIM,UTN,GROOTDRINK,Northern Cape,Outlying,O,136,UTN,OR,LOC,Outlying Adhoc,3
+GRN,WDH,WDH,GROOTFONTEIN,NULL,Outlying,O,422,OGO,OR,BLNS,Outlying Adhoc,10
+GRK,GRJ,GRJ,GROOTKRAAL,Western Cape,Outlying,O,56,OUH,OR,LOC,Outlying Adhoc,4
+GRM,CPT,UTN,GROOTMIS,Northern Cape,Outlying,O,202,SPU,OR,LOC,Outlying Adhoc,9
+GRP,KPR,RTR,GROOTPAN,North West,Outlying,O,95,LTX,OR,LOC,Outlying Adhoc,5
+GTS,NCS,NCS,GROOTSPRUIT,KwaZulu-Natal,Outlying,O,36,PPB,OR,LOC,Outlying Adhoc,4
+GIR,VDB,JNB,GROOTVLEI,Mpumalanga,Regional,R,NULL,VDB,RM,LOC,Regional Daily,1
+GUM,BFN,BEM,GUMTREE,Free State,Outlying,O,41,CLC,OR,LOC,Outlying Adhoc,4
+HMG,PTG,PTG,HA-MAGORO,Limpopo,Outlying,O,88,GIY,OR,LOC,Outlying Adhoc,4
+HKD,PTG,PTG,HAAKDORING,Limpopo,Outlying,O,47,NBR,OR,LOC,Outlying Adhoc,4
+HLM,GRJ,PLZ,HAARLEM,Western Cape,Outlying,O,179,KYL,OR,LOC,Outlying Adhoc,7
+HNB,PTG,PTG,HAENERTSBURG,Limpopo,Outlying,O,63,MKW,OR,LOC,Outlying Bi-weekly,2
+HGA,ELS,ELS,HAGA-HAGA,Eastern Cape,Outlying,O,122,BCB,OS,LOC,Outlying Adhoc,3
+HAD,ELS,BFN,HALCYON DRIFT,Eastern Cape,Outlying,O,215,MTL,OR,LOC,Outlying Adhoc,9
+HAL,KIM,UTN,HALFWEG,Northern Cape,Outlying,O,374,KAA,OR,LOC,Outlying Adhoc,6
+HMB,ELS,ELS,HAMBURG,Eastern Cape,Outlying,O,139,KWT,OR,LOC,Outlying Adhoc,3
+HMH,CPT,CPT,HAMMANSHOF,Western Cape,Outlying,O,60,WOR,OR,LOC,Outlying Adhoc,4
+HKR,PTA,JNB,HAMMANSKRAAL,Gauteng,Regional,R,NULL,PTA,RM,LOC,Regional Daily,3
+HAE,DUR,DUR,HAMMARSDALE,KwaZulu-Natal,Main (Suburb),S,NULL,DUR,SM,LOC,Hub,2
+HKY,PLZ,PLZ,HANKEY,Eastern Cape,Outlying,O,27,PTI,OR,LOC,Outlying Bi-weekly,4
+HVR,KIM,CDO,HANOVER,Northern Cape,Outlying,O,129,DER,OR,LOC,Outlying Bi-weekly,5
+HNV,KIM,CDO,HANOVER ROAD,Northern Cape,Outlying,O,144,DER,OR,LOC,Outlying Adhoc,6
+HTM,CPT,VDR,HANTAMSDRIF,Northern Cape,Outlying,O,245,VRE,OR,LOC,Outlying Adhoc,8
+HGL,PZB,PSH,HARDING,KwaZulu-Natal,Outlying,O,117,KDX,OR,LOC,Outlying Bi-weekly,3
+HSB,KPR,KPR,HARRISBURG,North West,Outlying,O,39,LDS,OR,LOC,Outlying Adhoc,2
+HRS,NCS,BEM,HARRISMITH,Free State,Regional,R,NULL,NCS,RM,LOC,Regional Daily,4
+HBR,KPR,KPR,HARTBEESFONTEIN,North West,Regional,R,NULL,KPR,RM,LOC,Regional Daily,1
+HBK,NLP,NLP,HARTBEESKOP,Mpumalanga,Outlying,O,172,BNR,OR,LOC,Outlying Adhoc,4
+HBP,PTA,JNB,HARTBEESPOORT,Gauteng,Main (Suburb),S,NULL,PTA,SM,LOC,Hub,2
+HTV,KIM,KIM,HARTSVALLEI,Northern Cape,Outlying,O,38,JKP,OR,LOC,Outlying Adhoc,4
+HWA,KIM,KIM,HARTSWATER,Northern Cape,Regional,R,NULL,KIM,RM,LOC,Regional Daily,4
+HSP,NCS,NCS,HATTINGSPRUIT,KwaZulu-Natal,Outlying,O,31,DNE,OR,LOC,Outlying Bi-weekly,2
+HPR,KPR,KPR,HAUPTRUS,North West,Outlying,O,51,COL,OR,LOC,Outlying Adhoc,2
+HAV,PTA,JNB,HAVANA,North West,Outlying,O,65,SON,OR,LOC,Outlying Adhoc,4
+HAW,CPT,CPT,HAWSTON,Western Cape,Outlying,O,23,HER,OR,LOC,Outlying Adhoc,3
+HZY,NLP,NLP,HAZYVIEW,Mpumalanga,Regional,R,NULL,NLP,RM,LOC,Regional Daily,2
+HPS,NLP,NLP,HECTORSPRUIT,Mpumalanga,Regional,R,NULL,NLP,RM,LOC,Regional Daily,3
+HEE,CPT,VDR,HEERENLOGEMENT,Western Cape,Outlying,O,84,VRE,OR,LOC,Outlying Adhoc,5
+HGR,VDB,JNB,HEIDELBERG (GP),Gauteng,Main (Suburb),S,NULL,VDB,SM,LOC,Hub,3
+HBS,GRJ,GRJ,HEIDELBERG (WC),Western Cape,Outlying,O,62,RDS,OR,LOC,Outlying Bi-weekly,5
+HNR,VDB,BEM,HEILBRON,Free State,Regional,R,NULL,VDB,RM,LOC,Regional Daily,4
+HKP,PTA,RTR,HEKPOORT,Gauteng,Outlying,O,87,HBP,OS,LOC,Outlying Bi-weekly,2
+HDA,KPR,RTR,HELDINA,North West,Outlying,O,39,DLV,OR,LOC,Outlying Adhoc,7
+HPM,NCS,NCS,HELPMEKAAR,KwaZulu-Natal,Outlying,O,77,DNE,OR,LOC,Outlying Adhoc,4
+HND,VDB,BFN,HENDRICKS DRIF,Free State,Outlying,O,112,BEM,OR,LOC,Outlying Adhoc,7
+HVD,BFN,BFN,HENDRIK VERWOED,Free State,Outlying,O,282,AWL,OR,LOC,Outlying Bi-weekly,5
+HRL,NLP,NLP,HENDRIKSDAL,Mpumalanga,Outlying,O,24,SAB,OR,LOC,Outlying Adhoc,2
+HDN,WIR,WIR,HENDRINA,Mpumalanga,Regional,R,NULL,WIR,RM,LOC,Regional Bi-weekly,3
+HAN,KPR,BFN,HENNENMAN,Free State,Outlying,O,50,VGA,OR,LOC,Outlying Bi-weekly,5
+HTB,WDH,WDH,HENTIES BAY,NULL,Outlying,O,156,SWP,OR,BLNS,Outlying Adhoc,10
+HSD,GRJ,GRJ,HERBERTSDALE,Western Cape,Outlying,O,100,MSB,OR,LOC,Outlying Bi-weekly,3
+HRF,WIR,WIR,HEREFORD,Mpumalanga,Outlying,O,15,MBH,OR,LOC,Outlying Adhoc,4
+HER,CPT,CPT,HERMANUS,Western Cape,Regional,R,NULL,CPT,RM,LOC,Regional Daily,4
+HUD,PTG,RTR,HERMANUSDORINGS,Limpopo,Outlying,O,148,ELL,OR,LOC,Outlying Adhoc,6
+HMN,CPT,CPT,HERMON,Western Cape,Outlying,O,49,WEG,OR,LOC,Outlying Adhoc,3
+HRD,GRJ,GRJ,HEROLD,Western Cape,Outlying,O,39,GRJ,OM,LOC,Outlying Bi-weekly,1
+HSL,BFN,BFN,HERSCHEL,Eastern Cape,Outlying,O,118,AWL,OR,LOC,Outlying Adhoc,7
+HZV,KIM,BFN,HERTZOGVILLE,Free State,Outlying,O,85,CSN,OR,LOC,Outlying Bi-weekly,5
+HKS,CPT,VDR,HET KRUIS,Western Cape,Outlying,O,77,PQB,OR,LOC,Outlying Adhoc,4
+HNK,KIM,KIM,HEUNINGNESKLOOF,Northern Cape,Outlying,O,45,MRS,OR,LOC,Outlying Adhoc,2
+HGN,VDB,KPR,HEUNINGSPRUIT,Free State,Outlying,O,64,KPY,OR,LOC,Outlying Adhoc,4
+HYD,PLZ,CDO,HEYDON,Eastern Cape,Outlying,O,209,GRT,OR,LOC,Outlying Adhoc,4
+HBD,DUR,PSH,HIBBERDENE,KwaZulu-Natal,Outlying,O,46,PSH,OR,LOC,Outlying Bi-weekly,1
+HPP,KIM,KIM,HIGGS HOPE,Northern Cape,Outlying,O,131,DLS,OR,LOC,Outlying Adhoc,5
+HHR,PZB,DUR,HIGHFLATS,KwaZulu-Natal,Outlying,O,47,IXO,OR,LOC,Outlying Bi-weekly,4
+HIL,CPT,CPT,HILANDALE,Western Cape,Outlying,O,260,LAI,OR,LOC,Outlying Adhoc,7
+HLR,PTG,PTG,HILDRETH RIDGE,Limpopo,Outlying,O,90,GIY,OR,LOC,Outlying Adhoc,4
+HMV,PZB,DUR,HIMEVILLE,KwaZulu-Natal,Outlying,O,12,UBR,OR,LOC,Outlying Bi-weekly,5
+HLB,EMG,EMG,HLABISA,KwaZulu-Natal,Outlying,O,97,NON,OR,LOC,Outlying Bi-weekly,4
+HBN,NCS,NCS,HLOBANE,KwaZulu-Natal,Outlying,O,49,VYD,OR,LOC,Outlying Adhoc,1
+HLO,WIR,WIR,HLOGOTLOU,Limpopo,Outlying,O,80,JFH,OR,LOC,Outlying Adhoc,5
+HWE,EMG,EMG,HLUHLUWE,KwaZulu-Natal,Outlying,O,102,MUT,OR,LOC,Outlying Bi-weekly,4
+HOB,ELS,ELS,HOBENI,Eastern Cape,Outlying,O,181,UTT,OR,LOC,Outlying Adhoc,4
+HHS,BFN,BFN,HOBHOUSE,Free State,Outlying,O,112,LBR,OR,LOC,Outlying Bi-weekly,4
+HDT,NLP,NLP,HOEDSPRUIT,Limpopo,Regional,R,NULL,NLP,RM,LOC,Regional Daily,5
+HFM,PLZ,CDO,HOFMEYER,Eastern Cape,Outlying,O,126,CDO,OR,LOC,Outlying Bi-weekly,3
+HGB,ELS,ELS,HOGSBACK,Eastern Cape,Outlying,O,153,KWT,OR,LOC,Outlying Bi-weekly,4
+HOH,NCS,NCS,HOHOZA,KwaZulu-Natal,Outlying,O,108,NQT,OR,LOC,Outlying Adhoc,4
+HOL,WIR,WIR,HOLBANK,Mpumalanga,Outlying,O,41,EML,OR,LOC,Outlying Adhoc,5
+HLE,WIR,NCS,HOLMDENE,Mpumalanga,Outlying,O,44,SNR,OR,LOC,Outlying Adhoc,5
+HLP,PTA,JNB,HOLME PARK,Limpopo,Outlying,O,52,NSR,OR,LOC,Outlying Adhoc,5
+HLC,PZB,PSH,HOLY CROSS,Eastern Cape,Outlying,O,48,FLG,OR,LOC,Outlying Bi-weekly,5
+HFN,KIM,KIM,HONDEFONTEIN,Northern Cape,Outlying,O,98,BKY,OR,LOC,Outlying Adhoc,8
+HKB,CPT,VDR,HONDEKLIPBAAI,Northern Cape,Outlying,O,233,SPU,OR,LOC,Outlying Adhoc,9
+HST,BFN,BFN,HOOPSTAD,Free State,Regional,R,NULL,BFN,RM,LOC,Regional Daily,5
+HPF,CPT,VDR,HOPEFIELD,Western Cape,Outlying,O,67,MRB,OR,LOC,Outlying Bi-weekly,2
+HPT,KIM,KIM,HOPETOWN,Northern Cape,Regional,R,NULL,KIM,RM,LOC,Regional Daily,4
+HOT,CPT,CPT,HOTAGTERKLIP,Western Cape,Outlying,O,62,BDD,OR,LOC,Outlying Adhoc,6
+HZL,KIM,KIM,HOTAZEL,Northern Cape,Outlying,O,124,KAT,OR,LOC,Outlying Bi-weekly,7
+HTK,CPT,CPT,HOTTENTOTSKLOOF,Western Cape,Outlying,O,66,CER,OR,LOC,Outlying Adhoc,5
+HWR,PZB,DUR,HOWICK,KwaZulu-Natal,Main (Suburb),S,NULL,PZB,SM,LOC,Branch,3
+HKI,KIM,KIM,HUKUNTSI,KwaZulu-Natal,Outlying,O,396,KIM,OM,LOC,Outlying Adhoc,0
+HDR,PLZ,PLZ,HUMANSDORP,Eastern Cape,Regional,R,NULL,PLZ,RM,LOC,Regional Daily,4
+HLH,PTG,PTG,HUNTLEIGH,Limpopo,Outlying,O,97,MES,OR,LOC,Outlying Adhoc,5
+IDA,ELS,BFN,IDA,Eastern Cape,Outlying,O,199,QQD,OR,LOC,Outlying Adhoc,8
+IDY,ELS,ELS,IDUTYWA,Eastern Cape,Outlying,O,70,BWH,OR,LOC,Outlying Bi-weekly,3
+IMP,PTG,PTG,IMMERPAN,Limpopo,Outlying,O,82,PTR,OR,LOC,Outlying Adhoc,3
+IMI,DUR,PSH,IMPISI,Eastern Cape,Outlying,O,134,FLG,OR,LOC,Outlying Adhoc,4
+IWE,ELS,ELS,INDWE,Eastern Cape,Outlying,O,162,QQD,OR,LOC,Outlying Bi-weekly,6
+IOR,GRJ,GRJ,INFANTA,Western Cape,Outlying,O,152,SWD,OR,LOC,Outlying Adhoc,6
+IGO,NCS,NCS,INGOGO,KwaZulu-Natal,Outlying,O,46,NCS,OM,LOC,Outlying Bi-weekly,1
+ING,EMG,EMG,INGWAVUMA,KwaZulu-Natal,Outlying,O,85,JOZ,OR,LOC,Outlying Bi-weekly,6
+IPG,DUR,DUR,ISIPINGO,KwaZulu-Natal,Main (Suburb),S,NULL,DUR,SM,LOC,Hub,2
+ISB,EMG,DUR,ISITHEBE,KwaZulu-Natal,Regional,R,NULL,EMG,RM,LOC,Regional Bi-weekly,4
+ISP,NCS,NCS,ISWEPE,Mpumalanga,Outlying,O,73,PFR,OR,LOC,Outlying Bi-weekly,5
+ITS,KPR,KPR,ITSOSENG,North West,Outlying,O,68,LTX,OR,LOC,Outlying Bi-weekly,4
+IXO,PZB,DUR,IXOPO,KwaZulu-Natal,Regional,R,NULL,PZB,RM,LOC,Regional Daily,4
+IZN,DUR,PSH,IZINGOLWENI,KwaZulu-Natal,Outlying,O,68,SYB,OR,LOC,Outlying Bi-weekly,2
+ISH,DUR,PSH,IZOTSHA,KwaZulu-Natal,Outlying,O,9,SYB,OR,LOC,Outlying Adhoc,1
+JDL,KIM,KIM,JACOBSDAL,Free State,Regional,R,NULL,KIM,RM,LOC,Regional Bi-weekly,2
+JSN,BFN,BFN,JAGERSFONTEIN,Free State,Outlying,O,174,PSG,OR,LOC,Outlying Bi-weekly,4
+JAM,NLP,NLP,JAMBILA,Mpumalanga,Outlying,O,59,BNR,OR,LOC,Outlying Adhoc,3
+JTR,BFN,BFN,JAMESTOWN,Eastern Cape,Outlying,O,113,AWL,OR,LOC,Outlying Bi-weekly,7
+JTU,BFN,BFN,JAMESTOWN (MOQ),Eastern Cape,Outlying,O,113,AWL,OR,LOC,Outlying Adhoc,7
+JMD,BFN,BFN,JAMMERSDRIF,Free State,Outlying,O,132,TCR,OR,LOC,Outlying Adhoc,4
+JKP,KIM,KIM,JAN KEMPDORP,Northern Cape,Regional,R,NULL,KIM,RM,LOC,Regional Daily,4
+JFH,PTG,PTG,JANE FURSE,Limpopo,Regional,R,NULL,PTG,RM,LOC,Regional Bi-weekly,4
+JSV,PLZ,PLZ,JANSENVILLE,Eastern Cape,Outlying,O,170,GRT,OR,LOC,Outlying Bi-weekly,5
+JSP,PTG,PTG,JANSEPUT,Limpopo,Outlying,O,136,ELL,OR,LOC,Outlying Bi-weekly,5
+JBY,PLZ,PLZ,JEFFREYS BAY,Eastern Cape,Regional,R,NULL,PLZ,RM,LOC,Regional Daily,4
+JOD,BFN,BEM,JOELS DRIFT,Free State,Outlying,O,130,FXB,OR,LOC,Outlying Adhoc,3
+JNB,JNB,JNB,JOHANNESBURG,Gauteng,Main,M,NULL,JNB,MM,LOC,Hub,1
+JOP,GRJ,GRJ,JOHNSONS POST,Western Cape,Outlying,O,71,MSB,OR,LOC,Outlying Adhoc,3
+JBT,GRJ,PLZ,JOUBERTINA,Eastern Cape,Outlying,O,188,HDR,OR,LOC,Outlying Bi-weekly,6
+JOZ,EMG,EMG,JOZINI,KwaZulu-Natal,Regional,R,NULL,EMG,RM,LOC,Regional Daily,5
+JNG,GBE,GBE,JWANENG,NULL,Outlying,O,284,GBE,OM,BLNS,Outlying Adhoc,10
+KGT,PTA,BEM,KAALLAAGTE,Gauteng,Outlying,O,30,HKR,OR,LOC,Outlying Adhoc,8
+KAL,NLP,NLP,KAALRUG,Mpumalanga,Outlying,O,55,MER,OR,LOC,Outlying Adhoc,3
+KPM,NLP,NLP,KAAPMUIDEN,Mpumalanga,Outlying,O,39,MER,OR,LOC,Outlying Adhoc,2
+KPH,NLP,NLP,KAAPSEHOOP,Mpumalanga,Outlying,O,65,NLP,OM,LOC,Outlying Bi-weekly,2
+KFR,BFN,BFN,KAFFERRIVIER,Free State,Outlying,O,78,BFN,OM,LOC,Outlying Adhoc,2
+KFS,WIR,WIR,KAFFERSPRUIT,Mpumalanga,Outlying,O,28,EML,OR,LOC,Outlying Adhoc,4
+KAA,KIM,UTN,KAKAMAS,Northern Cape,Regional,R,NULL,KIM,RM,LOC,Regional Daily,3
+KBA,CPT,CPT,KALBASKRAAL,Western Cape,Outlying,O,32,MBY,OR,LOC,Outlying Adhoc,2
+KLB,PTG,PTG,KALKBANK,Limpopo,Outlying,O,69,BOC,OR,LOC,Outlying Adhoc,2
+KLD,WDH,WDH,KALKFELD,NULL,Outlying,O,154,OGO,OR,BLNS,Outlying Adhoc,10
+KWF,KIM,UTN,KALKWERF,Northern Cape,Outlying,O,164,UTN,OR,LOC,Outlying Adhoc,3
+KAM,KIM,KIM,KAMDEN,Northern Cape,Outlying,O,97,KUR,OR,LOC,Outlying Adhoc,6
+KML,KPR,KPR,KAMEEL,North West,Outlying,O,94,DLV,OR,LOC,Outlying Bi-weekly,5
+KEE,KIM,KIM,KAMEELPUTS,North West,Outlying,O,99,WAR,OR,LOC,Outlying Adhoc,4
+KBG,CPT,VDR,KAMIESBERG,Northern Cape,Outlying,O,173,SPU,OR,LOC,Outlying Adhoc,8
+KES,PLZ,PLZ,KAMMIEBOS,Western Cape,Outlying,O,133,HDR,OR,LOC,Outlying Adhoc,5
+KPS,NLP,NLP,KAMPERSRUS,Limpopo,Outlying,O,59,HDT,OR,LOC,Outlying Adhoc,5
+KEG,KIM,UTN,KANONEILAND,Northern Cape,Outlying,O,53,UTN,OR,LOC,Outlying Bi-weekly,2
+KNM,NLP,NLP,KANYAMAZANE,Mpumalanga,Regional,R,NULL,NLP,RM,LOC,Regional Daily,2
+KYE,GBE,GBE,KANYE,NULL,Outlying,O,156,GBE,OM,BLNS,Outlying Adhoc,10
+KRR,BFN,BFN,KAREE,Free State,Outlying,O,45,BDT,OR,LOC,Outlying Adhoc,2
+KRW,PLZ,PLZ,KAREEDOUW,Eastern Cape,Outlying,O,99,HDR,OR,LOC,Outlying Bi-weekly,5
+KBK,KIM,UTN,KAREEKOLK,Northern Cape,Outlying,O,411,PRK,OR,LOC,Outlying Adhoc,8
+KBB,WDH,WDH,KARIBIB,NULL,Regional,R,NULL,WDH,RM,BLNS,Regional Daily,10
+KAR,KIM,UTN,KAROS,Northern Cape,Outlying,O,83,UTN,OR,LOC,Outlying Adhoc,2
+KXK,BFN,BFN,KARRINGMELKSPRUIT,Eastern Cape,Outlying,O,130,AWL,OR,LOC,Outlying Adhoc,7
+KSR,PLZ,PLZ,KASUKA ROAD,Eastern Cape,Outlying,O,37,PAF,OR,LOC,Outlying Adhoc,4
+KAT,KIM,KIM,KATHU,Northern Cape,Regional,R,NULL,KIM,RM,LOC,Regional Daily,7
+KMO,WDH,WDH,KATIMO MULILO,NULL,Outlying,O,500,OTI,OR,BLNS,Outlying Adhoc,10
+KTP,PZB,BFN,KATKOP,Eastern Cape,Outlying,O,194,MTL,OR,LOC,Outlying Adhoc,9
+KTD,PZB,DUR,KEATES DRIFT,KwaZulu-Natal,Outlying,O,59,GTN,OR,LOC,Outlying Bi-weekly,5
+KMP,WDH,WDH,KEETMANSHOOP,NULL,Outlying,O,800,WDH,OM,BLNS,Outlying Adhoc,10
+KEM,ELS,ELS,KEI MOUTH,Eastern Cape,Outlying,O,120,BWH,OR,LOC,Outlying Adhoc,4
+KEO,KIM,UTN,KEIMOES,Northern Cape,Outlying,O,81,KAA,OR,LOC,Outlying Bi-weekly,2
+KEK,ELS,ELS,KEISKAMMAHOEK,Eastern Cape,Outlying,O,83,KWT,OR,LOC,Outlying Bi-weekly,4
+KPT,JNB,JNB,KEMPTON PARK,Gauteng,Main (Suburb),S,NULL,JNB,SM,LOC,Hub,1
+KEN,WIR,WIR,KENDAL,Mpumalanga,Outlying,O,64,CWL,OR,LOC,Outlying Bi-weekly,2
+KNW,PLZ,CDO,KENDREW,Eastern Cape,Outlying,O,71,GRT,OR,LOC,Outlying Adhoc,5
+KHD,KIM,UTN,KENHARDT,Northern Cape,Outlying,O,178,KAA,OR,LOC,Outlying Bi-weekly,4
+KNV,NLP,NLP,KENNEDYS VALE,Limpopo,Outlying,O,36,SEE,OR,LOC,Outlying Adhoc,5
+KTI,ELS,ELS,KENTANI,Eastern Cape,Outlying,O,63,BWH,OR,LOC,Outlying Bi-weekly,4
+KNS,PLZ,PLZ,KENTON-ON-SEA,Eastern Cape,Outlying,O,52,PAF,OR,LOC,Outlying Bi-weekly,4
+KLL,NCS,BEM,KESTELL,Free State,Outlying,O,57,PJB,OR,LOC,Outlying Bi-weekly,2
+KYT,CPT,CPT,KHAYELITSHA,Western Cape,Main (Suburb),S,NULL,CPT,SM,LOC,Hub,1
+KDV,KIM,KIM,KHUDUTLOU,North West,Outlying,O,80,HWA,OR,LOC,Outlying Adhoc,5
+KIP,NLP,NLP,KIEPERSOL,Mpumalanga,Outlying,O,24,HZY,OR,LOC,Outlying Bi-weekly,2
+KIM,KIM,KIM,KIMBERLEY,Northern Cape,Main,M,NULL,KIM,MM,LOC,Branch,1
+KWT,ELS,ELS,KING WILLIAMS TOWN,Eastern Cape,Regional,R,NULL,ELS,RM,LOC,Regional Daily,3
+KIG,PZB,DUR,KINGSCOTE,KwaZulu-Natal,Outlying,O,71,UBR,OR,LOC,Outlying Adhoc,6
+KLY,NCS,NCS,KINGSLEY,KwaZulu-Natal,Outlying,O,65,VYD,OR,LOC,Outlying Bi-weekly,3
+KND,KPR,KPR,KINGSWOOD,North West,Outlying,O,83,WMD,OR,LOC,Outlying Adhoc,4
+KNP,PZB,PSH,KINIRAPOORT,Eastern Cape,Outlying,O,82,MTL,OR,LOC,Outlying Adhoc,7
+KRS,WIR,WIR,KINROSS,Mpumalanga,Regional,R,NULL,WIR,RM,LOC,Regional Daily,3
+KKD,PLZ,PLZ,KIRKWOOD,Eastern Cape,Regional,R,NULL,PLZ,RM,LOC,Regional Daily,3
+KLS,GRJ,GRJ,KLAARSTROOM,Western Cape,Outlying,O,116,OUH,OR,LOC,Outlying Adhoc,4
+KAX,NLP,NLP,KLASERIE,Limpopo,Outlying,O,51,HDT,OR,LOC,Outlying Adhoc,4
+KLV,CPT,VDR,KLAWER,Western Cape,Outlying,O,40,VRE,OR,LOC,Outlying Bi-weekly,5
+KLK,CPT,CPT,KLEIN DRAKENSTEIN,Western Cape,Outlying,O,12,PAA,OR,LOC,Outlying Adhoc,3
+KLT,PTG,PTG,KLEIN LETABA,Limpopo,Outlying,O,48,THO,OR,LOC,Outlying Adhoc,5
+KTW,KIM,KPR,KLEIN TSWAING,North West,Outlying,O,124,VRU,OR,LOC,Outlying Adhoc,7
+KNB,KIM,UTN,KLEINBEGIN,Northern Cape,Outlying,O,149,UTN,OR,LOC,Outlying Adhoc,3
+KMD,CPT,CPT,KLEINMOND,Western Cape,Outlying,O,67,HER,OR,LOC,Outlying Bi-weekly,3
+KLP,GRJ,GRJ,KLEINPLAAT,Western Cape,Outlying,O,64,SGF,OR,LOC,Outlying Adhoc,2
+KPO,PLZ,PLZ,KLEINPOORT,Eastern Cape,Outlying,O,115,KKD,OR,LOC,Outlying Adhoc,4
+KSE,CPT,UTN,KLEINSEE,Northern Cape,Outlying,O,209,SPU,OR,LOC,Outlying Bi-weekly,9
+KPR,KPR,KPR,KLERKSDORP,North West,Main,M,NULL,KPR,MM,LOC,Branch,1
+KKR,KPR,RTR,KLERKSKRAAL,North West,Outlying,O,69,CAR,OR,LOC,Outlying Bi-weekly,3
+KPD,CPT,CPT,KLIPDALE,Western Cape,Outlying,O,58,BDD,OR,LOC,Outlying Adhoc,5
+KPI,PLZ,CDO,KLIPFONTEIN,Eastern Cape,Outlying,O,130,SEO,OR,LOC,Outlying Adhoc,4
+KPP,PLZ,PLZ,KLIPPLAAT,Eastern Cape,Outlying,O,212,GRT,OR,LOC,Outlying Adhoc,4
+KLI,CPT,VDR,KLIPRAND,Northern Cape,Outlying,O,293,VRE,OR,LOC,Outlying Adhoc,8
+KPV,VDB,JNB,KLIPRIVIER,Gauteng,Main (Suburb),S,NULL,VDB,SM,LOC,Branch,4
+KPK,NLP,NLP,KLIPSKOOL,Mpumalanga,Outlying,O,52,LDR,OR,LOC,Outlying Adhoc,4
+KPX,VDB,JNB,KLIPTOWN,Gauteng,Outlying,O,9,SWO,OS,LOC,Outlying Adhoc,2
+KAD,BFN,BFN,KNAPDAAR,Eastern Cape,Outlying,O,135,AWL,OR,LOC,Outlying Adhoc,6
+KYL,GRJ,GRJ,KNYSNA,Western Cape,Regional,R,NULL,GRJ,RM,LOC,Regional Daily,3
+KDK,PTA,RTR,KOEDOESKOP,Limpopo,Outlying,O,58,NRR,OR,LOC,Outlying Bi-weekly,4
+KOG,KIM,UTN,KOEGAS,Northern Cape,Outlying,O,135,PRK,OR,LOC,Outlying Adhoc,5
+KGB,KIM,UTN,KOEGRABIE,Northern Cape,Outlying,O,187,UTN,OR,LOC,Outlying Adhoc,4
+KKP,CPT,VDR,KOEKENAAP,Western Cape,Outlying,O,61,VRE,OR,LOC,Outlying Bi-weekly,6
+KFY,KIM,KIM,KOFFIEFONTEIN,Free State,Outlying,O,84,JDL,OR,LOC,Outlying Bi-weekly,4
+KGN,CPT,VDR,KOIINGNAAS,Northern Cape,Outlying,O,206,SPU,OR,LOC,Outlying Adhoc,9
+KKM,KIM,KIM,KOKOMENG,North West,Outlying,O,77,HWA,OR,LOC,Outlying Adhoc,5
+KDX,PZB,PSH,KOKSTAD,KwaZulu-Natal,Regional,R,NULL,PZB,RM,LOC,Regional Daily,4
+KMG,NULL,NULL,KOMAGGAS,Northern Cape,Outlying,NULL,NULL,NULL,,LOC,Outlying Adhoc,9
+KTR,NLP,NLP,KOMATIPOORT,Mpumalanga,Regional,R,NULL,NLP,RM,LOC,Regional Daily,4
+KBT,WDH,WDH,KOMBAT,NULL,Regional,R,NULL,WDH,RM,BLNS,Regional Daily,10
+KGA,ELS,ELS,KOMGA,Eastern Cape,Outlying,O,101,BWH,OR,LOC,Outlying Bi-weekly,3
+KMS,CPT,VDR,KOMKANS,Western Cape,Outlying,O,151,VRE,OR,LOC,Outlying Adhoc,7
+KMM,GRJ,GRJ,KOMMANDOKRAAL,Western Cape,Outlying,O,241,BFU,OR,LOC,Outlying Adhoc,5
+KOO,KIM,KIM,KOOPMANSFONTEIN,Northern Cape,Outlying,O,121,BKY,OR,LOC,Outlying Adhoc,4
+KOF,KPR,KPR,KOOSFONTEIN,North West,Outlying,O,45,SRK,OR,LOC,Outlying Adhoc,5
+KTK,CPT,UTN,KOOTJIESKOLK,Northern Cape,Outlying,O,426,VRE,OR,LOC,Outlying Adhoc,8
+KOP,PTG,PTG,KOPERSPRUIT,Limpopo,Outlying,O,278,BOC,OR,LOC,Outlying Adhoc,6
+KPY,VDB,KPR,KOPPIES,Free State,Regional,R,NULL,VDB,RM,LOC,Regional Daily,4
+KOI,CPT,VDR,KORINGBERG,Western Cape,Outlying,O,36,MRB,OR,LOC,Outlying Adhoc,3
+KOR,GRJ,CPT,KORINGPLAAS,Western Cape,Outlying,O,309,LAI,OR,LOC,Outlying Adhoc,8
+KOS,KPR,RTR,KOSTER,North West,Outlying,O,103,RTR,OR,LOC,Outlying Bi-weekly,2
+KOT,CPT,UTN,KOTZEHOOP,Western Cape,Outlying,O,255,SPU,OR,LOC,Outlying Adhoc,9
+KTZ,CPT,VDR,KOTZESRUS,Northern Cape,Outlying,O,228,VRE,OR,LOC,Outlying Adhoc,8
+KBV,CPT,CPT,KOUE BOKKEVELD,Western Cape,Outlying,O,88,CER,OR,LOC,Outlying Bi-weekly,5
+KBV,CPT,CPT,KOUEBOKKEVELD,Western Cape,Outlying,O,88,CER,OR,LOC,Outlying Bi-weekly,5
+KOU,BFN,BFN,KOUKRAAL,Free State,Outlying,O,85,AWL,OR,LOC,Outlying Adhoc,5
+KUP,GRJ,GRJ,KOUP,Western Cape,Outlying,O,271,LAI,OR,LOC,Outlying Adhoc,6
+KUT,GRJ,GRJ,KOUTJIE,Western Cape,Outlying,O,89,OUH,OR,LOC,Outlying Adhoc,3
+KRD,GRJ,GRJ,KRAALDORINGS,Western Cape,Outlying,O,120,LAI,OR,LOC,Outlying Adhoc,4
+KKL,KIM,KIM,KRAANKUIL,Northern Cape,Outlying,O,64,HPT,OR,LOC,Outlying Adhoc,5
+KNN,NCS,BEM,KRANSFONTEIN,Free State,Outlying,O,56,BOH,OR,LOC,Outlying Adhoc,2
+KZK,PZB,DUR,KRANSKOP,KwaZulu-Natal,Outlying,O,72,GTN,OR,LOC,Outlying Bi-weekly,5
+KRI,WIR,WIR,KRIEL,Mpumalanga,Regional,R,NULL,WIR,RM,LOC,Regional Daily,2
+KRO,KPR,KPR,KROONSTAD,Free State,Regional,R,NULL,KPR,RM,LOC,Regional Daily,4
+KRQ,BFN,BFN,KRUGERS,Free State,Outlying,O,204,BFN,OM,LOC,Outlying Adhoc,4
+KGP,NLP,NLP,KRUGERSPOS,Mpumalanga,Outlying,O,51,LDR,OR,LOC,Outlying Bi-weekly,4
+KDN,GRJ,GRJ,KRUIDFONTEIN,Western Cape,Outlying,O,170,BFU,OR,LOC,Outlying Adhoc,3
+KFO,PLZ,PLZ,KRUISFONTEIN,Eastern Cape,Outlying,O,11,HDR,OR,LOC,Outlying Adhoc,4
+KIE,GRJ,CPT,KRUISRIVIER,Western Cape,Outlying,O,69,RDS,OR,LOC,Outlying Adhoc,4
+KUM,ELS,BFN,KU-MAYIMA,Eastern Cape,Outlying,O,196,UTT,OR,LOC,Outlying Adhoc,9
+KHB,CPT,UTN,KUBOES,Northern Cape,Outlying,O,415,SPU,OR,LOC,Outlying Adhoc,10
+KUR,KIM,KIM,KURUMAN,Northern Cape,Regional,R,NULL,KIM,RM,LOC,Regional Daily,6
+KMB,EMG,EMG,KWA MBONAMBI,KwaZulu-Natal,Outlying,O,44,RBY,OS,LOC,Outlying Bi-weekly,2
+KHU,DUR,DUR,KWA-MASHU,KwaZulu-Natal,Main (Suburb),S,NULL,DUR,SM,LOC,Hub,1
+KWA,ELS,ELS,KWA-PITA,Eastern Cape,Outlying,O,101,KWT,OR,LOC,Outlying Adhoc,4
+KHM,JNB,JNB,KWA-THEMA,Gauteng,Main (Suburb),S,NULL,JNB,SM,LOC,Hub,1
+KWG,WIR,WIR,KWAGGASKOP,Mpumalanga,Outlying,O,133,DLR,OR,LOC,Outlying Bi-weekly,4
+KLA,PTA,JNB,KWAMHLANGA,Mpumalanga,Regional,R,NULL,PTA,RM,LOC,Regional Daily,4
+KWN,EMG,EMG,KWANGWANASE,KwaZulu-Natal,Outlying,O,0,EGG,OR,LOC,Outlying Adhoc,7
+KWS,PZB,DUR,KWASIZABANTU MISSION,KwaZulu-Natal,Outlying,O,92,GTN,OR,LOC,Outlying Adhoc,4
+LCT,PTG,PTG,LA COTTE,Limpopo,Outlying,O,62,LET,OR,LOC,Outlying Adhoc,5
+LPK,CPT,VDR,LAAIPLEK,Western Cape,Outlying,O,7,VLF,OR,LOC,Outlying Adhoc,1
+LAI,GRJ,GRJ,LADISMITH (WC),Western Cape,Regional,R,NULL,GRJ,RM,LOC,Regional Daily,8
+LAF,ELS,ELS,LADY FRERE,Eastern Cape,Outlying,O,73,QQD,OR,LOC,Outlying Bi-weekly,6
+LDG,BFN,BFN,LADY GREY,Eastern Cape,Outlying,O,107,AWL,OR,LOC,Outlying Bi-weekly,7
+LBR,BFN,BFN,LADYBRAND,Free State,Regional,R,NULL,BFN,RM,LOC,Regional Daily,4
+LAY,NCS,NCS,LADYSMITH (KZN),KwaZulu-Natal,Regional,R,NULL,NCS,RM,LOC,Regional Daily,4
+LSD,WIR,WIR,LAERSDRIF,Mpumalanga,Outlying,O,132,DLR,OR,LOC,Outlying Adhoc,4
+LAG,CPT,CPT,LAGULHAS,Western Cape,Outlying,O,73,BDD,OR,LOC,Outlying Adhoc,6
+LAH,PZB,BFN,LAHLANGUBO,Eastern Cape,Outlying,O,165,MTL,OR,LOC,Outlying Adhoc,4
+LGR,GRJ,CPT,LAINGSBURG,Western Cape,Outlying,O,192,LAI,OR,LOC,Outlying Bi-weekly,7
+LAM,CPT,VDR,LAMBERTS BAY,Western Cape,Outlying,O,120,VRE,OR,LOC,Outlying Bi-weekly,4
+LMK,WIR,WIR,LAMMERKOP,Mpumalanga,Outlying,O,42,DLR,OR,LOC,Outlying Adhoc,2
+LDP,CPT,VDR,LANDPLAAS,Western Cape,Outlying,O,105,VRE,OR,LOC,Outlying Adhoc,7
+LGB,GRJ,CPT,LANGBERG,Western Cape,Outlying,O,113,RDS,OR,LOC,Outlying Adhoc,8
+LAN,ELS,ELS,LANGDON,Eastern Cape,Outlying,O,130,UTT,OR,LOC,Outlying Adhoc,3
+LGN,CPT,VDR,LANGEBAAN,Western Cape,Regional,R,NULL,CPT,RM,LOC,Regional Daily,1
+LGH,KPR,KPR,LANGEHORN,North West,Outlying,O,165,VRU,OR,LOC,Outlying Adhoc,7
+LGM,PLZ,ELS,LANGHOLM,Eastern Cape,Outlying,O,56,PAF,OR,LOC,Outlying Adhoc,5
+LAT,NCS,NCS,LATEMANEK,Mpumalanga,Outlying,O,50,VRR,OR,LOC,Outlying Adhoc,3
+LYM,NCS,NCS,LAYUMISA,KwaZulu-Natal,Outlying,O,509,NCS,OM,LOC,Outlying Adhoc,0
+LDM,KPR,RTR,LEAD MINE,North West,Outlying,O,111,ZST,OR,LOC,Outlying Adhoc,4
+LND,WIR,WIR,LEANDRA,Mpumalanga,Regional,R,NULL,WIR,RM,LOC,Regional Bi-weekly,3
+LEB,PTG,PTG,LEBOWAKGOMO,Limpopo,Regional,R,NULL,PTG,RM,LOC,Regional Daily,2
+LGU,GRJ,GRJ,LEEU-GAMKA,Western Cape,Outlying,O,152,BFU,OR,LOC,Outlying Bi-weekly,5
+LDS,KPR,KPR,LEEUDORINGSTAD,North West,Regional,R,NULL,KPR,RM,LOC,Regional Bi-weekly,3
+LEP,PTA,RTR,LEEUPOORT,Limpopo,Outlying,O,114,NRR,OR,LOC,Outlying Adhoc,4
+LEG,PTG,PTG,LEGKRAAL,Limpopo,Outlying,O,91,BOC,OR,LOC,Outlying Adhoc,3
+LEH,PZB,PSH,LEHLOHONOLO,Eastern Cape,Outlying,O,45,MTL,OR,LOC,Outlying Bi-weekly,6
+LHR,KPR,RTR,LEHURUTSHE,North West,Outlying,O,31,ZST,OR,LOC,Outlying Bi-weekly,5
+LPV,CPT,VDR,LEIPOLDTVILLE,Western Cape,Outlying,O,99,CWM,OR,LOC,Outlying Adhoc,4
+LEK,ELS,ELS,LEKFONTEIN,Eastern Cape,Outlying,O,132,GHO,OR,LOC,Outlying Adhoc,4
+LKS,CPT,UTN,LEKKERSING,Northern Cape,Outlying,O,274,SPU,OR,LOC,Outlying Adhoc,10
+LEM,GRJ,GRJ,LEMOENSHOEK,Western Cape,Outlying,O,122,SWD,OR,LOC,Outlying Adhoc,5
+ELL,PTG,PTG,LEPHALALE,Limpopo,Regional,R,NULL,PTG,RM,LOC,Regional Daily,6
+LBE,MSU,MSU,LERIBE,NULL,Outlying,O,168,MSU,OM,BLNS,Outlying Adhoc,10
+LEW,PTG,PTG,LESHWANE,Limpopo,Outlying,O,12,MKW,OR,LOC,Outlying Bi-weekly,2
+LES,WIR,WIR,LESLIE,Mpumalanga,Regional,R,NULL,WIR,RM,LOC,Regional Bi-weekly,3
+OLS,MSU,MSU,LESOTHO OTHER,NULL,Outlying,O,200,MSU,OM,BLNS,Outlying Adhoc,10
+LTA,PTG,PTG,LETABA,Limpopo,Outlying,O,30,LET,OR,LOC,Outlying Bi-weekly,4
+LTB,GRJ,GRJ,LETJIESBOS,Western Cape,Outlying,O,83,BFU,OR,LOC,Outlying Adhoc,6
+LET,PTG,PTG,LETSITELE,Limpopo,Regional,R,NULL,PTG,RM,LOC,Regional Daily,4
+LEV,PTG,PTG,LEVUBU,Limpopo,Outlying,O,61,THO,OR,LOC,Outlying Bi-weekly,4
+LEY,PTG,PTG,LEYDSDORP,Limpopo,Outlying,O,60,LET,OR,LOC,Outlying Adhoc,5
+LIB,VDB,BEM,LIBERTAS,Free State,Outlying,O,40,SEN,OR,LOC,Outlying Adhoc,3
+LBD,ELS,ELS,LIBODE,Eastern Cape,Outlying,O,57,UTT,OR,LOC,Outlying Bi-weekly,1
+LTX,KPR,KPR,LICHTENBURG,North West,Regional,R,NULL,KPR,RM,LOC,Regional Daily,4
+LID,ELS,CDO,LIDDLETON,Eastern Cape,Outlying,O,210,GHO,OR,LOC,Outlying Adhoc,5
+LMB,PTG,PTG,LIMBURG,Limpopo,Outlying,O,95,PTR,OR,LOC,Outlying Adhoc,3
+LAC,KIM,KIM,LIME ACRES,Northern Cape,Outlying,O,99,PMG,OR,LOC,Outlying Bi-weekly,5
+LNR,VDB,BEM,LINDLEY,Free State,Outlying,O,114,BEM,OR,LOC,Outlying Bi-weekly,2
+LSP,PTA,RTR,LINDLEYSPOORT,North West,Outlying,O,133,RTR,OR,LOC,Outlying Adhoc,3
+LSE,GBE,GBE,LOBATSE,NULL,Outlying,O,156,GBE,OM,BLNS,Outlying Adhoc,10
+LOC,NLP,NLP,LOCHIEL,Mpumalanga,Outlying,O,198,EML,OR,LOC,Outlying Bi-weekly,5
+LRE,PLZ,PLZ,LOERIE,Eastern Cape,Regional,R,NULL,PLZ,RM,LOC,Regional Bi-weekly,3
+LFT,CPT,UTN,LOERIESFONTEIN,Northern Cape,Outlying,O,272,VRE,OR,LOC,Outlying Bi-weekly,8
+LFR,BFN,BFN,LOFTER,Free State,Outlying,O,261,BFN,OM,LOC,Outlying Adhoc,4
+LHA,KIM,UTN,LOHATLHA,Northern Cape,Outlying,O,74,PMG,OR,LOC,Outlying Adhoc,6
+LOL,KPR,KPR,LOLWANE,North West,Outlying,O,455,LTX,OR,LOC,Outlying Adhoc,0
+LMV,KIM,KIM,LONGANENG,North West,Outlying,O,49,HWA,OR,LOC,Outlying Adhoc,5
+LGL,KIM,KIM,LONGLANDS,Northern Cape,Outlying,O,42,BKY,OR,LOC,Outlying Adhoc,3
+LSS,KIM,KIM,LOSASANENG,North West,Outlying,O,104,JKP,OR,LOC,Outlying Bi-weekly,4
+LLV,KIM,KIM,LOSELONG,North West,Outlying,O,111,HWA,OR,LOC,Outlying Adhoc,5
+LKP,PZB,DUR,LOSKOP,KwaZulu-Natal,Outlying,O,48,WNO,OR,LOC,Outlying Adhoc,5
+LTR,WIR,WIR,LOTHAIR,Mpumalanga,Outlying,O,103,EML,OR,LOC,Outlying Bi-weekly,5
+LOT,KPR,KPR,LOTLHAKANE,North West,Outlying,O,39,MEI,OR,LOC,Outlying Adhoc,7
+LTT,PTG,PTG,LOUIS TRICHARDT,Limpopo,Regional,R,NULL,PTG,RM,LOC,Regional Daily,4
+LSV,KIM,UTN,LOUISVALE,Northern Cape,Outlying,O,33,UTN,OR,LOC,Outlying Adhoc,1
+LUV,GRJ,PLZ,LOUTERWATER,Eastern Cape,Outlying,O,147,PLE,OR,LOC,Outlying Bi-weekly,6
+LUW,KIM,KPR,LOUWNA,North West,Outlying,O,133,VRU,OR,LOC,Outlying Bi-weekly,7
+LUB,NCS,NCS,LOUWSBURG,KwaZulu-Natal,Outlying,O,129,VYD,OR,LOC,Outlying Adhoc,5
+LKG,KIM,UTN,LOWER DIKGATLHONG,Northern Cape,Outlying,O,138,KUR,OR,LOC,Outlying Adhoc,8
+LWL,PZB,DUR,LOWER LOTENI,KwaZulu-Natal,Outlying,O,75,UBR,OR,LOC,Outlying Adhoc,5
+LMJ,KIM,KIM,LOWER MAYEAKGORO,North West,Outlying,O,38,HWA,OR,LOC,Outlying Adhoc,4
+LOP,PZB,BFN,LOWER PITSENG,Eastern Cape,Outlying,O,208,MTL,OR,LOC,Outlying Adhoc,9
+LXN,GRJ,KIM,LOXTON,Northern Cape,Outlying,O,228,BFU,OR,LOC,Outlying Adhoc,9
+LKF,KIM,KIM,LUCKHOFF,Free State,Outlying,O,157,HPT,OR,LOC,Outlying Bi-weekly,4
+LUD,WDH,WDH,LUDERITZ,NULL,Outlying,O,800,WDH,OM,BLNS,Outlying Adhoc,10
+LUF,ELS,BFN,LUFUTA,Eastern Cape,Outlying,O,172,QQD,OR,LOC,Outlying Adhoc,9
+ELU,NLP,NLP,LUKWATINI,Limpopo,Outlying,O,174,BNR,OR,LOC,Outlying Bi-weekly,4
+LDN,BFN,BFN,LUNDINS NEK,Eastern Cape,Outlying,O,296,AWL,OR,LOC,Outlying Adhoc,7
+LSK,PZB,ELS,LUSIKISIKI,Eastern Cape,Regional,R,NULL,PZB,RM,LOC,Regional Daily,4
+LTG,GRJ,GRJ,LUTTIG,Western Cape,Outlying,O,111,BFU,OR,LOC,Outlying Adhoc,6
+LZL,CPT,VDR,LUTZVILLE,Western Cape,Outlying,O,46,VRE,OR,LOC,Outlying Bi-weekly,6
+LDR,NLP,NLP,LYDENBURG,Mpumalanga,Regional,R,NULL,NLP,RM,LOC,Regional Daily,3
+LYK,KIM,KIM,LYKSO,North West,Outlying,O,140,VRU,OR,LOC,Outlying Adhoc,6
+MAH,PTA,RTR,MAANHAARRAND,North West,Outlying,O,86,RTR,OR,LOC,Outlying Adhoc,2
+MRT,NLP,NLP,MAARTENSHOOP,Mpumalanga,Outlying,O,84,LDR,OR,LOC,Outlying Adhoc,4
+MST,PTG,PTG,MAASSTROOM,Limpopo,Outlying,O,262,BOC,OR,LOC,Outlying Adhoc,6
+MBL,PTA,RTR,MABAALSTAD,North West,Outlying,O,165,RTR,OR,LOC,Outlying Adhoc,3
+MAB,PTA,RTR,MABESKRAAL,North West,Outlying,O,138,NRR,OR,LOC,Outlying Bi-weekly,3
+MBP,PTA,JNB,MABOPANE,North West,Regional,R,NULL,PTA,RM,LOC,Regional Daily,2
+MBU,PTA,RTR,MABULA,Limpopo,Outlying,O,77,WSR,OR,LOC,Outlying Adhoc,6
+MHR,NLP,NLP,MACHADODORP,Mpumalanga,Outlying,O,146,LDR,OR,LOC,Outlying Bi-weekly,4
+MAC,ELS,ELS,MACLEANTOWN,Eastern Cape,Outlying,O,48,FJN,OS,LOC,Outlying Adhoc,2
+MCR,ELS,ELS,MACLEAR,Eastern Cape,Outlying,O,198,UTT,OR,LOC,Outlying Bi-weekly,4
+MDD,NCS,NCS,MADADENI,KwaZulu-Natal,Regional,R,NULL,NCS,RM,LOC,Regional Daily,4
+MDG,KPR,KPR,MADIAKGAMA,North West,Outlying,O,203,VRU,OR,LOC,Outlying Adhoc,7
+MBO,KPR,KPR,MADIBOGO,North West,Outlying,O,82,DLV,OR,LOC,Outlying Bi-weekly,5
+MDE,PTA,RTR,MADIKWE,North West,Outlying,O,210,ZST,OR,LOC,Outlying Bi-weekly,4
+MPL,KIM,KIM,MADIPELESA,Northern Cape,Outlying,O,117,JKP,OR,LOC,Outlying Adhoc,4
+MNG,MSU,MSU,MAFETENG,NULL,Outlying,O,140,MSU,OM,BLNS,Outlying Adhoc,10
+MEI,KPR,KPR,MAFIKENG,North West,Regional,R,NULL,KPR,RM,LOC,Regional Daily,5
+MAF,PZB,PSH,MAFUBE,Eastern Cape,Outlying,O,40,MTL,OR,LOC,Outlying Adhoc,6
+MGS,PTA,RTR,MAGALIESBURG,Gauteng,Outlying,O,68,RDF,OR,LOC,Outlying Bi-weekly,2
+MGN,KIM,KIM,MAGANENG,North West,Outlying,O,105,VRU,OR,LOC,Outlying Adhoc,5
+MAG,EMG,EMG,MAGUDU,KwaZulu-Natal,Outlying,O,46,PGL,OR,LOC,Outlying Bi-weekly,4
+MGH,PZB,PSH,MAGUSHENI,Eastern Cape,Outlying,O,65,FLG,OR,LOC,Outlying Adhoc,4
+MYE,GBE,GBE,MAHALAPYE,NULL,Outlying,O,458,GBE,OM,BLNS,Outlying Adhoc,10
+OBP,NLP,NCS,MAHAMBA BORDER POST,Mpumalanga,Outlying,O,171,BNR,OR,LOC,Outlying Adhoc,0
+MHB,EMG,EMG,MAHLABATINI,KwaZulu-Natal,Outlying,O,33,ULD,OR,LOC,Outlying Bi-weekly,4
+MHG,EMG,EMG,MAHLANGASI,KwaZulu-Natal,Outlying,O,61,PGL,OR,LOC,Outlying Adhoc,5
+MWL,PTG,PTG,MAHWELERENG,Limpopo,Outlying,O,12,PTR,OR,LOC,Outlying Bi-weekly,3
+MZF,WIR,WIR,MAIZEFIELD,Mpumalanga,Outlying,O,48,BXL,OR,LOC,Outlying Adhoc,4
+MJP,NCS,NCS,MAJUBA POWER STATION,Mpumalanga,Outlying,O,78,VRR,OR,LOC,Outlying Adhoc,4
+LTT,PTG,PTG,MAKHADO,Limpopo,Regional,R,NULL,PTG,RM,LOC,Regional Daily,4
+AFB,PTG,PTG,MAKHADO AIR FORCE BASE,Limpopo,Outlying,O,53,LTT,OR,LOC,Outlying Adhoc,4
+MKK,KPR,KPR,MAKOKSKRAAL,North West,Outlying,O,45,VSD,OR,LOC,Outlying Adhoc,3
+MKO,PTG,PTG,MAKONDE,Limpopo,Outlying,O,45,THO,OR,LOC,Outlying Bi-weekly,5
+MAQ,KPR,KPR,MAKWASSIE,North West,Outlying,O,29,WMD,OR,LOC,Outlying Bi-weekly,4
+MLT,PTG,WIR,MALAITA,Limpopo,Outlying,O,56,JFH,OR,LOC,Outlying Adhoc,5
+MER,NLP,NLP,MALALANE,Mpumalanga,Regional,R,NULL,NLP,RM,LOC,Regional Daily,3
+MLM,PTG,PTG,MALAMULELE,Limpopo,Outlying,O,55,THO,OR,LOC,Outlying Bi-weekly,5
+MER,NLP,NLP,MALELANE,Mpumalanga,Regional,R,NULL,NLP,RM,LOC,Regional Daily,3
+MLS,WIR,WIR,MALEOSKOP,Mpumalanga,Outlying,O,42,GRO,OR,LOC,Outlying Adhoc,4
+MBY,CPT,CPT,MALMESBURY,Western Cape,Regional,R,NULL,CPT,RM,LOC,Regional Daily,3
+MLH,WDH,WDH,MALTAHOHE,NULL,Outlying,O,580,WDH,OM,BLNS,Outlying Adhoc,10
+MAM,PTG,PTG,MAMAILA,Limpopo,Outlying,O,124,LTT,OR,LOC,Outlying Bi-weekly,4
+MMD,CPT,CPT,MAMRE,Western Cape,Outlying,O,13,ALS,OR,LOC,Outlying Adhoc,2
+MWI,EMG,DUR,MANDINI,KwaZulu-Natal,Regional,R,NULL,EMG,RM,LOC,Regional Daily,4
+MNI,NCS,NCS,MANGENI,KwaZulu-Natal,Outlying,O,71,NQT,OR,LOC,Outlying Adhoc,4
+MKW,PTG,PTG,MANKWENG,Limpopo,Regional,R,NULL,PTG,RM,LOC,Regional Bi-weekly,1
+MKV,KIM,KIM,MANOKWANE,North West,Outlying,O,66,HWA,OR,LOC,Outlying Adhoc,5
+MSF,KPR,KPR,MANSFIELD,North West,Outlying,O,168,VRU,OR,LOC,Outlying Adhoc,2
+MNH,KIM,KIM,MANTHESTAD,North West,Outlying,O,73,HWA,OR,LOC,Outlying Adhoc,5
+MNB,ELS,ELS,MANUBI,Eastern Cape,Outlying,O,115,BWH,OR,LOC,Outlying Adhoc,5
+MTS,MTS,MTS,MANZINI,NULL,Main,M,NULL,MTS,MM,BLNS,Branch,4
+MAP,PTG,PTG,MAPELA,Limpopo,Outlying,O,68,PTR,OR,LOC,Outlying Bi-weekly,3
+MAO,MSU,MSU,MAPOTENG,NULL,Regional,R,NULL,MSU,RM,BLNS,Regional Daily,10
+MPU,PZB,DUR,MAPUMULO,KwaZulu-Natal,Outlying,O,69,SAE,OR,LOC,Outlying Bi-weekly,2
+MOE,MSU,MSU,MAPUTSOE,NULL,Outlying,O,144,MSU,OM,BLNS,Outlying Adhoc,10
+MRM,PTG,PTG,MARA,Limpopo,Outlying,O,55,LTT,OR,LOC,Outlying Adhoc,4
+MRP,PTG,PTG,MARAPONG,Limpopo,Outlying,O,34,ELL,OR,LOC,Outlying Bi-weekly,3
+MBH,WIR,WIR,MARBLE HALL,Mpumalanga,Regional,R,NULL,WIR,RM,LOC,Regional Daily,4
+MCH,KIM,UTN,MARCHAND,Northern Cape,Outlying,O,27,KAA,OR,LOC,Outlying Bi-weekly,4
+MNE,KPR,KPR,MAREETSANE,North West,Outlying,O,94,MEI,OR,LOC,Outlying Bi-weekly,5
+MAR,DUR,PSH,MARGATE,KwaZulu-Natal,Regional,R,NULL,DUR,RM,LOC,Regional Daily,1
+MAL,WDH,WDH,MARIENTAL,NULL,Outlying,O,200,WDH,OM,BLNS,Outlying Adhoc,10
+MAK,PTA,RTR,MARIKANA,North West,Outlying,O,53,RTR,OR,LOC,Outlying Bi-weekly,1
+MRI,NLP,NLP,MARITE,Limpopo,Outlying,O,23,HZY,OR,LOC,Outlying Bi-weekly,3
+MKN,PTG,PTG,MARKEN,Limpopo,Outlying,O,146,ELL,OR,LOC,Outlying Bi-weekly,4
+MKR,KIM,UTN,MARKRAMSDRAAI,Northern Cape,Outlying,O,104,KAT,OR,LOC,Outlying Adhoc,6
+MRL,NLP,NLP,MARLOTH PARK,Mpumalanga,Outlying,O,44,KTR,OR,LOC,Outlying Adhoc,4
+MAZ,PTG,PTG,MARNITZ,Limpopo,Outlying,O,185,ELL,OR,LOC,Outlying Adhoc,5
+MRO,PTG,RTR,MARONG,Limpopo,Outlying,O,103,ELL,OR,LOC,Outlying Adhoc,6
+MRQ,BFN,BEM,MARQUARD,Free State,Regional,R,NULL,BFN,RM,LOC,Regional Daily,4
+MDL,KIM,UTN,MARYDALE,Northern Cape,Outlying,O,153,PRK,OR,LOC,Outlying Bi-weekly,5
+MSU,MSU,MSU,MASERU,NULL,Main,M,NULL,MSU,MM,BLNS,Branch,4
+MTL,PZB,PSH,MATATIELE,KwaZulu-Natal,Regional,R,NULL,PZB,RM,LOC,Regional Daily,6
+MAT,PTG,PTG,MATAVHELO,Limpopo,Outlying,O,95,THO,OR,LOC,Outlying Adhoc,6
+MJN,CPT,CPT,MATJIESFONTEIN,Western Cape,Outlying,O,245,LAI,OR,LOC,Outlying Adhoc,6
+MTB,PTA,RTR,MATLABAS,Limpopo,Outlying,O,91,TZB,OR,LOC,Outlying Adhoc,5
+MTA,PTG,PTG,MATLALA,Limpopo,Outlying,O,103,PTR,OR,LOC,Outlying Bi-weekly,4
+MTV,KIM,KIM,MATOLONG,North West,Outlying,O,45,HWA,OR,LOC,Outlying Adhoc,4
+MTG,CPT,CPT,MATROOSBERG,Western Cape,Outlying,O,107,WOR,OR,LOC,Outlying Adhoc,3
+MTP,KIM,UTN,MATSAP,Northern Cape,Outlying,O,106,PMG,OR,LOC,Outlying Adhoc,6
+MSV,KIM,KIM,MATSHENG,North West,Outlying,O,78,HWA,OR,LOC,Outlying Adhoc,5
+MCB,NLP,NLP,MAUCHSBERG,Mpumalanga,Outlying,O,11,SAB,OR,LOC,Outlying Adhoc,2
+MUB,GBE,GBE,MAUN,NULL,Outlying,O,494,FRW,OR,BLNS,Outlying Adhoc,10
+MAV,PTG,PTG,MAVAMBE,Limpopo,Outlying,O,44,THO,OR,LOC,Outlying Bi-weekly,5
+MZA,ELS,ELS,MAZEPPA BAY,Eastern Cape,Outlying,O,128,BWH,OR,LOC,Outlying Adhoc,5
+MBE,MBE,MBE,MBABANE,NULL,Main,M,NULL,MBE,MM,BLNS,Branch,4
+MBZ,EMG,EMG,MBAZWANA,KwaZulu-Natal,Outlying,O,116,JOZ,OR,LOC,Outlying Bi-weekly,5
+EMB,PZB,PSH,MBOTYI,Eastern Cape,Outlying,O,52,LSK,OR,LOC,Outlying Adhoc,6
+MCG,CPT,CPT,MCGREGOR,Western Cape,Outlying,O,41,ROR,OR,LOC,Outlying Bi-weekly,5
+MEA,JNB,JNB,MEADOWLANDS,Gauteng,Outlying,O,12,RDP,OS,LOC,Outlying Adhoc,2
+MDS,BFN,BFN,MEADOWS,Free State,Outlying,O,73,BSB,OR,LOC,Outlying Adhoc,3
+MNS,EMG,EMG,MEER-EN-SEE,KwaZulu-Natal,Main (Suburb),S,NULL,EMG,SM,LOC,Branch,2
+MLK,PTG,PTG,MELKRIVIER,Limpopo,Outlying,O,172,PTR,OR,LOC,Outlying Adhoc,5
+MEH,EMG,EMG,MELMOTH,KwaZulu-Natal,Regional,R,NULL,EMG,RM,LOC,Regional Bi-weekly,3
+MLW,GRJ,CDO,MELTONWOLD,Northern Cape,Outlying,O,256,BFU,OR,LOC,Outlying Adhoc,8
+MEM,NCS,NCS,MEMEL,Free State,Outlying,O,99,NCS,OM,LOC,Outlying Bi-weekly,2
+MBK,DUR,DUR,MEREBANK EAST,KwaZulu-Natal,Main (Suburb),S,NULL,DUR,SM,LOC,Hub,1
+MRN,KPR,RTR,MERINDOL,North West,Outlying,O,94,VSD,OR,LOC,Outlying Adhoc,3
+MEN,KIM,CDO,MERRIMAN,Northern Cape,Outlying,O,160,DER,OR,LOC,Outlying Adhoc,7
+MWV,GRJ,GRJ,MERWEVILLE,Western Cape,Outlying,O,251,BFU,OR,LOC,Outlying Adhoc,6
+MSA,KPR,KPR,MESA,North West,Outlying,O,52,VSD,OR,LOC,Outlying Adhoc,2
+MKL,CPT,UTN,MESKLIP,Northern Cape,Outlying,O,42,SPU,OR,LOC,Outlying Adhoc,9
+MES,PTG,PTG,MESSINA,Limpopo,Regional,R,NULL,PTG,RM,LOC,Regional Daily,6
+MTN,VDB,JNB,MEYERTON,Gauteng,Main (Suburb),S,NULL,VDB,SM,LOC,Branch,3
+MGW,ELS,ELS,MGWALI,Eastern Cape,Outlying,O,111,BIS,OR,LOC,Outlying Adhoc,4
+MME,MBE,MBE,MHLUME,NULL,Outlying,O,180,MBE,OM,BLNS,Outlying Adhoc,10
+MIC,NLP,NLP,MICA,Limpopo,Outlying,O,57,HDT,OR,LOC,Outlying Adhoc,5
+MGK,BFN,CDO,MIDDELBURG (EC),Eastern Cape,Outlying,O,198,CDO,OR,LOC,Outlying Bi-weekly,4
+MDR,WIR,WIR,MIDDELBURG (MP),Mpumalanga,Regional,R,NULL,WIR,RM,LOC,Regional Daily,1
+MDT,ELS,ELS,MIDDELDRIFT,Eastern Cape,Outlying,O,77,KWT,OR,LOC,Outlying Bi-weekly,4
+MDP,CPT,CPT,MIDDELPOS,Northern Cape,Outlying,O,415,CWM,OR,LOC,Outlying Adhoc,8
+MDW,PTA,RTR,MIDDELWIT,Limpopo,Outlying,O,53,NRR,OR,LOC,Outlying Adhoc,4
+MDF,PTG,JNB,MIDDLEFONTEIN,Limpopo,Outlying,O,28,NSR,OR,LOC,Outlying Adhoc,5
+MID,JNB,JNB,MIDRAND,Gauteng,Main (Suburb),S,NULL,JNB,SM,LOC,Hub,1
+MGX,KPR,KPR,MIGDOL,North West,Outlying,O,54,DLV,OR,LOC,Outlying Bi-weekly,4
+MLR,PLZ,GRJ,MILLER,Eastern Cape,Outlying,O,262,GRT,OR,LOC,Outlying Adhoc,6
+MLV,PTA,RTR,MILLVALE,North West,Outlying,O,78,RTR,OR,LOC,Outlying Adhoc,2
+MIR,KPR,KPR,MIRAGE,Free State,Outlying,O,38,BHV,OR,LOC,Outlying Adhoc,2
+MGD,GRJ,PLZ,MISGUND,Eastern Cape,Outlying,O,162,PLE,OR,LOC,Outlying Bi-weekly,6
+MTM,ELS,ELS,MISTY MOUNT,Eastern Cape,Outlying,O,34,UTT,OR,LOC,Outlying Adhoc,1
+MCP,CPT,CPT,MITCHELL'S PLAIN,Western Cape,Main (Suburb),S,NULL,CPT,SM,LOC,Hub,1
+MKB,PZB,PSH,MKAMBATI,Eastern Cape,Outlying,O,89,LSK,OR,LOC,Outlying Adhoc,6
+MKD,EMG,EMG,MKUZE,KwaZulu-Natal,Outlying,O,58,JOZ,OR,LOC,Outlying Bi-weekly,5
+MMB,KPR,KPR,MMABATHO,North West,Outlying,O,1,MEI,OR,LOC,Outlying Bi-weekly,5
+MMV,KIM,KIM,MMAMUTLA,North West,Outlying,O,93,WAR,OR,LOC,Outlying Adhoc,4
+MDI,GBE,GBE,MOCHUDI,NULL,Outlying,O,80,GBE,OM,BLNS,Outlying Adhoc,10
+MDK,KPR,KPR,MODDERKRAAL,North West,Outlying,O,54,BHV,OR,LOC,Outlying Adhoc,3
+MRS,KIM,KIM,MODDERRIVIER,Northern Cape,Regional,R,NULL,KIM,RM,LOC,Regional Daily,2
+NSR,PTA,JNB,MODIMOLLE,Limpopo,Regional,R,NULL,PTA,RM,LOC,Regional Daily,5
+MDV,KIM,KIM,MODIMONG,North West,Outlying,O,92,HWA,OR,LOC,Outlying Adhoc,5
+MGV,KIM,KIM,MODUTUNG,North West,Outlying,O,33,HWA,OR,LOC,Outlying Adhoc,4
+MSW,KIM,UTN,MOESWAL,Northern Cape,Outlying,O,159,KAT,OR,LOC,Outlying Adhoc,5
+MGL,PTG,PTG,MOGALAKWENASTROOM,Limpopo,Outlying,O,142,PTR,OR,LOC,Outlying Adhoc,4
+MGY,PTG,PTG,MOGANYAKA,Limpopo,Outlying,O,36,MBH,OR,LOC,Outlying Bi-weekly,4
+MWS,PTA,RTR,MOGWASE,North West,Outlying,O,52,NRR,OR,LOC,Outlying Bi-weekly,2
+MSK,MSU,MSU,MOHALES HOEK,NULL,Outlying,O,216,MSU,OM,BLNS,Outlying Adhoc,10
+MOK,PTG,PTG,MOKAMOLE,Limpopo,Outlying,O,100,PTR,OR,LOC,Outlying Adhoc,4
+MKS,KIM,KIM,MOKASSA 1,North West,Outlying,O,54,HWA,OR,LOC,Outlying Adhoc,0
+MKG,KIM,KIM,MOKGARENG,North West,Outlying,O,62,HWA,OR,LOC,Outlying Adhoc,5
+PTR,PTG,PTG,MOKOPANE,Limpopo,Regional,R,NULL,PTG,RM,LOC,Regional Daily,3
+MOR,GRJ,GRJ,MOLENRIVIER,Western Cape,Outlying,O,113,GRJ,OM,LOC,Outlying Adhoc,5
+MLE,GBE,GBE,MOLEPOLOLE,NULL,Outlying,O,106,GBE,OM,BLNS,Outlying Adhoc,10
+MOL,KIM,KIM,MOLOLEMA,North West,Outlying,O,63,HWA,OR,LOC,Outlying Adhoc,5
+MOQ,ELS,BFN,MOLTENO,Eastern Cape,Outlying,O,165,QTN,OR,LOC,Outlying Bi-weekly,8
+MGU,CPT,CPT,MONTAGU,Western Cape,Outlying,O,56,ROR,OR,LOC,Outlying Bi-weekly,5
+MTC,PTG,PTG,MONTE CHRISTO,Limpopo,Outlying,O,75,ELL,OR,LOC,Outlying Adhoc,6
+MOV,BFN,BFN,MONTE VIDEO,Free State,Outlying,O,75,BDT,OR,LOC,Outlying Adhoc,3
+MRR,PZB,DUR,MOOI RIVER,KwaZulu-Natal,Regional,R,NULL,PZB,RM,LOC,Regional Daily,4
+MOO,KPR,KPR,MOOIFONTEIN,North West,Outlying,O,107,MEI,OR,LOC,Outlying Adhoc,5
+MON,PTA,RTR,MOOINOOI,North West,Outlying,O,51,SON,OR,LOC,Outlying Bi-weekly,2
+MKI,PTG,PTG,MOOKETSI,Limpopo,Outlying,O,80,TZN,OR,LOC,Outlying Bi-weekly,3
+NBR,PTG,PTG,MOOKGOPHONG,Limpopo,Regional,R,NULL,PTG,RM,LOC,Regional Daily,4
+MOD,CPT,CPT,MOORDKUIL,Western Cape,Outlying,O,35,WOR,OR,LOC,Outlying Adhoc,4
+MRB,CPT,VDR,MOORREESBURG,Western Cape,Regional,R,NULL,CPT,RM,LOC,Regional Daily,3
+MPI,PTG,PTG,MOPANE,Limpopo,Outlying,O,78,MES,OR,LOC,Outlying Adhoc,5
+MTE,KIM,KIM,MORETELE,North West,Outlying,O,92,VRU,OR,LOC,Outlying Adhoc,5
+MGB,ELS,ELS,MORGANS BAY,Eastern Cape,Outlying,O,134,BWH,OR,LOC,Outlying Adhoc,3
+MOZ,WIR,NCS,MORGENZON,Mpumalanga,Outlying,O,70,BXL,OR,LOC,Outlying Bi-weekly,4
+MOI,MSU,MSU,MORIJA,NULL,Outlying,O,84,MSU,OM,BLNS,Outlying Adhoc,10
+MRK,KPR,KPR,MOROKWENG,North West,Outlying,O,275,VRU,OR,LOC,Outlying Bi-weekly,5
+MRE,NLP,NLP,MORONE,Mpumalanga,Outlying,O,32,BGF,OR,LOC,Outlying Bi-weekly,4
+MOT,ELS,BFN,MORRISTOWN,Eastern Cape,Outlying,O,178,QQD,OR,LOC,Outlying Adhoc,8
+MOM,PLZ,CDO,MORTIMER,Eastern Cape,Outlying,O,54,CDO,OR,LOC,Outlying Bi-weekly,1
+MOS,BFN,BFN,MOSHESHS FORD,Eastern Cape,Outlying,O,293,AWL,OR,LOC,Outlying Adhoc,8
+MSI,KPR,KPR,MOSITA,North West,Outlying,O,217,VRU,OR,LOC,Outlying Adhoc,7
+MSB,GRJ,GRJ,MOSSEL BAY,Western Cape,Regional,R,NULL,GRJ,RM,LOC,Regional Daily,2
+MSD,WIR,WIR,MOSSIESDAL,Mpumalanga,Outlying,O,101,GRO,OR,LOC,Outlying Adhoc,4
+MTT,WIR,WIR,MOTETEMA,Limpopo,Outlying,O,25,GRO,OR,LOC,Outlying Bi-weekly,4
+MBS,KIM,KIM,MOTHIBISTAD,North West,Outlying,O,19,KUR,OR,LOC,Outlying Bi-weekly,6
+MTY,PZB,ELS,MOUNT AYLIFF,Eastern Cape,Outlying,O,76,KDX,OR,LOC,Outlying Bi-weekly,5
+MTF,PZB,ELS,MOUNT FLETCHER,Eastern Cape,Outlying,O,132,MTL,OR,LOC,Outlying Bi-weekly,5
+MFF,PZB,ELS,MOUNT FRERE,Eastern Cape,Outlying,O,162,KDX,OR,LOC,Outlying Bi-weekly,4
+MOP,NCS,BEM,MOUNT PELAAN,Free State,Outlying,O,132,NCS,OM,LOC,Outlying Adhoc,5
+MTR,KIM,KIM,MOUNT RUPERT,Northern Cape,Outlying,O,83,WAR,OR,LOC,Outlying Bi-weekly,3
+MTW,PLZ,PLZ,MOUNT STEWARD,Eastern Cape,Outlying,O,211,KKD,OR,LOC,Outlying Adhoc,5
+MPK,ELS,PLZ,MPEKWENI,Eastern Cape,Outlying,O,78,PAF,OR,LOC,Outlying Adhoc,5
+MMM,NCS,NCS,MPEMVANA,KwaZulu-Natal,Outlying,O,51,PPB,OR,LOC,Outlying Adhoc,4
+MUP,ELS,ELS,MPETU,Eastern Cape,Outlying,O,109,BCB,OS,LOC,Outlying Adhoc,3
+MPO,EMG,EMG,MPOSA,KwaZulu-Natal,Outlying,O,31,RBY,OS,LOC,Outlying Bi-weekly,1
+MAI,ELS,ELS,MQANDULI,Eastern Cape,Outlying,O,64,UTT,OR,LOC,Outlying Bi-weekly,2
+UTT,ELS,ELS,MTHATHA,Eastern Cape,Regional,R,NULL,ELS,RM,LOC,Regional Daily,1
+MUT,EMG,EMG,MTUBATUBA,KwaZulu-Natal,Regional,R,NULL,EMG,RM,LOC,Regional Daily,2
+MZI,EMG,EMG,MTUNZINI,KwaZulu-Natal,Outlying,O,54,FXT,OR,LOC,Outlying Bi-weekly,2
+MUD,PZB,DUR,MUDEN,KwaZulu-Natal,Outlying,O,55,GTN,OR,LOC,Outlying Bi-weekly,5
+MUL,PTG,PTG,MULATI,Limpopo,Outlying,O,97,LET,OR,LOC,Outlying Bi-weekly,5
+MUN,PTG,PTG,MUNNIK,Limpopo,Outlying,O,93,MKW,OR,LOC,Outlying Adhoc,2
+MYU,ELS,ELS,MUNYU,Eastern Cape,Outlying,O,98,BWH,OR,LOC,Outlying Adhoc,3
+MRY,PLZ,CDO,MURRAYSBURG,Western Cape,Outlying,O,181,GRT,OR,LOC,Outlying Bi-weekly,8
+MES,PTG,PTG,MUSINA,Limpopo,Regional,R,NULL,PTG,RM,LOC,Regional Daily,6
+MUE,PTG,PTG,MUTELE,Limpopo,Outlying,O,158,THO,OR,LOC,Outlying Bi-weekly,7
+MFN,KIM,CDO,MYNFONTEIN,Northern Cape,Outlying,O,70,DER,OR,LOC,Outlying Adhoc,7
+NBP,CPT,UTN,NABABEEP,Northern Cape,Outlying,O,36,SPU,OR,LOC,Outlying Bi-weekly,8
+NBR,PTG,PTG,NABOOMSPRUIT,Limpopo,Regional,R,NULL,PTG,RM,LOC,Regional Daily,4
+NAM,PTG,PTG,NAMAKGALE,Limpopo,Outlying,O,27,PHW,OR,LOC,Outlying Bi-weekly,6
+ONB,WDH,WDH,NAMIBIA OTHER,NULL,Outlying,O,200,WDH,OM,BLNS,Outlying Adhoc,10
+NAP,CPT,CPT,NAPIER,Western Cape,Outlying,O,32,BDD,OR,LOC,Outlying Bi-weekly,5
+NCH,PLZ,PLZ,NCANAHA,Eastern Cape,Outlying,O,50,ADO,OR,LOC,Outlying Adhoc,2
+NCO,ELS,ELS,NCORA CLINIC,Eastern Cape,Outlying,O,160,BWH,OR,LOC,Outlying Bi-weekly,5
+NDD,EMG,EMG,NDUNDULU,KwaZulu-Natal,Outlying,O,42,MEH,OR,LOC,Outlying Adhoc,2
+NEB,PTG,PTG,NEBO,Limpopo,Outlying,O,46,JFH,OR,LOC,Outlying Bi-weekly,4
+NEL,KIM,UTN,NEILERSDRIF,Northern Cape,Outlying,O,87,KAA,OR,LOC,Outlying Adhoc,2
+NSP,GRJ,GRJ,NELSPOORT,Western Cape,Outlying,O,108,BFU,OR,LOC,Outlying Adhoc,7
+NLP,NLP,NLP,NELSPRUIT,Mpumalanga,Main,M,NULL,NLP,MM,LOC,Branch,1
+NML,PZB,PSH,NEW AMALFI,KwaZulu-Natal,Outlying,O,95,KDX,OR,LOC,Outlying Adhoc,5
+NEN,BFN,BFN,NEW ENGLAND,Eastern Cape,Outlying,O,203,AWL,OR,LOC,Outlying Adhoc,8
+NCV,KPR,KPR,NEW MACHAVIE,North West,Outlying,O,33,SIF,OS,LOC,Outlying Bi-weekly,1
+NRK,EMG,DUR,NEWARK,KwaZulu-Natal,Outlying,O,20,MWI,OR,LOC,Outlying Bi-weekly,4
+NCS,NCS,NCS,NEWCASTLE,KwaZulu-Natal,Main,M,NULL,NCS,MM,LOC,Branch,1
+NGB,PZB,PSH,NGABENI,Eastern Cape,Outlying,O,85,FLG,OR,LOC,Outlying Adhoc,4
+NGO,NCS,NCS,NGOBENI,KwaZulu-Natal,Outlying,O,243,NCS,OM,LOC,Outlying Adhoc,0
+NGW,NLP,NLP,NGODWANA,Mpumalanga,Outlying,O,90,NLP,OM,LOC,Outlying Bi-weekly,2
+NGM,EMG,EMG,NGOME,KwaZulu-Natal,Outlying,O,82,NON,OR,LOC,Outlying Adhoc,5
+NGG,ELS,ELS,NGQELENI,Eastern Cape,Outlying,O,62,UTT,OR,LOC,Outlying Bi-weekly,2
+NGQ,ELS,ELS,NGQUNGQU,Eastern Cape,Outlying,O,76,UTT,OR,LOC,Outlying Adhoc,2
+NLZ,EMG,EMG,NHLAZATSHE,KwaZulu-Natal,Outlying,O,65,ULD,OR,LOC,Outlying Adhoc,4
+NNO,MBE,MBE,NHLONGANO,NULL,Outlying,O,166,MTS,OM,BLNS,Outlying Adhoc,10
+NKK,KIM,UTN,NIEKERKSHOOP,Northern Cape,Outlying,O,83,PRK,OR,LOC,Outlying Bi-weekly,6
+NVD,KPR,RTR,NIETVERDIEND,North West,Outlying,O,119,ZST,OR,LOC,Outlying Adhoc,5
+NBT,PLZ,CDO,NIEU-BETHESDA,Eastern Cape,Outlying,O,105,GRT,OR,LOC,Outlying Adhoc,4
+NWV,CPT,VDR,NIEUWOUDTVILLE,Northern Cape,Outlying,O,150,VRE,OR,LOC,Outlying Bi-weekly,7
+NLR,VDB,JNB,NIGEL,Gauteng,Main (Suburb),S,NULL,VDB,SM,LOC,Hub,3
+NIG,CPT,UTN,NIGRAMOEP,Northern Cape,Outlying,O,100,SPU,OR,LOC,Outlying Adhoc,9
+NKB,PTG,PTG,NKAMBAKO,Limpopo,Outlying,O,46,LET,OR,LOC,Outlying Adhoc,4
+NKA,EMG,EMG,NKANDLA,KwaZulu-Natal,Outlying,O,100,MEH,OR,LOC,Outlying Bi-weekly,4
+NKO,PTG,PTG,NKOMO,Limpopo,Outlying,O,42,GIY,OR,LOC,Outlying Adhoc,5
+NOB,ELS,ELS,NOBOKWE,Eastern Cape,Outlying,O,133,BWH,OR,LOC,Outlying Adhoc,5
+NOL,GRJ,GRJ,NOLL,Western Cape,Outlying,O,126,GRJ,OM,LOC,Outlying Adhoc,3
+NON,EMG,EMG,NONGOMA,KwaZulu-Natal,Regional,R,NULL,EMG,RM,LOC,Regional Daily,4
+NDK,NLP,NLP,NOORDKAAP,Mpumalanga,Outlying,O,29,BNR,OR,LOC,Outlying Adhoc,2
+NOK,CPT,VDR,NOORDKUIL,Western Cape,Outlying,O,83,VLF,OR,LOC,Outlying Adhoc,3
+NMD,NCS,NCS,NORMANDIEN,KwaZulu-Natal,Outlying,O,65,NCS,OM,LOC,Outlying Adhoc,2
+NRR,PTA,RTR,NORTHAM,Limpopo,Regional,R,NULL,PTA,RM,LOC,Regional Daily,3
+NVT,BFN,BFN,NORVALSPONT,Free State,Outlying,O,294,AWL,OR,LOC,Outlying Adhoc,6
+NOT,ELS,PSH,NOTINTSILA,Eastern Cape,Outlying,O,125,UTT,OR,LOC,Outlying Adhoc,7
+NUP,BFN,CDO,NOUPOORT,Northern Cape,Outlying,O,234,DER,OR,LOC,Outlying Bi-weekly,4
+NQB,ELS,ELS,NQABARA,Eastern Cape,Outlying,O,193,BWH,OR,LOC,Outlying Adhoc,6
+NQI,PZB,PSH,NQABENI,KwaZulu-Natal,Outlying,O,100,SYB,OR,LOC,Outlying Bi-weekly,2
+NQK,ELS,ELS,NQAMAKWE,Eastern Cape,Outlying,O,56,BWH,OR,LOC,Outlying Bi-weekly,4
+NQT,NCS,NCS,NQUTU,KwaZulu-Natal,Regional,R,NULL,NCS,RM,LOC,Regional Bi-weekly,4
+NBH,PZB,DUR,NTABAMHLOPE,KwaZulu-Natal,Outlying,O,67,ECT,OR,LOC,Outlying Bi-weekly,5
+NTB,NCS,NCS,NTABEBOMVU,KwaZulu-Natal,Outlying,O,47,NQT,OR,LOC,Outlying Adhoc,4
+NBE,ELS,ELS,NTIBANE,Eastern Cape,Outlying,O,104,UTT,OR,LOC,Outlying Adhoc,2
+NTS,ELS,ELS,NTSESHE,Eastern Cape,Outlying,O,79,BWH,OR,LOC,Outlying Adhoc,4
+NSL,ELS,PSH,NTSHILINI,Eastern Cape,Outlying,O,118,LSK,OR,LOC,Outlying Adhoc,3
+NTW,ELS,BFN,NTYWENKA,Eastern Cape,Outlying,O,146,UTT,OR,LOC,Outlying Adhoc,9
+NUF,PTA,JNB,NUTFIELD,Limpopo,Outlying,O,87,SBW,OR,LOC,Outlying Adhoc,5
+NUS,PTG,PTG,NUWE SMITSDORP,Limpopo,Outlying,O,67,PTG,OM,LOC,Outlying Adhoc,2
+NUY,CPT,CPT,NUY,Western Cape,Outlying,O,31,WOR,OR,LOC,Outlying Adhoc,4
+NSR,PTA,JNB,NYLSTROOM,Limpopo,Regional,R,NULL,PTA,RM,LOC,Regional Daily,5
+NYK,ELS,ELS,NYOKANA,Eastern Cape,Outlying,O,104,BWH,OR,LOC,Outlying Bi-weekly,4
+NYN,EMG,EMG,NYONI,KwaZulu-Natal,Outlying,O,15,ISB,OR,LOC,Outlying Adhoc,3
+OTS,PLZ,CDO,OATLANDS,Eastern Cape,Outlying,O,166,GRT,OR,LOC,Outlying Adhoc,6
+OZR,VDB,JNB,OBERHOLZER,Gauteng,Outlying,O,4,CAR,OR,LOC,Outlying Bi-weekly,4
+ODO,KPR,BFN,ODENDAALSRUS,Free State,Outlying,O,34,WEL,OR,LOC,Outlying Bi-weekly,5
+OFL,PTG,PTG,OFCOLACO,Limpopo,Outlying,O,54,LET,OR,LOC,Outlying Adhoc,5
+KGP,NLP,NLP,OHRIGSTAD,Mpumalanga,Outlying,O,51,LDR,OR,LOC,Outlying Bi-weekly,4
+OJA,WDH,WDH,OKAHANDJA,NULL,Outlying,O,156,WDH,OM,BLNS,Outlying Adhoc,10
+OKP,CPT,UTN,OKIEP,Northern Cape,Outlying,O,18,SPU,OR,LOC,Outlying Bi-weekly,8
+OLB,ELS,PSH,OLD BUNTING,Eastern Cape,Outlying,O,106,UTT,OR,LOC,Outlying Adhoc,7
+OLM,ELS,ELS,OLD MORLEY,Eastern Cape,Outlying,O,138,UTT,OR,LOC,Outlying Adhoc,3
+OFH,KIM,KIM,OLIFANTSHOEK,Northern Cape,Outlying,O,104,KAT,OR,LOC,Outlying Bi-weekly,7
+OFB,PTG,PTG,OLYFBERG,Limpopo,Outlying,O,53,MKW,OR,LOC,Outlying Adhoc,2
+ORU,WDH,WDH,OMARURU,NULL,Outlying,O,260,OGO,OR,BLNS,Outlying Adhoc,10
+ODV,KIM,KIM,OMDRAAISVLEI,Northern Cape,Outlying,O,126,PRK,OR,LOC,Outlying Adhoc,6
+OND,WDH,WDH,ONDANGWA,NULL,Outlying,O,46,OTI,OR,BLNS,Outlying Adhoc,10
+ODD,KIM,UTN,ONDERSTEDORINGS,Northern Cape,Outlying,O,413,KAA,OR,LOC,Outlying Adhoc,6
+ONR,CPT,CPT,ONRUS,Western Cape,Outlying,O,14,HER,OR,LOC,Outlying Adhoc,4
+ORW,PTG,PTG,OORWINNING,Limpopo,Outlying,O,62,LTT,OR,LOC,Outlying Adhoc,4
+OSM,PTA,RTR,OOSTERMOED,Limpopo,Outlying,O,106,TZB,OR,LOC,Outlying Adhoc,4
+OPD,EMG,EMG,OPHONDWENI,KwaZulu-Natal,Outlying,O,50,JOZ,OR,LOC,Outlying Adhoc,6
+ORN,KIM,KIM,ORANIA,Northern Cape,Outlying,O,79,HPT,OR,LOC,Outlying Bi-weekly,5
+ORF,PTG,PTG,ORANJEFONTEIN,Limpopo,Outlying,O,52,ELL,OR,LOC,Outlying Adhoc,6
+OMD,WDH,WDH,ORANJEMUND,NULL,Outlying,O,1546,WDH,OM,BLNS,Outlying Adhoc,10
+ORR,KIM,KIM,ORANJERIVIER,Northern Cape,Outlying,O,27,HPT,OR,LOC,Outlying Adhoc,4
+ORV,VDB,JNB,ORANJEVILLE,Free State,Outlying,O,98,HNR,OR,LOC,Outlying Bi-weekly,5
+ORP,GBE,GBE,ORAPA,NULL,Outlying,O,200,FRW,OR,BLNS,Outlying Adhoc,10
+OKY,KPR,KPR,ORKNEY,North West,Main (Suburb),S,NULL,KPR,SM,LOC,Branch,1
+OSB,EMG,EMG,OSBORN,KwaZulu-Natal,Outlying,O,80,MEH,OR,LOC,Outlying Adhoc,4
+OTI,WDH,WDH,OSHAKATI,NULL,Regional,R,NULL,WDH,RM,BLNS,Regional Daily,10
+OSH,NLP,NLP,OSHOEK BORDER POST,Mpumalanga,Outlying,O,172,BNR,OR,LOC,Outlying Adhoc,5
+OZI,NCS,NCS,OSIZWENI,KwaZulu-Natal,Regional,R,NULL,NCS,RM,LOC,Regional Daily,1
+OVI,WDH,WDH,OTAVI,NULL,Outlying,O,266,OGO,OR,BLNS,Outlying Adhoc,10
+OTM,DUR,DUR,OTIMATI,KwaZulu-Natal,Outlying,O,49,SAE,OR,LOC,Outlying Adhoc,4
+OGO,WDH,WDH,OTJIWARONGO,NULL,Regional,R,NULL,WDH,RM,BLNS,Regional Daily,10
+OTD,KPR,KPR,OTTOSDAL,North West,Regional,R,NULL,KPR,RM,LOC,Regional Daily,3
+OTT,KPR,RTR,OTTOSHOOP,North West,Outlying,O,60,ZST,OR,LOC,Outlying Adhoc,5
+OUH,GRJ,GRJ,OUDTSHOORN,Western Cape,Regional,R,NULL,GRJ,RM,LOC,Regional Daily,3
+OJO,WDH,WDH,OUTJO,NULL,Outlying,O,150,OGO,OR,BLNS,Outlying Adhoc,10
+OVY,PTG,PTG,OVERYSSEL,Limpopo,Outlying,O,103,ELL,OR,LOC,Outlying Adhoc,5
+OWD,KIM,KIM,OWENDALE,Northern Cape,Outlying,O,74,PMG,OR,LOC,Outlying Adhoc,5
+OYB,PLZ,PLZ,OYSTER BAY,Eastern Cape,Outlying,O,48,HDR,OR,LOC,Outlying Adhoc,4
+PAA,CPT,CPT,PAARL,Western Cape,Regional,R,NULL,CPT,RM,LOC,Regional Daily,2
+PDP,GRJ,GRJ,PACALTSDORP,Western Cape,Main (Suburb),S,NULL,GRJ,SM,LOC,Branch,1
+PDK,DUR,PSH,PADDOCK,KwaZulu-Natal,Outlying,O,42,SYB,OR,LOC,Outlying Adhoc,1
+PAL,PTG,PTG,PALALA,Limpopo,Outlying,O,76,NBR,OR,LOC,Outlying Adhoc,4
+PYE,GBE,GBE,PALAPYE,NULL,Outlying,O,540,GBE,OM,BLNS,Outlying Adhoc,10
+PMF,BFN,BFN,PALMIETFONTEIN,Eastern Cape,Outlying,O,219,AWL,OR,LOC,Outlying Adhoc,6
+PPP,KIM,CDO,PAMPOENPOORT,Northern Cape,Outlying,O,341,PRK,OR,LOC,Outlying Adhoc,8
+PBT,NCS,NCS,PANBULT,Mpumalanga,Outlying,O,96,PFR,OR,LOC,Outlying Adhoc,5
+PAD,PTA,JNB,PANSDRIF,North West,Outlying,O,25,BTR,OR,LOC,Outlying Adhoc,3
+PRP,CPT,VDR,PAPENDORP,Western Cape,Outlying,O,84,VRE,OR,LOC,Outlying Adhoc,5
+PPV,CPT,CPT,PAPIESVLEI,Western Cape,Outlying,O,90,HER,OR,LOC,Outlying Adhoc,5
+PAK,KIM,KIM,PAPKUIL,Northern Cape,Outlying,O,131,PMG,OR,LOC,Outlying Adhoc,4
+PKR,DUR,DUR,PARK RYNIE,KwaZulu-Natal,Regional,R,NULL,DUR,RM,LOC,Regional Daily,3
+PRW,CPT,CPT,PAROW,Western Cape,Main (Suburb),S,NULL,CPT,SM,LOC,Hub,1
+PYR,VDB,KPR,PARYS,Free State,Regional,R,NULL,VDB,RM,LOC,Regional Daily,4
+PTI,PLZ,PLZ,PATENSIE,Eastern Cape,Regional,R,NULL,PLZ,RM,LOC,Regional Daily,4
+PTS,PLZ,PLZ,PATERSON,Eastern Cape,Outlying,O,76,ADO,OR,LOC,Outlying Bi-weekly,2
+PLR,VDB,BEM,PAUL ROUX,Free State,Outlying,O,69,SEN,OR,LOC,Outlying Bi-weekly,2
+PPB,NCS,NCS,PAULPIETERSBURG,KwaZulu-Natal,Regional,R,NULL,NCS,RM,LOC,Regional Daily,4
+PEA,PLZ,PLZ,PEARSTON,Eastern Cape,Outlying,O,96,SEO,OR,LOC,Outlying Adhoc,3
+PDD,ELS,PLZ,PEDDIE,Eastern Cape,Outlying,O,106,KWT,OR,LOC,Outlying Bi-weekly,5
+PEL,KIM,UTN,PELLA,Northern Cape,Outlying,O,297,SPU,OR,LOC,Outlying Bi-weekly,2
+PEG,PTG,NLP,PENGE,Limpopo,Outlying,O,84,BGF,OR,LOC,Outlying Bi-weekly,5
+PPW,NCS,NCS,PEPWORTH,KwaZulu-Natal,Outlying,O,29,LAY,OR,LOC,Outlying Bi-weekly,4
+PEK,NCS,NCS,PERDEKOP,Mpumalanga,Outlying,O,70,VRR,OR,LOC,Outlying Bi-weekly,3
+PSS,VDB,BEM,PETRUS STEYN,Free State,Outlying,O,75,RTZ,OR,LOC,Outlying Bi-weekly,3
+PSG,KIM,KIM,PETRUSBURG,Free State,Regional,R,NULL,KIM,RM,LOC,Regional Bi-weekly,3
+PSV,KIM,KIM,PETRUSVILLE,Northern Cape,Outlying,O,168,HPT,OR,LOC,Outlying Bi-weekly,5
+PHW,PTG,PTG,PHALABORWA,Limpopo,Regional,R,NULL,PTG,RM,LOC,Regional Daily,6
+PLS,BFN,BFN,PHILIPPOLIS,Free State,Outlying,O,278,PSG,OR,LOC,Outlying Bi-weekly,5
+PTN,KIM,KIM,PHILIPSTOWN,Northern Cape,Outlying,O,111,DER,OR,LOC,Outlying Bi-weekly,6
+PHE,PTA,RTR,PHOKENG,North West,Outlying,O,28,RTR,OR,LOC,Outlying Bi-weekly,1
+PHK,PTG,PTG,PHOKWANE,Limpopo,Outlying,O,42,JFH,OR,LOC,Outlying Adhoc,4
+PJB,NCS,BEM,PHUTHADITJHABA,Free State,Regional,R,NULL,NCS,RM,LOC,Regional Daily,4
+PVR,PTA,JNB,PIENAARSRIVIER,Limpopo,Outlying,O,41,BBG,OR,LOC,Outlying Bi-weekly,3
+PPL,KPR,KPR,PIET PLESSIS,North West,Outlying,O,204,VRU,OR,LOC,Outlying Bi-weekly,7
+PFR,NCS,NCS,PIET RETIEF,Mpumalanga,Regional,R,NULL,NCS,RM,LOC,Regional Daily,5
+PRM,CPT,CPT,PIETER MEINTJIES,Western Cape,Outlying,O,235,WOR,OR,LOC,Outlying Adhoc,6
+PZB,PZB,DUR,PIETERMARITZBURG,KwaZulu-Natal,Main,M,NULL,PZB,MM,LOC,Branch,2
+PTG,PTG,PTG,PIETERSBURG,Limpopo,Main,M,NULL,PTG,MM,LOC,Branch,1
+PPK,MBE,MBE,PIGGS PEAK,NULL,Outlying,O,92,MBE,OM,BLNS,Outlying Adhoc,10
+PQB,CPT,VDR,PIKETBERG,Western Cape,Regional,R,NULL,CPT,RM,LOC,Regional Daily,3
+PGR,NLP,NLP,PILGRIMS REST,Mpumalanga,Outlying,O,67,SAB,OR,LOC,Outlying Adhoc,3
+PIN,DUR,DUR,PINETOWN,KwaZulu-Natal,Main (Suburb),S,NULL,DUR,SM,LOC,Hub,1
+PIT,MSU,MSU,PITSENG,NULL,Regional,R,NULL,MSU,RM,BLNS,Regional Daily,10
+PTV,KIM,KIM,PITSONG,North West,Outlying,O,65,HWA,OR,LOC,Outlying Adhoc,5
+PLB,CPT,VDR,PLATBAKKIES,Northern Cape,Outlying,O,230,SPU,OR,LOC,Outlying Adhoc,8
+PLH,GRJ,CPT,PLATHUIS,Western Cape,Outlying,O,80,LAI,OR,LOC,Outlying Adhoc,7
+PRD,NCS,NCS,PLATRAND,Mpumalanga,Outlying,O,62,SNR,OR,LOC,Outlying Adhoc,4
+PLE,GRJ,GRJ,PLETTENBERG BAY,Western Cape,Regional,R,NULL,GRJ,RM,LOC,Regional Daily,4
+PYB,KIM,KIM,PLOOYSBURG,Northern Cape,Outlying,O,98,MRS,OR,LOC,Outlying Adhoc,3
+PFD,KIM,UTN,POFADDER,Northern Cape,Outlying,O,262,KAA,OR,LOC,Outlying Bi-weekly,6
+PLI,PTG,PTG,POLITSI,Limpopo,Outlying,O,26,TZN,OR,LOC,Outlying Adhoc,3
+PTG,PTG,PTG,POLOKWANE,Limpopo,Main,M,NULL,PTG,MM,LOC,Branch,1
+POM,NCS,NCS,POMEROY,KwaZulu-Natal,Outlying,O,109,DNE,OR,LOC,Outlying Bi-weekly,4
+POF,KPR,KPR,POMFRET,North West,Outlying,O,378,VRU,OR,LOC,Outlying Adhoc,8
+PGL,EMG,NCS,PONGOLA,KwaZulu-Natal,Regional,R,NULL,EMG,RM,LOC,Regional Daily,6
+POO,CPT,VDR,POOLS,Western Cape,Outlying,O,30,PQB,OR,LOC,Outlying Adhoc,4
+PAF,ELS,PLZ,PORT ALFRED,Eastern Cape,Regional,R,NULL,ELS,RM,LOC,Regional Daily,4
+PTB,GRJ,GRJ,PORT BEAUFORT,Western Cape,Outlying,O,116,RDS,OR,LOC,Outlying Adhoc,5
+PED,DUR,PSH,PORT EDWARD,KwaZulu-Natal,Outlying,O,60,MAR,OR,LOC,Outlying Bi-weekly,2
+PLZ,PLZ,PLZ,PORT ELIZABETH,Eastern Cape,Main,M,NULL,PLZ,MM,LOC,Hub,1
+POG,PZB,PSH,PORT GROSVENOR,Eastern Cape,Outlying,O,82,LSK,OR,LOC,Outlying Adhoc,6
+PNH,CPT,UTN,PORT NOLLOTH,Northern Cape,Outlying,O,274,SPU,OR,LOC,Outlying Bi-weekly,10
+PSH,DUR,PSH,PORT SHEPSTONE,KwaZulu-Natal,Regional,R,NULL,DUR,RM,LOC,Regional Daily,1
+PSJ,PZB,ELS,PORT ST JOHNS,Eastern Cape,Outlying,O,79,LSK,OR,LOC,Outlying Bi-weekly,3
+POL,CPT,VDR,PORTERVILLE,Western Cape,Outlying,O,53,PQB,OR,LOC,Outlying Bi-weekly,4
+POC,PLZ,CDO,POST CHALMERS,Eastern Cape,Outlying,O,58,CDO,OR,LOC,Outlying Adhoc,1
+PMG,KIM,KIM,POSTMASBURG,Northern Cape,Regional,R,NULL,KIM,RM,LOC,Regional Daily,6
+PCM,KPR,KPR,POTCHEFSTROOM,North West,Regional,R,NULL,KPR,RM,LOC,Regional Daily,2
+PFT,KIM,KIM,POTFONTEIN,Northern Cape,Outlying,O,104,DER,OR,LOC,Outlying Adhoc,5
+PTR,PTG,PTG,POTGIETERSRUS,Limpopo,Regional,R,NULL,PTG,RM,LOC,Regional Daily,3
+PUP,KIM,KIM,POUPAN,Northern Cape,Outlying,O,102,HPT,OR,LOC,Outlying Adhoc,5
+PTA,PTA,JNB,PRETORIA,Gauteng,Main,M,NULL,PTA,MM,LOC,Hub,1
+PRK,KIM,UTN,PRIESKA,Northern Cape,Regional,R,NULL,KIM,RM,LOC,Regional Daily,6
+PAW,GRJ,GRJ,PRINCE ALBERT,Western Cape,Outlying,O,139,OUH,OR,LOC,Outlying Bi-weekly,4
+PRI,BFN,BFN,PRIORS,Free State,Outlying,O,274,AWL,OR,LOC,Outlying Adhoc,5
+PTM,CPT,CPT,PROTEM,Western Cape,Outlying,O,64,BDD,OR,LOC,Outlying Adhoc,5
+PUD,KIM,KIM,PUDIMOE,North West,Outlying,O,89,HWA,OR,LOC,Outlying Bi-weekly,5
+PTZ,KIM,UTN,PUTSONDERWATER,Northern Cape,Outlying,O,222,PRK,OR,LOC,Outlying Bi-weekly,4
+QBA,ELS,BFN,QIBA,Eastern Cape,Outlying,O,207,QQD,OR,LOC,Outlying Adhoc,8
+QBQ,ELS,ELS,QOBOQOBO,Eastern Cape,Outlying,O,42,BWH,OR,LOC,Outlying Adhoc,4
+QOM,ELS,ELS,QOLORA MOUTH,Eastern Cape,Outlying,O,113,BWH,OR,LOC,Outlying Adhoc,4
+QQD,ELS,ELS,QOQODALA,Eastern Cape,Regional,R,NULL,ELS,RM,LOC,Regional Daily,6
+QRM,ELS,ELS,QORA MOUTH,Eastern Cape,Outlying,O,151,BWH,OR,LOC,Outlying Adhoc,5
+QUD,EMG,DUR,QUDENI,KwaZulu-Natal,Outlying,O,115,NQT,OR,LOC,Outlying Adhoc,6
+QTN,ELS,ELS,QUEENSTOWN,Eastern Cape,Regional,R,NULL,ELS,RM,LOC,Regional Daily,6
+QUI,MSU,MSU,QUITENG,NULL,Regional,R,NULL,MSU,RM,BLNS,Regional Daily,10
+QKO,ELS,ELS,QUKO,Eastern Cape,Outlying,O,100,BCB,OS,LOC,Outlying Adhoc,3
+QMB,ELS,ELS,QUMBU,Eastern Cape,Outlying,O,119,UTT,OR,LOC,Outlying Bi-weekly,2
+RAD,PTA,JNB,RADIUM,Limpopo,Outlying,O,46,WSR,OR,LOC,Outlying Bi-weekly,4
+RNA,GBE,GBE,RAMOTSWANA,NULL,Outlying,O,62,GBE,OM,BLNS,Outlying Adhoc,10
+RMG,DUR,PSH,RAMSGATE,KwaZulu-Natal,Outlying,O,10,MAR,OR,LOC,Outlying Bi-weekly,1
+RLH,EMG,EMG,RANDALHURST,KwaZulu-Natal,Outlying,O,33,MEH,OR,LOC,Outlying Adhoc,3
+RDB,JNB,JNB,RANDBURG,Gauteng,Main (Suburb),S,NULL,JNB,SM,LOC,Hub,1
+RDF,VDB,JNB,RANDFONTEIN,Gauteng,Regional,R,NULL,VDB,RM,LOC,Regional Daily,3
+RKR,PTA,PTG,RANKINS PASS,Limpopo,Outlying,O,110,NSR,OR,LOC,Outlying Adhoc,5
+RFL,CPT,VDR,RATELFONTEIN,Western Cape,Outlying,O,79,CWM,OR,LOC,Outlying Adhoc,4
+RWV,CPT,CPT,RAWSONVILLE,Western Cape,Outlying,O,35,WOR,OR,LOC,Outlying Bi-weekly,3
+RZZ,NULL,NULL,RDS OTHER,NULL,Outlying,NULL,NULL,NULL,,LOC,Outlying Adhoc,0
+RDC,PZB,DUR,REDCLIFFE,KwaZulu-Natal,Outlying,O,62,MRR,OR,LOC,Outlying Adhoc,5
+RDG,BFN,BFN,REDDERSBURG,Free State,Outlying,O,120,BFN,OM,LOC,Outlying Bi-weekly,3
+RDH,CPT,VDR,REDELINGHUYS,Western Cape,Outlying,O,123,VLF,OR,LOC,Outlying Bi-weekly,3
+REE,KIM,KIM,REEBOKRAND,Free State,Outlying,O,235,HPT,OR,LOC,Outlying Adhoc,5
+RBH,WDH,WDH,REHOBOTH,NULL,Outlying,O,192,WDH,OM,BLNS,Outlying Adhoc,10
+RTZ,VDB,BEM,REITZ,Free State,Regional,R,NULL,VDB,RM,LOC,Regional Daily,2
+RZB,KPR,KPR,REITZBURG,Free State,Outlying,O,68,PYR,OR,LOC,Outlying Adhoc,3
+REV,KIM,KIM,REIVILO,North West,Outlying,O,163,HWA,OR,LOC,Outlying Bi-weekly,5
+RKP,GRJ,GRJ,RENOSTERKOP,Western Cape,Outlying,O,64,BFU,OR,LOC,Outlying Adhoc,7
+RSP,BFN,BFN,RENOSTERSPRUIT,North West,Outlying,O,23,BFN,OM,LOC,Outlying Bi-weekly,1
+RSV,GRJ,GRJ,RESTVALE,Western Cape,Outlying,O,107,BFU,OR,LOC,Outlying Adhoc,7
+RNL,GRJ,GRJ,RHEENENDAL,Western Cape,Outlying,O,46,KYL,OR,LOC,Outlying Adhoc,3
+RHO,BFN,BFN,RHODES,Eastern Cape,Outlying,O,342,AWL,OR,LOC,Outlying Adhoc,8
+RBY,EMG,EMG,RICHARD'S BAY,KwaZulu-Natal,Main (Suburb),S,NULL,EMG,SM,LOC,Branch,1
+RBY,EMG,EMG,RICHARDS BAY,KwaZulu-Natal,Main (Suburb),S,NULL,EMG,SM,LOC,Branch,1
+RMD,PZB,DUR,RICHMOND (KZN),KwaZulu-Natal,Regional,R,NULL,PZB,RM,LOC,Regional Bi-weekly,3
+RHD,KIM,KIM,RICHMOND (NC),Northern Cape,Outlying,O,187,DER,OR,LOC,Outlying Bi-weekly,6
+RBO,PLZ,PLZ,RIEBEEK EAST,Eastern Cape,Outlying,O,81,GHO,OR,LOC,Outlying Adhoc,4
+RKK,CPT,VDR,RIEBEEK-KASTEEL,Western Cape,Outlying,O,43,MBY,OR,LOC,Outlying Bi-weekly,4
+RBO,PLZ,PLZ,RIEBEEK-OOS,Eastern Cape,Outlying,O,81,GHO,OR,LOC,Outlying Adhoc,4
+RWR,CPT,VDR,RIEBEEK-WES,Western Cape,Outlying,O,51,MBY,OR,LOC,Outlying Bi-weekly,4
+RTB,GRJ,GRJ,RIETBRON,Western Cape,Outlying,O,168,BFU,OR,LOC,Outlying Bi-weekly,6
+RIK,PTG,PTG,RIETKOLK,Limpopo,Outlying,O,27,PTG,OM,LOC,Outlying Bi-weekly,2
+RTK,WIR,WIR,RIETKUIL,Mpumalanga,Outlying,O,56,HDN,OR,LOC,Outlying Bi-weekly,4
+RTP,CPT,CPT,RIETPOEL,Western Cape,Outlying,O,75,CLN,OR,LOC,Outlying Adhoc,4
+RPO,CPT,UTN,RIETPOORT,Western Cape,Outlying,O,223,VRE,OR,LOC,Outlying Bi-weekly,9
+RTV,PZB,DUR,RIETVLEI,KwaZulu-Natal,Outlying,O,68,MRR,OR,LOC,Outlying Adhoc,5
+RIT,PTG,PTG,RITA,Limpopo,Outlying,O,53,MKW,OR,LOC,Outlying Bi-weekly,4
+RTH,KIM,KIM,RITCHIE,Northern Cape,Outlying,O,11,MRS,OR,LOC,Outlying Bi-weekly,2
+RDS,GRJ,GRJ,RIVERSDALE,Western Cape,Regional,R,NULL,GRJ,RM,LOC,Regional Daily,4
+RVS,PZB,DUR,RIVERSIDE,KwaZulu-Natal,Outlying,O,106,IXO,OR,LOC,Outlying Adhoc,4
+RSD,CPT,CPT,RIVIERSONDEREND,Western Cape,Outlying,O,99,CLN,OR,LOC,Outlying Bi-weekly,5
+ROB,VDB,NCS,ROBERTS DRIFT,Mpumalanga,Outlying,O,56,SNR,OR,LOC,Outlying Adhoc,5
+ROR,CPT,CPT,ROBERTSON,Western Cape,Regional,R,NULL,CPT,RM,LOC,Regional Daily,5
+ROC,PZB,DUR,ROCKMOUNT,KwaZulu-Natal,Outlying,O,87,MRR,OR,LOC,Outlying Adhoc,5
+ROD,PZB,PSH,RODE,Eastern Cape,Outlying,O,120,KDX,OR,LOC,Outlying Adhoc,3
+ROE,PTG,PTG,ROEDTAN,Limpopo,Outlying,O,92,NBR,OR,LOC,Outlying Bi-weekly,4
+ROA,MSU,MSU,ROMA,NULL,Outlying,O,70,MSU,OM,BLNS,Outlying Adhoc,10
+ROO,WIR,WIR,ROODEBANK,Mpumalanga,Outlying,O,45,EVD,OR,LOC,Outlying Adhoc,4
+RDP,JNB,JNB,ROODEPOORT,Gauteng,Main (Suburb),S,NULL,JNB,SM,LOC,Hub,1
+RBG,PTA,RTR,ROOIBERG,Limpopo,Outlying,O,106,TZB,OR,LOC,Outlying Bi-weekly,4
+RBK,PTA,RTR,ROOIBOKKRAAL,Limpopo,Outlying,O,164,TZB,OR,LOC,Outlying Adhoc,6
+ROG,KPR,KPR,ROOIGROND,North West,Outlying,O,36,MEI,OR,LOC,Outlying Adhoc,5
+RKL,WIR,WIR,ROOIKRAAL,Limpopo,Outlying,O,87,GRO,OR,LOC,Outlying Bi-weekly,4
+ROP,KIM,KIM,ROOIPAN,Free State,Outlying,O,116,JDL,OR,LOC,Outlying Adhoc,4
+RWL,PTA,JNB,ROOIWAL,Free State,Regional,R,NULL,PTA,RM,LOC,Regional Bi-weekly,5
+RSC,WIR,WIR,ROOSSENEKAL,Limpopo,Outlying,O,138,JFH,OR,LOC,Outlying Adhoc,4
+RKD,NCS,NCS,RORKES DRIFT,KwaZulu-Natal,Outlying,O,51,NQT,OR,LOC,Outlying Adhoc,4
+ROS,GRJ,GRJ,ROSEDENE,Western Cape,Outlying,O,96,BFU,OR,LOC,Outlying Adhoc,7
+RDL,BFN,BEM,ROSENDAL,Free State,Outlying,O,80,SEN,OR,LOC,Outlying Bi-weekly,2
+RTT,PZB,DUR,ROSETTA,KwaZulu-Natal,Outlying,O,25,MRR,OR,LOC,Outlying Adhoc,4
+RSW,ELS,BFN,ROSSOUW,Eastern Cape,Outlying,O,174,QQD,OR,LOC,Outlying Adhoc,8
+ROV,KPR,KPR,ROSTRATAVILLE,North West,Outlying,O,51,DLV,OR,LOC,Outlying Adhoc,4
+RHM,ELS,ELS,ROTHMERE,Eastern Cape,Outlying,O,165,UTT,OR,LOC,Outlying Adhoc,3
+RXP,GRJ,CPT,ROUXPOS,Western Cape,Outlying,O,153,LAI,OR,LOC,Outlying Adhoc,8
+RXL,BFN,BFN,ROUXVILLE,Free State,Outlying,O,70,AWL,OR,LOC,Outlying Bi-weekly,5
+RUB,GRJ,GRJ,RUITERSBOS,Western Cape,Outlying,O,56,GBR,OR,LOC,Outlying Adhoc,2
+NDU,WDH,WDH,RUNDU,NULL,Outlying,O,500,OTI,OR,BLNS,Outlying Adhoc,10
+RUS,CPT,CPT,RUST,Western Cape,Outlying,O,31,MRB,OR,LOC,Outlying Adhoc,4
+RDW,PTA,JNB,RUST DE WINTER,Limpopo,Outlying,O,90,HKR,OR,LOC,Outlying Bi-weekly,4
+RTR,PTA,RTR,RUSTENBURG,North West,Regional,R,NULL,PTA,RM,LOC,Regional Daily,1
+RSG,KPR,KPR,RUSTIG,Free State,Outlying,O,67,KRO,OR,LOC,Outlying Adhoc,4
+RVB,KPR,RTR,RUSVERBY,North West,Outlying,O,143,RTR,OR,LOC,Outlying Adhoc,3
+SAB,NLP,NLP,SABIE,Mpumalanga,Regional,R,NULL,NLP,RM,LOC,Regional Daily,2
+SAD,ELS,ELS,SADA,Eastern Cape,Outlying,O,80,QTN,OR,LOC,Outlying Adhoc,5
+SLD,CPT,VDR,SALDANHA,Western Cape,Regional,R,NULL,CPT,RM,LOC,Regional Daily,1
+SPT,KIM,KIM,SALPETERPAN,North West,Outlying,O,113,VRU,OR,LOC,Outlying Adhoc,5
+SLT,KIM,KIM,SALT LAKE,Northern Cape,Outlying,O,74,DLS,OR,LOC,Outlying Adhoc,4
+SAL,EMG,EMG,SALVATION,KwaZulu-Natal,Outlying,O,76,NON,OR,LOC,Outlying Adhoc,5
+SGR,CPT,VDR,SANDBERG,Western Cape,Outlying,O,95,CWM,OR,LOC,Outlying Bi-weekly,4
+SAN,JNB,JNB,SANDTON,Gauteng,Main (Suburb),S,NULL,JNB,SM,LOC,Hub,1
+SDV,PLZ,PLZ,SANDVLAKTE,Eastern Cape,Outlying,O,202,PTI,OR,LOC,Outlying Adhoc,6
+SAH,KPR,KPR,SANNIESHOF,North West,Outlying,O,82,DLV,OR,LOC,Outlying Bi-weekly,4
+SRN,CPT,VDR,SARON,NULL,Outlying,O,90,PQB,OR,LOC,Outlying Adhoc,4
+CRL,PTG,PTG,SASELEMANI,Limpopo,Outlying,O,125,BOC,OR,LOC,Outlying Bi-weekly,6
+SBG,VDB,JNB,SASOLBURG,Free State,Main (Suburb),S,NULL,VDB,SM,LOC,Branch,4
+SCN,NCS,NCS,SCHEEPERSNEK,KwaZulu-Natal,Outlying,O,25,VYD,OR,LOC,Outlying Adhoc,4
+SCH,KIM,KIM,SCHMIDTSDRIF,Northern Cape,Outlying,O,101,DLS,OR,LOC,Outlying Adhoc,3
+SMH,GRJ,GRJ,SCHOEMANSHOEK,Western Cape,Outlying,O,28,OUH,OR,LOC,Outlying Adhoc,3
+SRK,KPR,KPR,SCHWEIZER-RENEKE,North West,Regional,R,NULL,KPR,RM,LOC,Regional Daily,5
+SOG,DUR,DUR,SCOTTBURGH,KwaZulu-Natal,Regional,R,NULL,DUR,RM,LOC,Regional Daily,3
+SBK,VDB,JNB,SEBOKENG,Gauteng,Main (Suburb),S,NULL,VDB,SM,LOC,Branch,3
+SEC,WIR,WIR,SECUNDA,Mpumalanga,Regional,R,NULL,WIR,RM,LOC,Regional Daily,3
+SED,CPT,CPT,SEDERBERG,Western Cape,Outlying,O,114,CWM,OR,LOC,Outlying Adhoc,7
+SGF,GRJ,GRJ,SEDGEFIELD,Western Cape,Regional,R,NULL,GRJ,RM,LOC,Regional Daily,2
+SKG,GRJ,GRJ,SEEKOEGAT,Western Cape,Outlying,O,165,BFU,OR,LOC,Outlying Adhoc,4
+SHV,KIM,KIM,SEKHING,North West,Outlying,O,52,HWA,OR,LOC,Outlying Adhoc,4
+SPE,GBE,GBE,SELIBI PHIKWE,NULL,Outlying,O,200,FRW,OR,BLNS,Outlying Adhoc,10
+SER,WIR,WIR,SELONSRIVIER,Mpumalanga,Outlying,O,54,DLR,OR,LOC,Outlying Adhoc,2
+SLS,BFN,BFN,SELOSESHA,Free State,Outlying,O,5,TCR,OR,LOC,Outlying Adhoc,3
+SEK,MSU,MSU,SEMONKONG,NULL,Regional,R,NULL,MSU,RM,BLNS,Regional Daily,10
+SDG,KPR,KPR,SENDELINGSFONTEIN,North West,Outlying,O,62,OTD,OR,LOC,Outlying Adhoc,2
+SEG,PTG,PTG,SENDING,Limpopo,Outlying,O,70,BOC,OR,LOC,Outlying Adhoc,3
+SEN,BFN,BEM,SENEKAL,Free State,Regional,R,NULL,BFN,RM,LOC,Regional Daily,3
+SNM,PTA,RTR,SENTRUM,Limpopo,Outlying,O,85,TZB,OR,LOC,Outlying Adhoc,5
+SDL,KIM,KIM,SEODING,North West,Outlying,O,18,KUR,OR,LOC,Outlying Adhoc,4
+SRE,GBE,GBE,SEROWE,NULL,Outlying,O,314,FRW,OR,BLNS,Outlying Adhoc,10
+SGE,KPR,KPR,SETLAGOLE,North West,Outlying,O,119,DLV,OR,LOC,Outlying Adhoc,6
+SOO,KPR,KPR,SETLOPO,North West,Outlying,O,19,MEI,OR,LOC,Outlying Adhoc,5
+SET,PTA,JNB,SETTLERS,Limpopo,Outlying,O,59,WSR,OR,LOC,Outlying Bi-weekly,4
+SHA,DUR,DUR,SHAKASKRAAL,KwaZulu-Natal,Regional,R,NULL,DUR,RM,LOC,Regional Bi-weekly,3
+SHL,KIM,KIM,SHALENG,North West,Outlying,O,121,JKP,OR,LOC,Outlying Adhoc,4
+SHR,NCS,WIR,SHEEPMOOR,Mpumalanga,Outlying,O,87,EML,OR,LOC,Outlying Adhoc,5
+SYB,DUR,PSH,SHELLY BEACH,KwaZulu-Natal,Regional,R,NULL,DUR,RM,LOC,Regional Daily,1
+SHE,BFN,CDO,SHERBORNE,Eastern Cape,Outlying,O,232,CDO,OR,LOC,Outlying Adhoc,4
+SIB,PTG,PTG,SIBASA,Limpopo,Outlying,O,8,THO,OR,LOC,Outlying Bi-weekly,5
+SLV,PTA,RTR,SILENT VALLEY,Limpopo,Outlying,O,170,NRR,OR,LOC,Outlying Adhoc,5
+SVR,KIM,KIM,SILVER STREAMS,Northern Cape,Outlying,O,112,PMG,OR,LOC,Outlying Adhoc,5
+SYE,MBE,MBE,SIMUNYE,NULL,Outlying,O,180,MBE,OM,BLNS,Outlying Adhoc,10
+SKB,GRJ,GRJ,SINKSBRUG,Western Cape,Outlying,O,20,GBR,OR,LOC,Outlying Bi-weekly,1
+SIN,KIM,KIM,SISHEN,Northern Cape,Outlying,O,42,KAT,OR,LOC,Outlying Adhoc,7
+SKI,MBE,MBE,SITEKI,NULL,Outlying,O,92,BBD,OR,BLNS,Outlying Adhoc,10
+SBW,WIR,WIR,SIYABUSWA,Mpumalanga,Regional,R,NULL,WIR,RM,LOC,Regional Bi-weekly,4
+SKP,PTA,RTR,SKEERPOORT,North West,Outlying,O,48,HBP,OS,LOC,Outlying Bi-weekly,3
+SPP,KIM,UTN,SKERPIOENPUNT,Northern Cape,Outlying,O,238,UTN,OR,LOC,Outlying Adhoc,4
+SKK,CPT,CPT,SKIPSKOP,Western Cape,Outlying,O,82,BDD,OR,LOC,Outlying Adhoc,6
+SKZ,NLP,NLP,SKUKUZA,Mpumalanga,Outlying,O,103,HZY,OR,LOC,Outlying Bi-weekly,4
+SBB,VDB,BEM,SLABBERTS,Free State,Outlying,O,59,BEM,OR,LOC,Outlying Adhoc,1
+SLR,PLZ,PLZ,SLANGRIVIER,Eastern Cape,Outlying,O,46,HDR,OR,LOC,Outlying Bi-weekly,5
+SLU,KPR,KPR,SLURRY,North West,Outlying,O,44,MEI,OR,LOC,Outlying Bi-weekly,5
+SMF,BFN,BFN,SMITHFIELD,Free State,Outlying,O,145,AWL,OR,LOC,Outlying Bi-weekly,4
+SMK,GRJ,GRJ,SMITHSKRAAL (SMITSKRAAL),Eastern Cape,Outlying,O,298,BFU,OR,LOC,Outlying Adhoc,5
+SNK,GRJ,GRJ,SNEEUKRAAL,Western Cape,Outlying,O,124,BFU,OR,LOC,Outlying Adhoc,8
+SNW,PZB,DUR,SNEEZEWOOD,Eastern Cape,Outlying,O,100,KDX,OR,LOC,Outlying Adhoc,5
+SOD,KIM,KIM,SODIUM,Northern Cape,Outlying,O,138,PRK,OR,LOC,Outlying Adhoc,7
+SDW,EMG,EMG,SODWANA BAY,KwaZulu-Natal,Outlying,O,144,EGG,OR,LOC,Outlying Adhoc,6
+SMC,PTG,PTG,SOEKMEKAAR,Limpopo,Outlying,O,121,LTT,OR,LOC,Outlying Bi-weekly,3
+SOM,PTG,PTG,SOLOMONDALE,Limpopo,Outlying,O,32,MKW,OR,LOC,Outlying Bi-weekly,1
+SEO,PLZ,PLZ,SOMERSET EAST,Eastern Cape,Regional,R,NULL,PLZ,RM,LOC,Regional Daily,5
+SSW,CPT,CPT,SOMERSET WEST,Western Cape,Main (Suburb),S,NULL,CPT,SM,LOC,Hub,1
+SON,PTA,JNB,SONOP,North West,Regional,R,NULL,PTA,RM,LOC,Regional Bi-weekly,3
+SDO,PZB,DUR,SOUTH DOWNS,KwaZulu-Natal,Outlying,O,45,MRR,OR,LOC,Outlying Adhoc,5
+SWE,PLZ,PLZ,SOUTHWELL,Eastern Cape,Outlying,O,47,PAF,OR,LOC,Outlying Adhoc,4
+SOU,BFN,BFN,SOUTPAN (FS),Free State,Outlying,O,86,BDT,OR,LOC,Outlying Adhoc,2
+SPN,BFN,JNB,SOUTPAN (N),Limpopo,Outlying,O,86,BDT,OR,LOC,Outlying Adhoc,9
+SWO,JNB,JNB,SOWETO,Gauteng,Main (Suburb),S,NULL,JNB,SM,LOC,Hub,1
+SPV,ELS,CDO,SPRING VALLEY,Eastern Cape,Outlying,O,172,CDO,OR,LOC,Outlying Adhoc,3
+SPU,CPT,UTN,SPRINGBOK,Northern Cape,Regional,R,NULL,CPT,RM,LOC,Regional Daily,8
+SPF,BFN,BFN,SPRINGFONTEIN,Free State,Outlying,O,253,AWL,OR,LOC,Outlying Bi-weekly,3
+SPR,JNB,JNB,SPRINGS,Gauteng,Main (Suburb),S,NULL,JNB,SM,LOC,Hub,1
+STF,PZB,PSH,ST FAITHS,KwaZulu-Natal,Outlying,O,88,PSH,OR,LOC,Outlying Adhoc,3
+SFB,PLZ,PLZ,ST FRANCIS BAY,Eastern Cape,Outlying,O,37,HDR,OR,LOC,Outlying Bi-weekly,4
+SLE,EMG,EMG,ST LUCIA,KwaZulu-Natal,Outlying,O,52,MUT,OR,LOC,Outlying Bi-weekly,3
+STM,ELS,ELS,ST MARKS,Eastern Cape,Outlying,O,112,QTN,OR,LOC,Outlying Adhoc,5
+SNR,NCS,NCS,STANDERTON,Mpumalanga,Regional,R,NULL,NCS,RM,LOC,Regional Daily,4
+SFD,CPT,CPT,STANFORD,Western Cape,Outlying,O,49,HER,OR,LOC,Outlying Bi-weekly,4
+SAE,DUR,DUR,STANGER (KWADUKUZA),KwaZulu-Natal,Regional,R,NULL,DUR,RM,LOC,Regional Daily,3
+SEE,NLP,NLP,STEELPOORT,Mpumalanga,Regional,R,NULL,NLP,RM,LOC,Regional Bi-weekly,5
+STX,CPT,CPT,STEENBERG,Western Cape,Main (Suburb),S,NULL,CPT,SM,LOC,Hub,1
+SBP,PTG,RTR,STEENBOKPAN,Limpopo,Outlying,O,100,ELL,OR,LOC,Outlying Adhoc,7
+STL,KPR,KPR,STELLA,North West,Outlying,O,94,VRU,OR,LOC,Outlying Bi-weekly,5
+SHC,CPT,CPT,STELLENBOSCH,Western Cape,Main (Suburb),S,NULL,CPT,SM,LOC,Hub,1
+SKT,BFN,BFN,STERKSPRUIT,Eastern Cape,Outlying,O,171,AWL,OR,LOC,Outlying Bi-weekly,6
+STK,ELS,BFN,STERKSTROOM (EASTERN CAPE),Eastern Cape,Outlying,O,110,QTN,OR,LOC,Outlying Bi-weekly,8
+STS,KPR,RTR,STERKSTROOM (NORTH WEST),North West,Outlying,O,47,VSD,OR,LOC,Outlying Adhoc,4
+SYG,BFN,BFN,STEYNSBURG,Eastern Cape,Outlying,O,216,CDO,OR,LOC,Outlying Bi-weekly,7
+SYS,VDB,BEM,STEYNSRUS,Free State,Outlying,O,91,SEN,OR,LOC,Outlying Bi-weekly,4
+STV,PLZ,PLZ,STEYTLERVILLE,Eastern Cape,Outlying,O,185,PTI,OR,LOC,Outlying Bi-weekly,5
+SBI,GRJ,GRJ,STILBAAI,Western Cape,Regional,R,NULL,GRJ,RM,LOC,Regional Daily,4
+SIF,KPR,KPR,STILFONTEIN,North West,Main (Suburb),S,NULL,KPR,SM,LOC,Branch,1
+STP,PTG,PTG,STOCKPOORT,Limpopo,Outlying,O,117,ELL,OR,LOC,Outlying Adhoc,7
+SOF,WIR,WIR,STOFFBERG,Mpumalanga,Outlying,O,119,DLR,OR,LOC,Outlying Bi-weekly,3
+STR,GRJ,PLZ,STORMS RIVER,Eastern Cape,Outlying,O,122,PLE,OR,LOC,Outlying Bi-weekly,6
+STR,GRJ,PLZ,STORMSRIVIER,Eastern Cape,Outlying,O,122,PLE,OR,LOC,Outlying Bi-weekly,5
+STD,CPT,CPT,STRAND,Western Cape,Main (Suburb),S,NULL,CPT,SM,LOC,Hub,1
+SFT,CPT,CPT,STRANDFONTEIN,Western Cape,Main (Suburb),S,NULL,CPT,SM,LOC,Hub,5
+STB,CPT,CPT,STRUIS BAY,Western Cape,Outlying,O,65,BDD,OR,LOC,Outlying Bi-weekly,6
+STG,KIM,KIM,STRYDENBURG,Northern Cape,Outlying,O,110,HPT,OR,LOC,Outlying Bi-weekly,5
+SSH,ELS,ELS,STUTTERHEIM,Eastern Cape,Outlying,O,70,BIS,OR,LOC,Outlying Bi-weekly,4
+SUN,PTA,RTR,SUN CITY/LOST CITY,North West,Outlying,O,89,RTR,OR,LOC,Outlying Bi-weekly,2
+STH,CPT,CPT,SUTHERLAND,Northern Cape,Outlying,O,384,CER,OR,LOC,Outlying Bi-weekly,8
+SWP,WDH,WDH,SWAKOPMUND,NULL,Regional,R,NULL,WDH,RM,BLNS,Regional Daily,10
+SRB,PZB,PSH,SWARTBERG,KwaZulu-Natal,Outlying,O,86,KDX,OR,LOC,Outlying Bi-weekly,5
+SWK,PTA,RTR,SWARTKLIP,Limpopo,Outlying,O,29,NRR,OR,LOC,Outlying Bi-weekly,4
+SWM,KIM,UTN,SWARTMODDER,Northern Cape,Outlying,O,188,UTN,OR,LOC,Outlying Adhoc,4
+SWA,KIM,KIM,SWARTPUTS,Northern Cape,Outlying,O,161,BKY,OR,LOC,Outlying Adhoc,4
+SWU,KPR,RTR,SWARTRUGGENS,North West,Outlying,O,118,RTR,OR,LOC,Outlying Bi-weekly,3
+SWW,PTG,PTG,SWARTWATER,Limpopo,Outlying,O,236,ELL,OR,LOC,Outlying Bi-weekly,6
+OSW,MBE,MBE,SWAZILAND OTHER,NULL,Outlying,O,200,MBE,OM,BLNS,Outlying Adhoc,10
+SWD,CPT,CPT,SWELLENDAM,Western Cape,Regional,R,NULL,CPT,RM,LOC,Regional Daily,6
+SWN,NCS,BEM,SWINBURNE,Free State,Outlying,O,40,HRS,OR,LOC,Outlying Adhoc,4
+TNZ,PZB,ELS,TABANKULU,Eastern Cape,Outlying,O,103,FLG,OR,LOC,Outlying Bi-weekly,5
+TAS,ELS,CDO,TARKASTAD,Eastern Cape,Outlying,O,130,QTN,OR,LOC,Outlying Bi-weekly,3
+TAU,KIM,KIM,TAUNG,North West,Outlying,O,63,HWA,OR,LOC,Outlying Bi-weekly,5
+TNG,MSU,MSU,TEYATEYANENG,NULL,Outlying,O,70,MSU,OM,BLNS,Outlying Adhoc,10
+TCR,BFN,BFN,THABA NCHU,Free State,Regional,R,NULL,BFN,RM,LOC,Regional Daily,3
+TZB,PTA,RTR,THABAZIMBI,Limpopo,Regional,R,NULL,PTA,RM,LOC,Regional Daily,4
+THA,KPR,KPR,THABONG,Free State,Outlying,O,13,OKY,OS,LOC,Outlying Bi-weekly,5
+CRG,GRJ,GRJ,THE CRAGS,Western Cape,Outlying,O,38,PLE,OR,LOC,Outlying Bi-weekly,4
+THN,BFN,BFN,THEUNISSEN,Free State,Outlying,O,80,VGA,OR,LOC,Outlying Bi-weekly,4
+THO,PTG,PTG,THOHOYANDOU,Limpopo,Regional,R,NULL,PTG,RM,LOC,Regional Daily,5
+THL,PLZ,PLZ,THORNHILL,Eastern Cape,Outlying,O,24,LRE,OR,LOC,Outlying Bi-weekly,4
+TRS,GRJ,GRJ,THREE SISTERS,Northern Cape,Outlying,O,153,BFU,OR,LOC,Outlying Adhoc,8
+TML,NLP,NLP,THULAMAHASHE,Limpopo,Outlying,O,47,BOS,OR,LOC,Outlying Bi-weekly,4
+THU,NLP,NLP,THULAMAHAXI,Limpopo,Outlying,O,48,BOS,OR,LOC,Outlying Adhoc,4
+TRF,BFN,BFN,TIERFONTEIN,Free State,Outlying,O,72,BTN,OR,LOC,Outlying Adhoc,4
+TIN,PZB,PSH,TINANA,Eastern Cape,Outlying,O,116,MTL,OR,LOC,Outlying Adhoc,7
+TLA,KIM,KIM,TLAPENG,North West,Outlying,O,100,HWA,OR,LOC,Outlying Adhoc,7
+TOL,PTG,PTG,TOLWE,Limpopo,Outlying,O,185,BOC,OR,LOC,Outlying Bi-weekly,5
+TMB,PTG,PTG,TOM BURKE,Limpopo,Outlying,O,170,ELL,OR,LOC,Outlying Bi-weekly,6
+TGW,NLP,NLP,TONGA VIEW,Mpumalanga,Outlying,O,74,HPS,OR,LOC,Outlying Adhoc,4
+TON,DUR,DUR,TONGAAT,KwaZulu-Natal,Regional,R,NULL,DUR,RM,LOC,Regional Daily,2
+TOS,KPR,KPR,TOSCA,North West,Outlying,O,296,VRU,OR,LOC,Outlying Bi-weekly,8
+TOW,CPT,CPT,TOUWS RIVER,Western Cape,Outlying,O,150,WOR,OR,LOC,Outlying Bi-weekly,5
+TIT,WIR,WIR,TRICHARDT,Mpumalanga,Regional,R,NULL,WIR,RM,LOC,Regional Daily,3
+TPR,BFN,BFN,TROMPSBURG,Free State,Outlying,O,227,BFN,OM,LOC,Outlying Bi-weekly,4
+TNI,MBE,MBE,TSHANENI,NULL,Outlying,O,160,MBE,OM,BLNS,Outlying Adhoc,10
+TKN,PTG,PTG,TSHIKONDENI MINE,Limpopo,Outlying,O,180,THO,OR,LOC,Outlying Adhoc,7
+TSP,PTG,PTG,TSHIPISE,Limpopo,Outlying,O,74,MES,OR,LOC,Outlying Bi-weekly,5
+TSK,ELS,ELS,TSITSIKAMA,Eastern Cape,Outlying,O,110,QTN,OR,LOC,Outlying Adhoc,6
+TSL,ELS,ELS,TSOLO,Eastern Cape,Outlying,O,85,UTT,OR,LOC,Outlying Bi-weekly,2
+TSO,ELS,ELS,TSOMO,Eastern Cape,Outlying,O,107,BWH,OR,LOC,Outlying Bi-weekly,5
+TSB,WDH,WDH,TSUMEB,NULL,Outlying,O,408,OGO,OR,BLNS,Outlying Adhoc,10
+TUW,CPT,CPT,TULBAGH,Western Cape,Outlying,O,61,CER,OR,LOC,Outlying Bi-weekly,4
+TWG,VDB,BEM,TWEELING,Free State,Outlying,O,65,RTZ,OR,LOC,Outlying Bi-weekly,3
+TWE,PTA,RTR,TWEERIVIER,North West,Outlying,O,102,BTR,OR,LOC,Outlying Adhoc,8
+TST,BFN,BFN,TWEESPRUIT,Free State,Outlying,O,52,TCR,OR,LOC,Outlying Bi-weekly,3
+TZN,PTG,PTG,TZANEEN,Limpopo,Regional,R,NULL,PTG,RM,LOC,Regional Daily,4
+UGE,ELS,ELS,UGIE,Eastern Cape,Outlying,O,222,UTT,OR,LOC,Outlying Bi-weekly,3
+UTH,PLZ,PLZ,UITENHAGE,Eastern Cape,Regional,R,NULL,PLZ,RM,LOC,Regional Daily,2
+ULO,KIM,KIM,ULCO,Northern Cape,Outlying,O,80,BKY,OR,LOC,Outlying Bi-weekly,3
+ULD,EMG,EMG,ULUNDI,KwaZulu-Natal,Regional,R,NULL,EMG,RM,LOC,Regional Daily,4
+UMI,DUR,DUR,UMHLALI,KwaZulu-Natal,Regional,R,NULL,DUR,RM,LOC,Regional Daily,3
+UML,DUR,DUR,UMLAZI,KwaZulu-Natal,Main (Suburb),S,NULL,DUR,SM,LOC,Hub,2
+UTT,ELS,ELS,UMTATA,Eastern Cape,Regional,R,NULL,ELS,RM,LOC,Regional Daily,1
+UMZ,PZB,DUR,UMZIMKULU,KwaZulu-Natal,Outlying,O,44,IXO,OR,LOC,Outlying Bi-weekly,5
+UZO,DUR,DUR,UMZINTO,KwaZulu-Natal,Regional,R,NULL,DUR,RM,LOC,Regional Daily,3
+UBR,PZB,DUR,UNDERBERG,KwaZulu-Natal,Regional,R,NULL,PZB,RM,LOC,Regional Daily,5
+UDL,GRJ,GRJ,UNIONDALE,Western Cape,Outlying,O,167,KYL,OR,LOC,Outlying Bi-weekly,4
+UTN,KIM,UTN,UPINGTON,Northern Cape,Regional,R,NULL,KIM,RM,LOC,Regional Daily,1
+UKS,WDH,WDH,USAKOS,NULL,Outlying,O,58,KBB,OR,BLNS,Outlying Adhoc,10
+UCT,NCS,NCS,UTRECHT,KwaZulu-Natal,Outlying,O,51,OZI,OR,LOC,Outlying Bi-weekly,2
+UVG,DUR,PSH,UVONGO,KwaZulu-Natal,Regional,R,NULL,DUR,RM,LOC,Regional Daily,1
+VAH,NLP,NLP,VAALHOEK,Mpumalanga,Outlying,O,113,SAB,OR,LOC,Outlying Adhoc,4
+VAP,KPR,KPR,VAALPLAATS,Mpumalanga,Outlying,O,98,DLV,OR,LOC,Outlying Adhoc,5
+VLR,PTA,PTG,VAALWATER,Limpopo,Outlying,O,124,NSR,OR,LOC,Outlying Bi-weekly,5
+VAL,WIR,JNB,VAL,Mpumalanga,Outlying,O,84,BOR,OR,LOC,Outlying Bi-weekly,5
+VYF,PTA,WIR,VAN DYKSDRIFT,Mpumalanga,Outlying,O,42,KLA,OR,LOC,Outlying Adhoc,3
+VWV,KIM,UTN,VAN WYKSVLEI,Northern Cape,Outlying,O,251,PRK,OR,LOC,Outlying Adhoc,7
+VDB,VDB,JNB,VANDERBIJLPARK,Gauteng,Main,M,NULL,VDB,MM,LOC,Branch,4
+VDK,KIM,KIM,VANDERKLOOF,Northern Cape,Outlying,O,173,HPT,OR,LOC,Outlying Bi-weekly,5
+VRD,CPT,VDR,VANRHYNSDORP,Western Cape,Outlying,O,50,VRE,OR,LOC,Outlying Bi-weekly,6
+VSR,BFN,BFN,VANSTADENSRUS,Free State,Outlying,O,197,AWL,OR,LOC,Outlying Adhoc,4
+VEG,NCS,BEM,VEGKOP,Free State,Outlying,O,49,NQT,OR,LOC,Outlying Adhoc,7
+VLF,CPT,VDR,VELDDRIF,Western Cape,Regional,R,NULL,CPT,RM,LOC,Regional Bi-weekly,1
+VBG,BFN,BFN,VENTERSBURG,Free State,Outlying,O,66,VGA,OR,LOC,Outlying Bi-weekly,5
+VSD,KPR,RTR,VENTERSDORP,North West,Regional,R,NULL,KPR,RM,LOC,Regional Daily,4
+VTS,PLZ,CDO,VENTERSHOEK,Eastern Cape,Outlying,O,137,GRT,OR,LOC,Outlying Adhoc,4
+VEN,BFN,KPR,VENTERSKROON,Gauteng,Outlying,O,183,BFN,OM,LOC,Outlying Adhoc,8
+VSS,BFN,BFN,VENTERSTAD,Eastern Cape,Outlying,O,215,AWL,OR,LOC,Outlying Bi-weekly,6
+VER,VDB,JNB,VEREENIGING,Gauteng,Main (Suburb),S,NULL,VDB,SM,LOC,Branch,4
+VRN,WIR,WIR,VERENA,Mpumalanga,Outlying,O,77,KLA,OR,LOC,Outlying Bi-weekly,2
+VGG,KIM,KIM,VERGENOEG,Northern Cape,Outlying,O,149,PMG,OR,LOC,Outlying Adhoc,4
+VKD,BFN,BFN,VERKEERDEVLEI,Free State,Outlying,O,80,BDT,OR,LOC,Outlying Bi-weekly,3
+VKP,NCS,BEM,VERKYKERSKOP,Free State,Outlying,O,93,HRS,OR,LOC,Outlying Adhoc,4
+VAM,DUR,DUR,VERULAM,KwaZulu-Natal,Main (Suburb),S,NULL,DUR,SM,LOC,Hub,1
+VCW,KIM,KIM,VICTORIA WEST,Northern Cape,Outlying,O,272,BFU,OR,LOC,Outlying Bi-weekly,8
+VTN,KPR,KPR,VIERFONTEIN,Free State,Outlying,O,40,OKY,OS,LOC,Outlying Adhoc,2
+VJK,KPR,KPR,VILJOENSKROON,Free State,Regional,R,NULL,KPR,RM,LOC,Regional Daily,2
+VIL,VDB,JNB,VILLIERS,Free State,Outlying,O,68,FFO,OR,LOC,Outlying Bi-weekly,5
+VDP,CPT,CPT,VILLIERSDORP,Western Cape,Outlying,O,68,FSK,OR,LOC,Outlying Bi-weekly,3
+VIO,CPT,UTN,VIOOLSDRIF,Northern Cape,Outlying,O,234,SPU,OR,LOC,Outlying Adhoc,9
+VGA,BFN,BFN,VIRGINIA,Free State,Regional,R,NULL,BFN,RM,LOC,Regional Daily,4
+FIS,PLZ,CDO,VISRIVIER,Eastern Cape,Outlying,O,72,CDO,OR,LOC,Outlying Adhoc,2
+VIV,PTG,PTG,VIVO,Limpopo,Outlying,O,86,BOC,OR,LOC,Outlying Bi-weekly,4
+VRR,NCS,NCS,VOLKSRUST,Mpumalanga,Regional,R,NULL,NCS,RM,LOC,Regional Daily,2
+VSB,KIM,KIM,VOSBURG,Northern Cape,Outlying,O,217,PRK,OR,LOC,Outlying Bi-weekly,8
+VDE,NCS,NCS,VREDE,Free State,Regional,R,NULL,NCS,RM,LOC,Regional Daily,4
+VRF,VDB,KPR,VREDEFORT,Free State,Outlying,O,30,PYR,OR,LOC,Outlying Bi-weekly,4
+VDR,CPT,VDR,VREDENBURG,Western Cape,Regional,R,NULL,CPT,RM,LOC,Regional Daily,1
+VRE,CPT,VDR,VREDENDAL,Western Cape,Regional,R,NULL,CPT,RM,LOC,Regional Daily,5
+VRU,KIM,KPR,VRYBURG,North West,Regional,R,NULL,KIM,RM,LOC,Regional Daily,6
+VYD,NCS,NCS,VRYHEID,KwaZulu-Natal,Regional,R,NULL,NCS,RM,LOC,Regional Daily,4
+WAE,CPT,CPT,WAENHUISKRANS,Western Cape,Outlying,O,48,BDD,OR,LOC,Outlying Adhoc,6
+WKR,NCS,NCS,WAKKERSTROOM,Mpumalanga,Outlying,O,57,VRR,OR,LOC,Outlying Bi-weekly,3
+WVB,WDH,WDH,WALVIS BAY,NULL,Regional,R,NULL,WDH,RM,BLNS,Regional Daily,10
+WRB,WIR,WIR,WARBURTON,Mpumalanga,Outlying,O,129,EML,OR,LOC,Outlying Adhoc,5
+WAN,NCS,BEM,WARDEN,Free State,Outlying,O,104,HRS,OR,LOC,Outlying Bi-weekly,3
+WSR,PTA,JNB,WARMBATHS,Limpopo,Regional,R,NULL,PTA,RM,LOC,Regional Daily,4
+WAR,KIM,KIM,WARRENTON,Northern Cape,Regional,R,NULL,KIM,RM,LOC,Regional Bi-weekly,3
+WBG,PZB,DUR,WARTBURG,KwaZulu-Natal,Outlying,O,31,DTN,OR,LOC,Outlying Bi-weekly,3
+WAS,NCS,NCS,WASBANK,KwaZulu-Natal,Outlying,O,50,DNE,OR,LOC,Outlying Bi-weekly,3
+WER,PTG,PTG,WATERPOORT,Limpopo,Outlying,O,99,LTT,OR,LOC,Outlying Adhoc,5
+WTB,NLP,NLP,WATERVAL BOVEN,Mpumalanga,Outlying,O,146,LDR,OR,LOC,Outlying Bi-weekly,3
+WNN,PZB,NCS,WEENEN,KwaZulu-Natal,Outlying,O,76,ECT,OR,LOC,Outlying Adhoc,5
+WEL,KPR,BFN,WELKOM,Free State,Regional,R,NULL,KPR,RM,LOC,Regional Daily,5
+WEG,CPT,CPT,WELLINGTON,Western Cape,Regional,R,NULL,CPT,RM,LOC,Regional Daily,3
+WPR,BFN,BFN,WEPENER,Free State,Outlying,O,143,TCR,OR,LOC,Outlying Bi-weekly,4
+WLB,KPR,BFN,WESSELSBRON,Free State,Outlying,O,92,HST,OR,LOC,Outlying Bi-weekly,5
+WSM,BFN,BFN,WESTMINSTER,Free State,Outlying,O,70,TCR,OR,LOC,Outlying Adhoc,4
+WTI,VDB,JNB,WESTONARIA,Gauteng,Main (Suburb),S,NULL,VDB,SM,LOC,Hub,3
+WHI,NLP,NLP,WHITE RIVER,Mpumalanga,Main (Suburb),S,NULL,NLP,SM,LOC,Branch,1
+WIS,ELS,ELS,WHITTLESEA,Eastern Cape,Outlying,O,73,QTN,OR,LOC,Outlying Bi-weekly,5
+WLR,GRJ,GRJ,WILDERNESS,Western Cape,Outlying,O,31,GRJ,OM,LOC,Outlying Bi-weekly,1
+WLN,GRJ,UTN,WILLISTON,Northern Cape,Outlying,O,448,BFU,OR,LOC,Outlying Bi-weekly,8
+WME,GRJ,GRJ,WILLOWMORE,Eastern Cape,Outlying,O,285,OUH,OR,LOC,Outlying Bi-weekly,5
+WGR,BFN,BFN,WINBURG,Free State,Outlying,O,102,MRQ,OR,LOC,Outlying Bi-weekly,4
+WDH,WDH,WDH,WINDHOEK,NULL,Main,M,NULL,WDH,MM,BLNS,Branch,4
+WIN,KIM,KIM,WINDSORTON,Northern Cape,Outlying,O,61,WAR,OR,LOC,Outlying Adhoc,2
+WNO,PZB,NCS,WINTERTON,KwaZulu-Natal,Regional,R,NULL,PZB,RM,LOC,Regional Daily,5
+WIR,WIR,WIR,WITBANK,Mpumalanga,Main,M,NULL,WIR,MM,LOC,Branch,1
+WTS,PLZ,PLZ,WITELSBOS,Eastern Cape,Outlying,O,132,HDR,OR,LOC,Outlying Bi-weekly,5
+WPT,PTG,PTG,WITPOORT (ELL),Limpopo,Outlying,O,121,ELL,OR,LOC,Outlying Adhoc,5
+WTP,KPR,KPR,WITPOORT (LDS),North West,Outlying,O,30,LDS,OR,LOC,Outlying Adhoc,3
+WIT,GRJ,GRJ,WITSAND,Western Cape,Outlying,O,120,RDS,OR,LOC,Outlying Adhoc,5
+WMD,KPR,KPR,WOLMARANSSTAD,North West,Regional,R,NULL,KPR,RM,LOC,Regional Daily,3
+WSY,CPT,CPT,WOLSELEY,Western Cape,Outlying,O,31,CER,OR,LOC,Outlying Bi-weekly,4
+WOR,CPT,CPT,WORCESTER,Western Cape,Regional,R,NULL,CPT,RM,LOC,Regional Daily,4
+YFN,CPT,CPT,YZERFONTEIN,Western Cape,Outlying,O,94,LGN,OR,LOC,Outlying Bi-weekly,4
+ZAN,NULL,NULL,ZANDSPRUIT,Gauteng,Outlying,NULL,NULL,NULL,,LOC,Outlying Adhoc,3
+ZRN,BFN,BFN,ZASTRON,Free State,Outlying,O,138,AWL,OR,LOC,Outlying Bi-weekly,5
+ZEB,PTG,PTG,ZEBEDIELA,Limpopo,Outlying,O,67,LEB,OR,LOC,Outlying Bi-weekly,3
+ZST,KPR,RTR,ZEERUST,North West,Regional,R,NULL,KPR,RM,LOC,Regional Daily,4
+ZNV,PTA,RTR,ZINNIAVILLE,North West,Outlying,O,7,RTR,OR,LOC,Outlying Bi-weekly,1

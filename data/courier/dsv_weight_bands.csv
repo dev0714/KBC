@@ -1,0 +1,22 @@
+band_floor_kg,range_label,rate_col,per_unit,min_rate,fuel_levy
+1,1 to < 5,C,Shipment,37.11,0.306
+5,5 to <10,F,Shipment,37.11,0.306
+10,10 to <15,I,Shipment,37.11,0.306
+15,15 to <20,M,Shipment,37.11,0.306
+20,20 to <25,P,Shipment,37.11,0.306
+25,25 to <30,R,Shipment,37.11,0.306
+30,30 to <35,T,Shipment,37.11,0.306
+35,35 to < 40,V,Shipment,37.11,0.306
+40,40 to < 45,X,Shipment,37.11,0.306
+45,45 to < 50,Z,Shipment,37.11,0.306
+50,50 to < 60,AC,Shipment,37.11,0.306
+60,60 to < 70,AF,Shipment,37.11,0.306
+70,70 to <80,AI,Shipment,37.11,0.306
+80,80 to < 90,AL,Shipment,37.11,0.306
+90,90 to < 100,AO,Shipment,37.11,0.306
+100,100 to <150,AR,Shipment,37.11,0.306
+150,150 to <200,AV,Shipment,37.11,0.306
+200,200 to < 250,AY,Shipment,37.11,0.306
+250,250 to < 300,BA,Shipment,37.11,0.306
+300,300 to < 350,BC,Shipment,37.11,0.306
+350,Over 350,BE,Kilo,37.11,0.306

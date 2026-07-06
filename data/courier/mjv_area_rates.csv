@@ -1,0 +1,4 @@
+area,rate_per_kg,ta_per_kg,fuel_levy
+Main,55,2,0.46
+Local,50,1,0.46
+Outlying,65,2.5,0.46
