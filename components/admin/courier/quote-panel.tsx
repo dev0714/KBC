@@ -33,6 +33,12 @@ interface QuoteResponse {
 
 const rand = (n: number) => `R ${n.toFixed(2)}`
 
+const PANEL =
+  'rounded-2xl border border-white/10 bg-gradient-to-br from-[#0b2a5b]/90 to-[#07163f]/90 shadow-[0_20px_50px_rgba(0,0,0,0.2)] backdrop-blur-xl'
+const LABEL = 'block text-[11px] uppercase tracking-[0.28em] text-slate-400 mb-2'
+const FIELD =
+  'border-white/15 bg-white/5 text-white placeholder:text-slate-500 focus-visible:ring-blue-500/40'
+
 function TownInput({
   label,
   value,
@@ -70,11 +76,11 @@ function TownInput({
 
   return (
     <div className="relative">
-      <label className="block text-sm font-semibold text-slate-300 mb-1">{label}</label>
+      <label className={LABEL}>{label}</label>
       <Input
         value={value}
         placeholder={placeholder}
-        className="bg-slate-800/50 border-slate-600/50"
+        className={FIELD}
         onChange={(e) => {
           onChange(e.target.value)
           search(e.target.value)
@@ -83,19 +89,19 @@ function TownInput({
         onBlur={() => setTimeout(() => setOpen(false), 150)}
       />
       {open && suggestions.length > 0 && (
-        <ul className="absolute z-20 mt-1 w-full max-h-56 overflow-auto rounded-lg border border-slate-600/50 bg-slate-900 shadow-xl">
+        <ul className="absolute z-20 mt-2 w-full max-h-56 overflow-auto rounded-2xl border border-white/10 bg-[#07163f]/95 shadow-[0_20px_50px_rgba(0,0,0,0.35)] backdrop-blur-xl">
           {suggestions.map((s) => (
             <li key={`${s.source}:${s.name}`}>
               <button
                 type="button"
-                className="w-full px-3 py-2 text-left text-sm text-slate-200 hover:bg-slate-700/60"
+                className="w-full px-4 py-2.5 text-left text-sm text-slate-200 transition-colors hover:bg-white/10"
                 onMouseDown={() => {
                   onChange(s.name)
                   setOpen(false)
                 }}
               >
                 {s.name}
-                <span className="ml-2 text-xs text-slate-500">{s.source}</span>
+                <span className="ml-2 text-[10px] uppercase tracking-wider text-slate-500">{s.source}</span>
               </button>
             </li>
           ))}
@@ -152,56 +158,56 @@ export function CourierQuotePanel() {
   const cheapest = result?.comparison?.cheapest
 
   return (
-    <div className="space-y-6 animate-fade-in-up">
+    <div className="space-y-8 animate-fade-in-up">
       <div>
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-1">
-          Courier Quote
-        </h1>
-        <p className="text-muted-foreground">Compare MJV and DSV for a shipment and get the cheapest option</p>
+        <p className="text-[11px] uppercase tracking-[0.45em] text-slate-400 mb-3">Logistics</p>
+        <h1 className="text-4xl font-black tracking-tight text-white">Courier Quote</h1>
+        <p className="mt-3 max-w-2xl text-slate-300">
+          Compare MJV and DSV for a shipment and get the cheapest option with its delivery promise.
+        </p>
       </div>
 
-      <form
-        onSubmit={submit}
-        className="bg-gradient-to-br from-card to-card/50 border border-primary/20 rounded-xl p-6 space-y-4 shadow-xl shadow-primary/10"
-      >
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <form onSubmit={submit} className={`${PANEL} p-8 space-y-6`}>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
           <div className="sm:col-span-2">
             <TownInput label="Origin" value={origin} onChange={setOrigin} placeholder="e.g. Johannesburg" />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-slate-300 mb-1">Origin postcode</label>
+            <label className={LABEL}>Origin postcode</label>
             <Input
               value={originPostcode}
               onChange={(e) => setOriginPostcode(e.target.value)}
               placeholder="optional"
-              className="bg-slate-800/50 border-slate-600/50"
+              className={FIELD}
             />
           </div>
           <div className="sm:col-span-2">
             <TownInput label="Destination" value={destination} onChange={setDestination} placeholder="e.g. Durban" />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-slate-300 mb-1">Destination postcode</label>
+            <label className={LABEL}>Destination postcode</label>
             <Input
               value={destPostcode}
               onChange={(e) => setDestPostcode(e.target.value)}
               placeholder="optional"
-              className="bg-slate-800/50 border-slate-600/50"
+              className={FIELD}
             />
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 items-end">
           <div>
-            <label className="block text-sm font-semibold text-slate-300 mb-1">Service</label>
-            <div className="flex rounded-lg overflow-hidden border border-slate-600/50">
+            <label className={LABEL}>Service</label>
+            <div className="flex rounded-xl overflow-hidden border border-white/15">
               {(['Economy', 'Express'] as const).map((s) => (
                 <button
                   key={s}
                   type="button"
                   onClick={() => setService(s)}
-                  className={`flex-1 px-3 py-2 text-sm font-semibold transition-colors ${
-                    service === s ? 'bg-blue-600 text-white' : 'bg-slate-800/50 text-slate-300 hover:bg-slate-700/50'
+                  className={`flex-1 px-3 py-2 text-sm font-bold transition-all ${
+                    service === s
+                      ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-600/30'
+                      : 'bg-white/5 text-slate-300 hover:bg-white/10'
                   }`}
                 >
                   {s}
@@ -210,21 +216,21 @@ export function CourierQuotePanel() {
             </div>
           </div>
           <div>
-            <label className="block text-sm font-semibold text-slate-300 mb-1">Weight (kg)</label>
+            <label className={LABEL}>Weight (kg)</label>
             <Input
               value={weight}
               onChange={(e) => setWeight(e.target.value)}
               placeholder="e.g. 757"
               inputMode="decimal"
-              className="bg-slate-800/50 border-slate-600/50"
+              className={FIELD}
             />
           </div>
-          <label className="flex items-center gap-2 text-sm text-slate-300 pb-2 cursor-pointer">
+          <label className="flex items-center gap-3 pb-2 cursor-pointer text-sm text-slate-300">
             <input
               type="checkbox"
               checked={allowSplit}
               onChange={(e) => setAllowSplit(e.target.checked)}
-              className="accent-blue-600 w-4 h-4"
+              className="accent-red-600 w-4 h-4"
             />
             Optimise DSV parcel split
           </label>
@@ -233,45 +239,40 @@ export function CourierQuotePanel() {
         <Button
           type="submit"
           disabled={loading || !origin.trim() || !destination.trim() || !(Number(weight) > 0)}
-          className="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary/80 hover:to-secondary/80 text-white font-bold gap-2"
+          className="w-full bg-gradient-to-r from-red-600 to-red-700 text-white font-bold gap-2 shadow-lg shadow-red-600/30 hover:from-red-500 hover:to-red-600"
         >
           {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Truck className="w-4 h-4" />}
           {loading ? 'Quoting…' : 'Get Quote'}
         </Button>
 
         {error && (
-          <p className="flex items-center gap-2 text-sm text-red-400">
+          <p className="flex items-center gap-2 text-sm text-red-300">
             <AlertCircle className="w-4 h-4" /> {error}
           </p>
         )}
       </form>
 
       {result && (
-        <div className="space-y-4">
-          <div className="bg-gradient-to-br from-card to-card/50 border border-primary/20 rounded-xl p-6 shadow-xl shadow-primary/10">
-            <h2 className="text-lg font-bold mb-3">Route</h2>
+        <div className="space-y-6">
+          <div className={`${PANEL} p-8`}>
+            <p className="text-[11px] uppercase tracking-[0.35em] text-slate-400 mb-2">Route</p>
             {result.route.ok ? (
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
-                <div>
-                  <p className="text-slate-400">Element</p>
-                  <p className="text-2xl font-bold">{result.route.element}</p>
-                </div>
-                <div>
-                  <p className="text-slate-400">Lead time</p>
-                  <p className="font-semibold">{result.route.sla ?? '—'}</p>
-                </div>
-                <div>
-                  <p className="text-slate-400">Scope</p>
-                  <p className="font-semibold">{result.route.blns === 'LOC' ? 'Domestic' : result.route.blns}</p>
-                </div>
-                <div>
-                  <p className="text-slate-400">Service</p>
-                  <p className="font-semibold">{service}</p>
-                </div>
+              <div className="mt-4 grid grid-cols-2 gap-4 lg:grid-cols-4">
+                {[
+                  { label: 'Element', value: String(result.route.element) },
+                  { label: 'Lead time', value: result.route.sla ?? '—' },
+                  { label: 'Scope', value: result.route.blns === 'LOC' ? 'Domestic' : result.route.blns ?? '—' },
+                  { label: 'Service', value: service },
+                ].map((stat) => (
+                  <div key={stat.label} className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <p className="text-[11px] uppercase tracking-[0.32em] text-slate-400">{stat.label}</p>
+                    <p className="mt-3 text-2xl font-black text-white">{stat.value}</p>
+                  </div>
+                ))}
               </div>
             ) : (
-              <div className="space-y-2">
-                <p className="flex items-center gap-2 text-amber-400 text-sm">
+              <div className="space-y-3">
+                <p className="flex items-center gap-2 text-amber-300 text-sm">
                   <AlertCircle className="w-4 h-4" /> {result.route.error}
                   {result.route.sla ? ` (lead time still resolved: ${result.route.sla})` : ''}
                 </p>
@@ -285,7 +286,7 @@ export function CourierQuotePanel() {
                         <button
                           key={n}
                           type="button"
-                          className="mr-2 rounded-full border border-blue-400/40 bg-blue-500/10 px-3 py-0.5 text-blue-300 hover:bg-blue-500/25"
+                          className="mr-2 rounded-full border border-blue-400/40 bg-blue-500/10 px-3 py-1 text-blue-200 transition-colors hover:bg-blue-500/25"
                           onClick={() => (field === 'origin' ? setOrigin(n) : setDestination(n))}
                         >
                           {n}
@@ -299,27 +300,31 @@ export function CourierQuotePanel() {
           </div>
 
           {result.quotes.length > 0 && (
-            <div className="bg-gradient-to-br from-card to-card/50 border border-primary/20 rounded-xl overflow-hidden shadow-xl shadow-primary/10">
+            <div className={`${PANEL} overflow-hidden`}>
+              <div className="px-8 pt-8 pb-4">
+                <p className="text-[11px] uppercase tracking-[0.35em] text-slate-400 mb-2">Comparison</p>
+                <h2 className="text-xl font-bold text-white">Carrier Prices</h2>
+              </div>
               <table className="w-full text-sm">
-                <thead className="bg-gradient-to-r from-primary/20 to-secondary/20 border-b border-primary/30">
-                  <tr>
-                    <th className="text-left px-5 py-3">Carrier</th>
-                    <th className="text-left px-5 py-3">Detail</th>
-                    <th className="text-right px-5 py-3">Total</th>
+                <thead>
+                  <tr className="border-y border-white/10 bg-white/5">
+                    <th className="text-left px-8 py-3 text-[11px] uppercase tracking-[0.28em] text-slate-400 font-semibold">Carrier</th>
+                    <th className="text-left px-4 py-3 text-[11px] uppercase tracking-[0.28em] text-slate-400 font-semibold">Detail</th>
+                    <th className="text-right px-8 py-3 text-[11px] uppercase tracking-[0.28em] text-slate-400 font-semibold">Total</th>
                   </tr>
                 </thead>
                 <tbody>
                   {result.quotes.map((q) => (
-                    <tr key={q.carrier} className="border-b border-white/5 last:border-0">
-                      <td className="px-5 py-3 font-semibold">
+                    <tr key={q.carrier} className="border-b border-white/5 last:border-0 transition-colors hover:bg-white/[0.04]">
+                      <td className="px-8 py-4 font-bold text-white">
                         {q.carrier}
                         {cheapest === q.carrier && (
-                          <span className="ml-2 inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-xs font-bold text-emerald-400">
+                          <span className="ml-2 inline-flex items-center gap-1 rounded-full border border-emerald-400/40 bg-emerald-500/15 px-2.5 py-1 text-xs font-bold text-emerald-300">
                             <CheckCircle2 className="w-3 h-3" /> Cheapest
                           </span>
                         )}
                       </td>
-                      <td className="px-5 py-3 text-slate-400">
+                      <td className="px-4 py-4 text-slate-400">
                         {q.parcels && q.parcels.length > 1
                           ? `${q.parcels.length} parcels (${q.parcels.map((p) => `${p}kg`).join(' + ')})`
                           : Object.entries(q.breakdown)
@@ -327,13 +332,13 @@ export function CourierQuotePanel() {
                               .map(([k, v]) => `${k}: ${v}`)
                               .join(' · ') || '—'}
                       </td>
-                      <td className="px-5 py-3 text-right font-bold tabular-nums">{rand(q.total)}</td>
+                      <td className="px-8 py-4 text-right font-black text-white tabular-nums">{rand(q.total)}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
               {result.comparison && result.comparison.quotes.length > 1 && (
-                <div className="px-5 py-4 bg-emerald-500/10 border-t border-emerald-500/20 text-sm font-semibold text-emerald-300">
+                <div className="px-8 py-4 border-t border-emerald-500/20 bg-emerald-500/10 text-sm font-bold text-emerald-300">
                   Cheapest: {result.comparison.cheapest} — saves {rand(result.comparison.difference)}
                 </div>
               )}
@@ -341,9 +346,12 @@ export function CourierQuotePanel() {
           )}
 
           {result.warnings.length > 0 && (
-            <ul className="space-y-1">
+            <ul className="space-y-2">
               {result.warnings.map((w) => (
-                <li key={w} className="flex items-start gap-2 text-sm text-amber-400/90">
+                <li
+                  key={w}
+                  className="flex items-start gap-2 rounded-2xl border border-amber-500/20 bg-amber-500/10 px-4 py-3 text-sm text-amber-300"
+                >
                   <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" /> {w}
                 </li>
               ))}

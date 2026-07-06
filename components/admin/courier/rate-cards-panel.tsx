@@ -27,6 +27,12 @@ interface RateCard {
   couriers: { id: number; name: string; rate_model: string } | null
 }
 
+const PANEL =
+  'rounded-2xl border border-white/10 bg-gradient-to-br from-[#0b2a5b]/90 to-[#07163f]/90 shadow-[0_20px_50px_rgba(0,0,0,0.2)] backdrop-blur-xl'
+const LABEL = 'block text-[11px] uppercase tracking-[0.28em] text-slate-400 mb-2'
+const FIELD =
+  'border-white/15 bg-white/5 text-white placeholder:text-slate-500 focus-visible:ring-blue-500/40 [color-scheme:dark]'
+
 export function RateCardsPanel() {
   const [cards, setCards] = useState<RateCard[] | null>(null)
   const [loadError, setLoadError] = useState('')
@@ -80,23 +86,24 @@ export function RateCardsPanel() {
   }
 
   return (
-    <div className="space-y-6 animate-fade-in-up">
+    <div className="space-y-8 animate-fade-in-up">
       <div>
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-1">
-          Courier Rate Cards
-        </h1>
-        <p className="text-muted-foreground">Fuel levies, minimums, effective dates and MJV area rates</p>
+        <p className="text-[11px] uppercase tracking-[0.45em] text-slate-400 mb-3">Logistics</p>
+        <h1 className="text-4xl font-black tracking-tight text-white">Courier Rate Cards</h1>
+        <p className="mt-3 max-w-2xl text-slate-300">
+          Fuel levies, minimums, effective dates and MJV area rates — changes apply to the next quote immediately.
+        </p>
       </div>
 
       {loadError && (
-        <div className="flex items-start gap-2 rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 text-sm text-amber-300">
+        <div className="flex items-start gap-3 rounded-2xl border border-amber-500/20 bg-amber-500/10 p-5 text-sm text-amber-300">
           <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
           <div>
-            <p className="font-semibold">Rate cards are not editable yet.</p>
+            <p className="font-bold">Rate cards are not editable yet.</p>
             <p className="mt-1 text-amber-300/80">{loadError}</p>
             <p className="mt-1 text-amber-300/80">
-              Quoting still works — it uses the rates bundled from the original spreadsheets until the database
-              tables are set up.
+              Quoting still works — it uses the rates bundled from the original spreadsheets until the database tables
+              are set up.
             </p>
           </div>
         </div>
@@ -111,61 +118,63 @@ export function RateCardsPanel() {
       {cards?.map((card) => {
         const isSaving = saving === card.id
         return (
-          <div
-            key={card.id}
-            className="bg-gradient-to-br from-card to-card/50 border border-primary/20 rounded-xl p-6 space-y-4 shadow-xl shadow-primary/10"
-          >
+          <div key={card.id} className={`${PANEL} p-8 space-y-6`}>
             <div className="flex flex-wrap items-baseline justify-between gap-2">
-              <h2 className="text-lg font-bold">
-                {card.couriers?.name}
-                {card.service ? ` · ${card.service}` : ''}
-                {savedFlash === card.id && (
-                  <span className="ml-2 inline-flex items-center gap-1 text-xs font-bold text-emerald-400">
-                    <CheckCircle2 className="w-3 h-3" /> Saved
-                  </span>
-                )}
-              </h2>
+              <div>
+                <p className="text-[11px] uppercase tracking-[0.35em] text-slate-400 mb-2">
+                  {card.couriers?.rate_model === 'area_perkg' ? 'Per-kg rates' : 'Element grid'}
+                </p>
+                <h2 className="text-xl font-bold text-white">
+                  {card.couriers?.name}
+                  {card.service ? ` · ${card.service}` : ''}
+                  {savedFlash === card.id && (
+                    <span className="ml-3 inline-flex items-center gap-1 rounded-full border border-emerald-400/40 bg-emerald-500/15 px-2.5 py-1 text-xs font-bold text-emerald-300">
+                      <CheckCircle2 className="w-3 h-3" /> Saved
+                    </span>
+                  )}
+                </h2>
+              </div>
               <p className="text-xs text-slate-400">
                 {card.account_ref ?? ''}
                 {card.cellCount ? ` · ${card.cellCount} rate cells` : ''}
               </p>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
-              <div>
-                <label className="block text-slate-400 mb-1">Fuel levy</label>
+            <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <label className={LABEL}>Fuel levy</label>
                 <Input
                   value={draft(`fuel:${card.id}`, String(card.fuel_levy))}
                   onChange={(e) => setDraft(`fuel:${card.id}`, e.target.value)}
-                  className="bg-slate-800/50 border-slate-600/50"
+                  className={FIELD}
                 />
               </div>
               {card.minimum_charge !== null && (
-                <div>
-                  <label className="block text-slate-400 mb-1">Minimum (R)</label>
+                <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                  <label className={LABEL}>Minimum (R)</label>
                   <Input
                     value={draft(`min:${card.id}`, String(card.minimum_charge))}
                     onChange={(e) => setDraft(`min:${card.id}`, e.target.value)}
-                    className="bg-slate-800/50 border-slate-600/50"
+                    className={FIELD}
                   />
                 </div>
               )}
-              <div>
-                <label className="block text-slate-400 mb-1">Effective from</label>
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <label className={LABEL}>Effective from</label>
                 <Input
                   type="date"
                   value={draft(`from:${card.id}`, card.effective_from)}
                   onChange={(e) => setDraft(`from:${card.id}`, e.target.value)}
-                  className="bg-slate-800/50 border-slate-600/50"
+                  className={FIELD}
                 />
               </div>
-              <div>
-                <label className="block text-slate-400 mb-1">Expires</label>
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <label className={LABEL}>Expires</label>
                 <Input
                   type="date"
                   value={draft(`to:${card.id}`, card.effective_to ?? '')}
                   onChange={(e) => setDraft(`to:${card.id}`, e.target.value)}
-                  className="bg-slate-800/50 border-slate-600/50"
+                  className={FIELD}
                 />
               </div>
             </div>
@@ -183,55 +192,54 @@ export function RateCardsPanel() {
                   effectiveTo: draft(`to:${card.id}`, card.effective_to ?? '') || null,
                 })
               }
-              variant="outline"
-              className="border-primary/40 gap-2"
+              className="bg-gradient-to-r from-red-600 to-red-700 text-white font-bold gap-2 shadow-lg shadow-red-600/30 hover:from-red-500 hover:to-red-600"
             >
               {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
               Save card
             </Button>
 
             {card.areaRates.length > 0 && (
-              <div className="overflow-x-auto rounded-lg border border-white/10">
+              <div className="overflow-x-auto rounded-2xl border border-white/10">
                 <table className="w-full text-sm">
-                  <thead className="bg-gradient-to-r from-primary/20 to-secondary/20">
-                    <tr>
-                      <th className="text-left px-4 py-2">Area</th>
-                      <th className="text-left px-4 py-2">Rate / kg</th>
-                      <th className="text-left px-4 py-2">TA / kg</th>
-                      <th className="text-left px-4 py-2">TA over (kg)</th>
-                      <th className="text-left px-4 py-2">Base applied</th>
-                      <th className="px-4 py-2" />
+                  <thead>
+                    <tr className="border-b border-white/10 bg-white/5">
+                      <th className="text-left px-5 py-3 text-[11px] uppercase tracking-[0.28em] text-slate-400 font-semibold">Area</th>
+                      <th className="text-left px-5 py-3 text-[11px] uppercase tracking-[0.28em] text-slate-400 font-semibold">Rate / kg</th>
+                      <th className="text-left px-5 py-3 text-[11px] uppercase tracking-[0.28em] text-slate-400 font-semibold">TA / kg</th>
+                      <th className="text-left px-5 py-3 text-[11px] uppercase tracking-[0.28em] text-slate-400 font-semibold">TA over (kg)</th>
+                      <th className="text-left px-5 py-3 text-[11px] uppercase tracking-[0.28em] text-slate-400 font-semibold">Base applied</th>
+                      <th className="px-5 py-3" />
                     </tr>
                   </thead>
                   <tbody>
                     {card.areaRates.map((a) => (
-                      <tr key={a.id} className="border-t border-white/5">
-                        <td className="px-4 py-2 font-semibold">{a.area}</td>
+                      <tr key={a.id} className="border-t border-white/5 transition-colors hover:bg-white/[0.04]">
+                        <td className="px-5 py-3 font-bold text-white">{a.area}</td>
                         {(['rate_per_kg', 'ta_per_kg', 'ta_threshold_kg'] as const).map((f) => (
-                          <td key={f} className="px-4 py-2">
+                          <td key={f} className="px-5 py-3">
                             <Input
                               value={draft(`${f}:${a.id}`, String(a[f]))}
                               onChange={(e) => setDraft(`${f}:${a.id}`, e.target.value)}
-                              className="w-24 bg-slate-800/50 border-slate-600/50"
+                              className={`w-24 ${FIELD}`}
                             />
                           </td>
                         ))}
-                        <td className="px-4 py-2">
+                        <td className="px-5 py-3">
                           <select
                             value={draft(`mode:${a.id}`, a.base_mode)}
                             onChange={(e) => setDraft(`mode:${a.id}`, e.target.value)}
-                            className="rounded-md bg-slate-800/50 border border-slate-600/50 px-2 py-1.5 text-sm"
+                            className="rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white [color-scheme:dark]"
                           >
                             <option value="flat_once">Once per shipment (as spreadsheet)</option>
                             <option value="per_kg">Multiplied by weight</option>
                           </select>
                         </td>
-                        <td className="px-4 py-2 text-right">
+                        <td className="px-5 py-3 text-right">
                           <Button
                             size="sm"
                             variant="outline"
                             disabled={saving === a.id}
-                            className="border-primary/40"
+                            className="border-red-500/50 text-red-300 hover:bg-red-500/10 font-bold bg-transparent"
                             onClick={() =>
                               patch(a.id, {
                                 areaRateId: a.id,
