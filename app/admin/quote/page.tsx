@@ -28,6 +28,7 @@ interface QuoteResponse {
   quotes: CarrierQuote[]
   comparison: { quotes: CarrierQuote[]; cheapest: string; difference: number } | null
   warnings: string[]
+  suggestions?: { origin?: string[]; destination?: string[] }
 }
 
 const rand = (n: number) => `R ${n.toFixed(2)}`
@@ -302,10 +303,31 @@ export default function QuotePage() {
                   </div>
                 </div>
               ) : (
-                <p className="flex items-center gap-2 text-amber-400 text-sm">
-                  <AlertCircle className="w-4 h-4" /> {result.route.error}
-                  {result.route.sla ? ` (lead time still resolved: ${result.route.sla})` : ''}
-                </p>
+                <div className="space-y-2">
+                  <p className="flex items-center gap-2 text-amber-400 text-sm">
+                    <AlertCircle className="w-4 h-4" /> {result.route.error}
+                    {result.route.sla ? ` (lead time still resolved: ${result.route.sla})` : ''}
+                  </p>
+                  {(['origin', 'destination'] as const).map((field) => {
+                    const names = result.suggestions?.[field]
+                    if (!names?.length) return null
+                    return (
+                      <p key={field} className="text-sm text-slate-300">
+                        Did you mean ({field}):{' '}
+                        {names.map((n) => (
+                          <button
+                            key={n}
+                            type="button"
+                            className="mr-2 rounded-full border border-blue-400/40 bg-blue-500/10 px-3 py-0.5 text-blue-300 hover:bg-blue-500/25"
+                            onClick={() => (field === 'origin' ? setOrigin(n) : setDestination(n))}
+                          >
+                            {n}
+                          </button>
+                        ))}
+                      </p>
+                    )
+                  })}
+                </div>
               )}
             </div>
 

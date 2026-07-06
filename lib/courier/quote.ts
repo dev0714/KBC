@@ -13,6 +13,7 @@ import {
   loadMjvAreaRates,
 } from './csv-data'
 import { loadRatesFromDb } from './db-data'
+import { suggestTowns } from './fuzzy'
 import { compare } from './compare'
 import { optimiseSplit } from './optimise-split'
 import { priceDSV, priceMJV } from './pricing'
@@ -34,6 +35,7 @@ export interface QuoteResponse {
   quotes: CarrierQuote[]
   comparison: Comparison | null
   warnings: string[]
+  suggestions?: { origin?: string[]; destination?: string[] }
 }
 
 async function buildContext() {
@@ -123,11 +125,23 @@ export async function quote(req: QuoteRequest): Promise<QuoteResponse> {
     warnings.push(`DSV: route not resolved — ${route.error}`)
   }
 
+  // "Did you mean" for unresolved towns — the sheet just failed on typos.
+  let suggestions: QuoteResponse['suggestions']
+  if (!route.ok && route.error?.includes('Origin')) {
+    const s = suggestTowns(ctx.data, req.origin)
+    if (s.length) suggestions = { origin: s }
+  }
+  if (!route.ok && route.error?.includes('Destination')) {
+    const s = suggestTowns(ctx.data, req.destination)
+    if (s.length) suggestions = { ...suggestions, destination: s }
+  }
+
   return {
     route,
     quotes,
     comparison: quotes.length ? compare(quotes) : null,
     warnings,
+    suggestions,
   }
 }
 
