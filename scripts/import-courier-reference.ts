@@ -64,9 +64,9 @@ async function replaceTable(table: string, rows: object[]) {
   console.log(`${table}: ${rows.length} rows`)
 }
 
-/** "1 to < 5" -> [1, 5]; "Over 350" -> [350, null]. */
+/** "1 to < 5" -> [1, 5]; "Over 350" / "> 350" -> [350, null]. */
 function parseBand(label: string): { min: number; max: number | null; perUnit: 'shipment' | 'kg' } {
-  const over = label.match(/Over\s+(\d+)/i)
+  const over = label.match(/(?:Over|>)\s*(\d+)/i)
   if (over) return { min: Number(over[1]), max: null, perUnit: 'kg' }
   const m = label.match(/([\d.]+)\s*to\s*<\s*([\d.]+)/i)
   if (!m) throw new Error(`unparseable weight band: "${label}"`)

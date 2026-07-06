@@ -85,7 +85,9 @@ write_csv(
     ["from_date", "fin_network", "division", "branch_col", "service_level", "tarsrt",
      "country", "city", "city2", "from_postcode", "thru_postcode", "till_date",
      "zone_code", "remark", "lookup", "branch", "zone"],
-    sheet_rows(ws, list(range(1, 18)), 2, key_col=7),
+    # keyed on the LOOKUP column: ~1.7k rows have a blank city but a bare
+    # postcode key, which the estimator's third lookup fallback depends on
+    sheet_rows(ws, list(range(1, 18)), 2, key_col=14),
 )
 
 ws = bpp["Townslist"]
@@ -166,8 +168,8 @@ for start in service_starts:
     service = grid[start][0].split()[0]  # Economy | Express
     meta = {"account": grid[start - 3][0], "representative": grid[start - 2][0],
             "effective_date": grid[start - 1][0]}
-    band_row = next(g for g in grid[start:start + 6] if any(v and ("to <" in v or "Over" in v) for v in g))
-    band_cols = [(c, v) for c, v in enumerate(band_row) if v and ("to <" in v or "Over" in v)]
+    band_row = next(g for g in grid[start:start + 6] if any(v and ("to <" in v or "Over" in v or v.lstrip().startswith(">")) for v in g))
+    band_cols = [(c, v) for c, v in enumerate(band_row) if v and ("to <" in v or "Over" in v or v.lstrip().startswith(">"))]
     min_row = next(g for g in grid[start:start + 4] if g[0] == "Minimum")
     minimum = next((v for v in min_row if re.fullmatch(r"\d+(\.\d+)?", v)), "")
 
