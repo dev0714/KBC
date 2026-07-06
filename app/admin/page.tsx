@@ -7,6 +7,8 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { LogOut, Package, Users, ShoppingCart, BarChart3, Menu, X, Edit2, Trash2, Plus, CheckCircle2, AlertCircle, Clock, Loader2, Send, Mail, MessageSquare, Check, XCircle, Upload, ImageIcon, TrendingUp, ChevronDown, Lock, Shield, Bell, Database, Globe, Palette, CreditCard, Building2, Settings, User, Search } from 'lucide-react'
 import { ReportingDashboard } from '@/components/admin/reporting/reporting-dashboard'
+import { CourierQuotePanel } from '@/components/admin/courier/quote-panel'
+import { RateCardsPanel } from '@/components/admin/courier/rate-cards-panel'
 import { buildReportingModel } from '@/lib/admin/reporting'
 import { createClient } from '@/lib/supabase/client'
 
@@ -956,7 +958,7 @@ export default function AdminPage() {
       <div className="relative z-10 flex flex-1 pt-[72px]">
         {/* Sidebar */}
         <aside
-          className={`w-64 bg-[#06123d]/80 border-r border-white/10 fixed md:fixed md:top-[72px] md:left-0 md:h-[calc(100vh-72px)] transition-transform z-30 backdrop-blur-xl shadow-[12px_0_40px_rgba(0,0,0,0.18)] ${
+          className={`w-64 bg-[#06123d]/80 border-r border-white/10 fixed md:fixed md:top-[72px] md:left-0 h-[calc(100vh-72px)] md:h-[calc(100vh-72px)] overflow-y-auto transition-transform z-30 backdrop-blur-xl shadow-[12px_0_40px_rgba(0,0,0,0.18)] ${
             sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
           }`}
         >
@@ -985,10 +987,6 @@ export default function AdminPage() {
               <button
                 key={item.id}
                 onClick={() => {
-                  if (item.id === 'quote' || item.id === 'rate-cards') {
-                    window.location.href = `/admin/${item.id}`
-                    return
-                  }
                   setActiveTab(item.id)
                   setSidebarOpen(false)
                 }}
@@ -1198,6 +1196,10 @@ export default function AdminPage() {
             {activeTab === 'reporting' && (
               <ReportingDashboard orders={orders} clients={clients} reporting={reporting} />
             )}
+
+            {activeTab === 'quote' && <CourierQuotePanel />}
+
+            {activeTab === 'rate-cards' && <RateCardsPanel />}
 
             {/* Products Tab */}
             {activeTab === 'products' && (() => {
