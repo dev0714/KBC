@@ -975,6 +975,7 @@ export default function AdminPage() {
   { id: 'products', label: 'Products', icon: Package },
   { id: 'customers', label: 'Customers', icon: Users },
               { id: 'orders', label: 'Orders', icon: ShoppingCart },
+              { id: 'quote', label: 'Courier Quote', icon: Send },
               { id: 'payment', label: 'Payment', icon: CreditCard },
               { id: 'settings', label: 'Settings', icon: AlertCircle },
             ].map((item) => {
@@ -983,6 +984,10 @@ export default function AdminPage() {
               <button
                 key={item.id}
                 onClick={() => {
+                  if (item.id === 'quote') {
+                    window.location.href = '/admin/quote'
+                    return
+                  }
                   setActiveTab(item.id)
                   setSidebarOpen(false)
                 }}
