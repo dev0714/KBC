@@ -10,6 +10,8 @@ import { ReportingDashboard } from '@/components/admin/reporting/reporting-dashb
 import { CourierQuotePanel } from '@/components/admin/courier/quote-panel'
 import { RateCardsPanel } from '@/components/admin/courier/rate-cards-panel'
 import { CreditApplicationsPanel } from '@/components/admin/credit-applications-panel'
+import { AdminShell } from '@/components/admin/admin-shell'
+import { portalFontVars } from '@/components/portal/fonts'
 import { buildReportingModel } from '@/lib/admin/reporting'
 import { createClient } from '@/lib/supabase/client'
 
@@ -49,23 +51,28 @@ function getStoragePathFromPublicUrl(url: string) {
 const getStatusColor = (status: string) => {
   switch ((status || '').toLowerCase()) {
     case 'active':
-      return 'bg-gradient-to-r from-green-500/20 to-green-400/20 border-green-500/50 text-green-700 dark:text-green-300'
-    case 'pending':
-      return 'bg-gradient-to-r from-yellow-500/20 to-yellow-400/20 border-yellow-500/50 text-yellow-700 dark:text-yellow-300'
     case 'completed':
     case 'paid':
-      return 'bg-gradient-to-r from-blue-500/20 to-blue-400/20 border-blue-500/50 text-blue-700 dark:text-blue-300'
-    case 'shipped':
-      return 'bg-gradient-to-r from-purple-500/20 to-purple-400/20 border-purple-500/50 text-purple-700 dark:text-purple-300'
-    case 'cancelled':
-      return 'bg-gradient-to-r from-red-500/20 to-red-400/20 border-red-500/50 text-red-300 dark:text-red-200'
-    case 'failed':
-      return 'bg-gradient-to-r from-rose-500/20 to-rose-400/20 border-rose-500/50 text-rose-300 dark:text-rose-200'
+    case 'approved':
+      return 'border-transparent bg-[#E7F4EE] text-[#0B6B41]'
+    case 'pending':
     case 'low stock':
-      return 'bg-gradient-to-r from-orange-500/20 to-orange-400/20 border-orange-500/50 text-orange-700 dark:text-orange-300'
+      return 'border-transparent bg-[#FFF4DB] text-[#7A4F00]'
+    case 'shipped':
+      return 'border-transparent bg-[#E6EAF3] text-[#0F1B3D]'
+    case 'cancelled':
+    case 'failed':
+    case 'rejected':
+      return 'border-transparent bg-[#FDECEA] text-[#A4161A]'
     default:
-      return 'bg-gradient-to-r from-primary/20 to-primary/10 border-primary/50'
+      return 'border-transparent bg-[#EEF0F3] text-[#4A515E]'
   }
+}
+
+const formatRand = (value: number | string | null | undefined) => {
+  const n = Number(value ?? 0)
+  const [int, dec] = Math.abs(n).toFixed(2).split('.')
+  return `${n < 0 ? '−' : ''}R ${int.replace(/\B(?=(\d{3})+(?!\d))/g, ' ')}.${dec}`
 }
 
 export default function AdminPage() {
@@ -274,10 +281,10 @@ export default function AdminPage() {
   }, [activeTab])
 
   const statsCards = [
-    { label: 'Total Products', value: String(stats.totalProducts), icon: Package, color: 'from-blue-500 to-blue-600' },
-    { label: 'Active Customers', value: String(stats.activeCustomers), icon: Users, color: 'from-green-500 to-green-600' },
-    { label: 'Total Orders', value: String(stats.totalOrders), icon: ShoppingCart, color: 'from-purple-500 to-purple-600' },
-    { label: 'Total Revenue', value: `R${Number(stats.totalRevenue).toLocaleString()}`, icon: TrendingUp, color: 'from-pink-500 to-pink-600' },
+    { label: 'Total products', value: String(stats.totalProducts), icon: Package, color: 'from-blue-500 to-blue-600' },
+    { label: 'Active customers', value: String(stats.activeCustomers), icon: Users, color: 'from-green-500 to-green-600' },
+    { label: 'Total orders', value: String(stats.totalOrders), icon: ShoppingCart, color: 'from-purple-500 to-purple-600' },
+    { label: 'Total revenue', value: formatRand(stats.totalRevenue), icon: TrendingUp, color: 'from-pink-500 to-pink-600' },
   ]
 
   const handleImageUpload = async (sku: string, files: FileList | File[]) => {
@@ -363,22 +370,44 @@ export default function AdminPage() {
     setEditProductData({title: '', product_type: '', description: '', price: '', inventory_quantity: ''})
   }
 
+  // Admin table writes go through the server (RLS blocks browser writes).
+  const adminWrite = async (payload: { table: string; action: string; key?: string; values?: Record<string, unknown> }) => {
+    const res = await fetch('/api/admin/records', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
+    const data = await res.json().catch(() => ({}))
+    if (!res.ok) throw new Error(data.error || 'Save failed')
+    return data
+  }
+
+  const handleCopyPassword = async () => {
+    if (!createdLoginCredentials?.password) return
+    try {
+      await navigator.clipboard.writeText(createdLoginCredentials.password)
+      alert('Password copied')
+    } catch {
+      window.prompt('Copy the temporary password', createdLoginCredentials.password)
+    }
+  }
+
   const saveEditProduct = async () => {
     if (!editingProductSku) return
     setEditProductLoading(true)
     try {
-      const supabase = createClient()
-      const { error } = await supabase
-        .from('products')
-        .update({
+      await adminWrite({
+        table: 'products',
+        action: 'update',
+        key: editingProductSku,
+        values: {
           title: editProductData.title,
           product_type: editProductData.product_type,
           description: editProductData.description,
           price: parseFloat(editProductData.price) || 0,
           inventory_quantity: parseInt(editProductData.inventory_quantity) || 0,
-        })
-        .eq('sku', editingProductSku)
-      if (error) throw error
+        },
+      })
       // Update local state
       setPagedProducts(prev => prev.map(p => 
         p.sku === editingProductSku 
@@ -388,6 +417,7 @@ export default function AdminPage() {
       setEditingProductSku(null)
     } catch (err) {
       console.error('[v0] Error saving product:', err)
+      alert(err instanceof Error ? err.message : 'Could not save the product')
     } finally {
       setEditProductLoading(false)
     }
@@ -688,11 +718,12 @@ export default function AdminPage() {
   const handleDeleteProduct = async (sku: string) => {
     setDeletingProduct(sku)
     try {
-      const supabase = createClient()
-      await supabase.from('products').delete().eq('sku', sku)
+      await adminWrite({ table: 'products', action: 'delete', key: sku })
+      setPagedProducts((prev) => prev.filter((p) => p.sku !== sku))
       mutate()
     } catch (err) {
       console.error('[v0] Error deleting product:', err)
+      alert(err instanceof Error ? err.message : 'Could not delete the product')
     } finally {
       setDeletingProduct(null)
     }
@@ -701,11 +732,10 @@ export default function AdminPage() {
   const handleSaveProduct = async () => {
     setSavingProduct(true)
     try {
-      const supabase = createClient()
       if (editingProduct) {
-        await supabase.from('products').update(productFormData).eq('sku', editingProduct.sku)
+        await adminWrite({ table: 'products', action: 'update', key: editingProduct.sku, values: productFormData })
       } else {
-        await supabase.from('products').insert([productFormData])
+        await adminWrite({ table: 'products', action: 'insert', values: productFormData })
       }
       mutate()
       setEditingProduct(null)
@@ -713,6 +743,7 @@ export default function AdminPage() {
       setProductFormData({})
     } catch (err) {
       console.error('[v0] Error saving product:', err)
+      alert(err instanceof Error ? err.message : 'Could not save the product')
     } finally {
       setSavingProduct(false)
     }
@@ -753,13 +784,13 @@ export default function AdminPage() {
   const handleOrderStatusChange = async (orderNumber: string, newStatus: string) => {
     setUpdatingOrderStatus(orderNumber)
     try {
-      const supabase = createClient()
-      await supabase.from('orders').update({ payment_status: newStatus }).eq('order_number', orderNumber)
+      await adminWrite({ table: 'orders', action: 'update', key: orderNumber, values: { payment_status: newStatus } })
       setStatusUpdateSuccess(orderNumber)
       setTimeout(() => setStatusUpdateSuccess(null), 2000)
       mutate()
     } catch (err) {
       console.error('[v0] Error updating order status:', err)
+      alert(err instanceof Error ? err.message : 'Could not update the order status')
     } finally {
       setUpdatingOrderStatus(null)
     }
@@ -920,285 +951,158 @@ export default function AdminPage() {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col min-h-screen bg-gradient-to-b from-[#000034] via-[#002463] to-[#0056a1] items-center justify-center">
-        <Loader2 className="w-10 h-10 text-red-400 animate-spin" />
-        <p className="mt-4 text-slate-400 font-bold">Loading admin panel...</p>
+      <div className={`kbc-portal ${portalFontVars} flex min-h-screen flex-col items-center justify-center gap-3 bg-[#F4F5F7]`}>
+        <Loader2 className="h-8 w-8 animate-spin text-[#0F1B3D]" />
+        <p className="text-sm font-medium text-[#5A6272]">Loading admin workspace…</p>
       </div>
     )
   }
 
   return (
-    <div className="relative flex flex-col min-h-screen overflow-hidden bg-gradient-to-b from-[#000034] via-[#002463] to-[#0056a1]">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.08),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(239,68,68,0.10),transparent_30%)]" />
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:96px_96px] opacity-20" />
-      {/* Admin Header */}
-      <div className="fixed inset-x-0 top-0 z-40 border-b border-blue-500/30 bg-[#06123dcc]/90 text-white shadow-[0_18px_40px_rgba(0,0,0,0.25)] backdrop-blur-xl">
-        <div className="mx-auto flex items-center justify-between px-4 py-4">
-          <div className="flex items-center gap-3">
-            <img src="/kbc-logo.png" alt="KBC" className="h-14 w-auto" />
-            <div className="hidden md:block">
-              <p className="text-[11px] uppercase tracking-[0.35em] text-slate-300/80">KBC CRM</p>
-              <p className="text-sm font-semibold text-slate-100">Command Center</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="hidden lg:flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-200">
-              <Search className="w-4 h-4 text-slate-400" />
-              <span>Admin workspace</span>
-            </div>
-            <Button
-              size="icon"
-              className="bg-red-600 hover:bg-red-700 text-white transition-all"
-              onClick={handleLogout}
-            >
-              <LogOut className="w-4 h-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden hover:bg-white/10 transition-all text-white"
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-            >
-              {sidebarOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      <div className="relative z-10 flex flex-1 pt-[72px]">
-        {/* Sidebar */}
-        <aside
-          className={`w-64 bg-[#06123d]/80 border-r border-white/10 fixed md:fixed md:top-[72px] md:left-0 h-[calc(100vh-72px)] md:h-[calc(100vh-72px)] overflow-y-auto transition-transform z-30 backdrop-blur-xl shadow-[12px_0_40px_rgba(0,0,0,0.18)] ${
-            sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
-          }`}
-        >
-          <div className="p-6 border-b border-white/10">
-            <p className="text-[11px] uppercase tracking-[0.35em] text-slate-400 mb-2">Workspace</p>
-            <div className="rounded-2xl border border-white/10 bg-gradient-to-br from-blue-500/10 to-red-500/10 p-4 shadow-inner">
-              <p className="text-sm font-semibold text-white">Customer CRM</p>
-              <p className="text-xs text-slate-300 mt-1">Manage products, customers, orders, and payments from one panel.</p>
-            </div>
-          </div>
-          <nav className="p-4 space-y-2">
-            <p className="px-3 pb-2 text-[11px] uppercase tracking-[0.35em] text-slate-500">Navigation</p>
-            {[
-  { id: 'overview', label: 'Overview', icon: BarChart3 },
-  { id: 'reporting', label: 'Reporting', icon: Database },
-  { id: 'products', label: 'Products', icon: Package },
-  { id: 'customers', label: 'Customers', icon: Users },
-              { id: 'orders', label: 'Orders', icon: ShoppingCart },
-              { id: 'credit-applications', label: 'Credit Applications', icon: FileSignature },
-              { id: 'quote', label: 'Courier Quote', icon: Send },
-              { id: 'rate-cards', label: 'Rate Cards', icon: TrendingUp },
-              { id: 'payment', label: 'Payment', icon: CreditCard },
-              { id: 'settings', label: 'Settings', icon: AlertCircle },
-            ].map((item) => {
-              const Icon = item.icon
-              return (
-              <button
-                key={item.id}
-                onClick={() => {
-                  setActiveTab(item.id)
-                  setSidebarOpen(false)
-                }}
-                className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-300 font-semibold flex items-center gap-3 border ${
-                  activeTab === item.id
-                    ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-600/30 border-blue-400/30'
-                    : 'border-transparent hover:border-white/10 hover:bg-white/5 text-slate-300 hover:text-white'
-                }`}
-              >
-                <span className={`w-9 h-9 rounded-lg flex items-center justify-center ${activeTab === item.id ? 'bg-white/15' : 'bg-white/5'}`}>
-                  <Icon className="w-4 h-4" />
-                </span>
-                <span className="flex-1">{item.label}</span>
-                {activeTab === item.id && <span className="w-2 h-2 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]" />}
-              </button>
-              )
-            })}
-          </nav>
-        </aside>
-
-        {/* Main Content */}
-        <main className="relative flex-1 overflow-auto md:ml-64">
-          <div className="mx-auto w-full max-w-[1700px] px-4 py-8 lg:px-8">
+    <AdminShell active={activeTab} onNavigate={setActiveTab} onLogout={handleLogout}>
             {/* Overview Tab */}
             {activeTab === 'overview' && (
-              <div className="space-y-8 animate-fade-in-up">
-                <div className="overflow-hidden rounded-[28px] border border-white/10 bg-gradient-to-r from-[#07163f]/95 via-[#0b2a5b]/95 to-[#102f73]/95 p-6 shadow-[0_24px_70px_rgba(0,0,0,0.28)] backdrop-blur-xl md:p-8">
-                  <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-                    <div className="max-w-3xl">
-                      <p className="text-[11px] uppercase tracking-[0.45em] text-slate-400 mb-3">Operations snapshot</p>
-                      <h1 className="text-4xl font-black tracking-tight text-white md:text-5xl">
-                        Dashboard
-                        <span className="block bg-gradient-to-r from-red-400 via-white to-blue-200 bg-clip-text text-transparent">
-                          KBC CRM Control Center
-                        </span>
-                      </h1>
-                      <p className="mt-4 max-w-2xl text-slate-300">
-                        Track products, customers, orders, and payments from a single workspace built for day-to-day operations.
-                      </p>
-                    </div>
-                    <div className="flex flex-wrap gap-3">
-                      <Button
-                        type="button"
-                        onClick={() => setActiveTab('orders')}
-                        className="bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg shadow-red-600/30"
-                      >
-                        Review Orders
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => setActiveTab('customers')}
-                        className="border-white/15 bg-white/5 text-slate-100 hover:bg-white/10"
-                      >
-                        Customer CRM
-                      </Button>
-                    </div>
+              <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                  <div className="flex flex-col gap-1.5">
+                    <h1 className="kbc-display text-[26px] font-semibold leading-8 tracking-tight sm:text-[28px] sm:leading-[34px]">Overview</h1>
+                    <p className="text-sm text-[#5A6272]">Products, customers, orders and payments across the business</p>
                   </div>
-                  <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
-                    {statsCards.map((stat) => {
-                      const Icon = stat.icon
-                      return (
-                        <div key={stat.label} className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                          <div className="flex items-center justify-between gap-3">
-                            <p className="text-[11px] uppercase tracking-[0.32em] text-slate-400">{stat.label}</p>
-                            <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center text-white shadow-lg`}>
-                              <Icon className="w-5 h-5" />
-                            </div>
-                          </div>
-                          <p className="mt-4 text-3xl font-black text-white">{stat.value}</p>
-                        </div>
-                      )
-                    })}
+                  <div className="flex flex-wrap gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab('customers')}
+                      className="inline-flex h-10 items-center gap-2 rounded-md border border-[#CBD2DD] bg-white px-4 text-sm font-semibold hover:bg-[#F4F5F7]"
+                    >
+                      <Users className="h-4 w-4" /> Customers
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab('orders')}
+                      className="inline-flex h-10 items-center gap-2 rounded-md bg-[#C8102E] px-4 text-sm font-semibold text-white hover:bg-[#A50D26]"
+                    >
+                      <ShoppingCart className="h-4 w-4" /> Review orders
+                    </button>
                   </div>
                 </div>
 
-                {/* CRM Insights */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
                   {[
+                    ...statsCards.map((s) => ({ ...s, helper: '' })),
                     {
-                      label: 'Average Payment',
-                      value: `R${averagePayment.toLocaleString('en-ZA', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}`,
-                      helper: `${orders.length} total payments`,
+                      label: 'Average payment',
+                      value: formatRand(averagePayment),
+                      helper: `${orders.length} payments`,
                       icon: CreditCard,
-                      color: 'from-emerald-500 to-emerald-600',
                     },
+                    { label: 'Customer logins', value: String(activeLoginUsers), helper: 'Customers who can sign in', icon: Users },
                     {
-                      label: 'Users',
-                      value: String(activeLoginUsers),
-                      helper: 'Customers with logins',
-                      icon: Users,
-                      color: 'from-blue-500 to-blue-600',
-                    },
-                    {
-                      label: 'Avg Payments / Customer',
+                      label: 'Payments per customer',
                       value: averagePaymentsPerCustomer.toFixed(1),
                       helper: `${customersWithPayments} paying customers`,
                       icon: ShoppingCart,
-                      color: 'from-purple-500 to-purple-600',
                     },
-                    {
-                      label: 'Peak Time',
-                      value: peakTimeLabel,
-                      helper: `${peakTimeShare}% of orders`,
-                      icon: Clock,
-                      color: 'from-pink-500 to-pink-600',
-                    },
-                  ].map((stat, idx) => {
+                    { label: 'Busiest time', value: peakTimeLabel, helper: `${peakTimeShare}% of orders`, icon: Clock },
+                  ].map((stat) => {
                     const Icon = stat.icon
                     return (
-                      <div
-                        key={stat.label}
-                        className="group cursor-pointer rounded-2xl border border-white/10 bg-gradient-to-br from-[#0c2e67]/80 to-[#07163f]/80 p-6 shadow-[0_18px_40px_rgba(0,0,0,0.22)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-red-500/40 hover:shadow-[0_18px_50px_rgba(220,38,38,0.18)] animate-fade-in-up"
-                        style={{ animationDelay: `${idx * 0.1}s` }}
-                      >
-                        <div className="flex items-center justify-between mb-4">
-                          <p className="text-[11px] uppercase tracking-[0.32em] text-slate-400">{stat.label}</p>
-                          <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform`}>
-                            <Icon className="w-6 h-6" />
-                          </div>
+                      <div key={stat.label} className="flex flex-col gap-2.5 rounded-lg border border-[#E3E6EC] bg-white p-4 sm:p-5">
+                        <div className="flex items-center justify-between gap-3">
+                          <span className="text-[13px] font-medium text-[#5A6272]">{stat.label}</span>
+                          <span className="flex h-8 w-8 items-center justify-center rounded-md bg-[#EEF1F6] text-[#0F1B3D]">
+                            <Icon className="h-4 w-4" />
+                          </span>
                         </div>
-                        <p className="text-4xl font-black text-white">{stat.value}</p>
-                        <p className="mt-2 text-sm text-slate-400">{stat.helper}</p>
+                        <span className="kbc-mono break-words text-xl font-medium tracking-tight sm:text-[26px] sm:leading-8">{stat.value}</span>
+                        {stat.helper && <span className="text-xs text-[#5A6272]">{stat.helper}</span>}
                       </div>
                     )
                   })}
                 </div>
 
-                {/* Recent Orders & Customers */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  {/* Recent Orders */}
-                  <div className="rounded-2xl border border-white/10 bg-gradient-to-br from-[#0b2a5b]/90 to-[#07163f]/90 p-8 shadow-[0_20px_50px_rgba(0,0,0,0.2)] backdrop-blur-xl">
-                    <div className="flex items-center justify-between mb-6">
-                      <div>
-                        <p className="text-[11px] uppercase tracking-[0.35em] text-slate-400 mb-2">Activity</p>
-                        <h2 className="text-xl font-bold text-white">Recent Orders</h2>
-                      </div>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        className="border-red-500/50 text-red-300 hover:bg-red-500/10 font-bold bg-transparent"
-                        onClick={() => setActiveTab('orders')}
-                      >
-                        View All
-                      </Button>
+                <div className="grid grid-cols-1 items-start gap-6 xl:grid-cols-2">
+                  <section className="overflow-hidden rounded-lg border border-[#E3E6EC] bg-white">
+                    <div className="flex items-center justify-between px-5 py-4">
+                      <h2 className="kbc-display text-[17px] font-semibold">Recent orders</h2>
+                      <button type="button" onClick={() => setActiveTab('orders')} className="text-sm font-medium text-[#1D3A8A] hover:text-[#132A6B]">
+                        All orders
+                      </button>
                     </div>
-                    <div className="space-y-3">
-                      {orders.slice(0, 3).map((order: any, idx: number) => (
-                        <div key={order.order_number} className="rounded-2xl border border-white/10 bg-white/5 p-4 transition-all hover:border-red-500/30 hover:bg-white/[0.07] animate-fade-in-up" style={{ animationDelay: `${idx * 0.1}s` }}>
-                          <div className="flex items-start justify-between mb-2">
-                            <div>
-                              <p className="font-bold text-white">{order.order_number}</p>
-                              <p className="text-xs text-slate-400">{order.client_name}</p>
-                            </div>
-                            <span className={`inline-flex px-2.5 py-1 rounded-full text-xs font-bold border ${getStatusColor(order.payment_status)}`}>
-                              {order.payment_status}
-                            </span>
-                          </div>
-                          <div className="flex items-center justify-between text-sm">
-                            <p className="text-slate-400">{order.item_count} items</p>
-                            <p className="font-bold text-red-300">R{Number(order.total_amount).toLocaleString()}</p>
-                          </div>
-                        </div>
-                      ))}
+                    <div className="overflow-x-auto">
+                      <table className="w-full border-collapse text-sm">
+                        <thead>
+                          <tr className="text-left text-xs font-semibold text-[#5A6272]">
+                            <th className="border-y border-[#E3E6EC] bg-[#F8F9FB] px-4 py-2.5">Order</th>
+                            <th className="border-y border-[#E3E6EC] bg-[#F8F9FB] px-4 py-2.5">Customer</th>
+                            <th className="border-y border-[#E3E6EC] bg-[#F8F9FB] px-4 py-2.5">Payment</th>
+                            <th className="border-y border-[#E3E6EC] bg-[#F8F9FB] px-4 py-2.5 text-right">Total</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {orders.slice(0, 6).map((order: any) => (
+                            <tr key={order.order_number}>
+                              <td className="kbc-mono whitespace-nowrap border-b border-[#EEF0F3] px-4 py-3 font-medium">{order.order_number}</td>
+                              <td className="border-b border-[#EEF0F3] px-4 py-3">
+                                <span className="block max-w-[220px] truncate">{order.client_name || '—'}</span>
+                                <span className="text-xs text-[#5A6272]">{order.item_count} items</span>
+                              </td>
+                              <td className="border-b border-[#EEF0F3] px-4 py-3">
+                                <span className={`inline-flex h-6 items-center rounded-full border px-2.5 text-xs font-semibold ${getStatusColor(order.payment_status)}`}>
+                                  {order.payment_status || 'Pending'}
+                                </span>
+                              </td>
+                              <td className="kbc-mono whitespace-nowrap border-b border-[#EEF0F3] px-4 py-3 text-right font-medium">{formatRand(order.total_amount)}</td>
+                            </tr>
+                          ))}
+                          {orders.length === 0 && (
+                            <tr>
+                              <td colSpan={4} className="px-4 py-10 text-center text-[#5A6272]">No orders yet</td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
                     </div>
-                  </div>
+                  </section>
 
-                  {/* Active Customers */}
-                  <div className="rounded-2xl border border-white/10 bg-gradient-to-br from-[#0b2a5b]/90 to-[#07163f]/90 p-8 shadow-[0_20px_50px_rgba(0,0,0,0.2)] backdrop-blur-xl">
-                    <div className="flex items-center justify-between mb-6">
-                      <div>
-                        <p className="text-[11px] uppercase tracking-[0.35em] text-slate-400 mb-2">Relationship view</p>
-                        <h2 className="text-xl font-bold text-white">Top Customers</h2>
-                      </div>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        className="border-red-500/50 text-red-300 hover:bg-red-500/10 font-bold bg-transparent"
-                        onClick={() => setActiveTab('customers')}
-                      >
-                        View All
-                      </Button>
+                  <section className="overflow-hidden rounded-lg border border-[#E3E6EC] bg-white">
+                    <div className="flex items-center justify-between px-5 py-4">
+                      <h2 className="kbc-display text-[17px] font-semibold">Top customers</h2>
+                      <button type="button" onClick={() => setActiveTab('customers')} className="text-sm font-medium text-[#1D3A8A] hover:text-[#132A6B]">
+                        All customers
+                      </button>
                     </div>
-                    <div className="space-y-3">
-                      {clients.filter((c: any) => c.order_count > 0).slice(0, 3).map((customer: any, idx: number) => (
-                        <div key={customer.account_no} className="rounded-2xl border border-white/10 bg-white/5 p-4 transition-all hover:border-red-500/30 hover:bg-white/[0.07] animate-fade-in-up" style={{ animationDelay: `${idx * 0.1}s` }}>
-                          <div className="flex items-start justify-between mb-2">
-                            <div>
-                              <p className="font-bold text-white">{customer.client_name}</p>
-                              <p className="text-xs text-slate-400">{customer.account_no}</p>
-                            </div>
-                            <div className="text-right">
-                              <p className="text-sm font-bold text-red-300">{customer.order_count} orders</p>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
+                    <div className="overflow-x-auto">
+                      <table className="w-full border-collapse text-sm">
+                        <thead>
+                          <tr className="text-left text-xs font-semibold text-[#5A6272]">
+                            <th className="border-y border-[#E3E6EC] bg-[#F8F9FB] px-4 py-2.5">Customer</th>
+                            <th className="border-y border-[#E3E6EC] bg-[#F8F9FB] px-4 py-2.5">Account</th>
+                            <th className="border-y border-[#E3E6EC] bg-[#F8F9FB] px-4 py-2.5 text-right">Orders</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {clients
+                            .filter((c: any) => c.order_count > 0)
+                            .sort((x: any, y: any) => y.order_count - x.order_count)
+                            .slice(0, 6)
+                            .map((customer: any) => (
+                              <tr key={customer.account_no}>
+                                <td className="border-b border-[#EEF0F3] px-4 py-3 font-medium">
+                                  <span className="block max-w-[260px] truncate">{customer.client_name}</span>
+                                </td>
+                                <td className="kbc-mono whitespace-nowrap border-b border-[#EEF0F3] px-4 py-3 text-[13px] text-[#5A6272]">{customer.account_no}</td>
+                                <td className="kbc-mono border-b border-[#EEF0F3] px-4 py-3 text-right">{customer.order_count}</td>
+                              </tr>
+                            ))}
+                          {!clients.some((c: any) => c.order_count > 0) && (
+                            <tr>
+                              <td colSpan={3} className="px-4 py-10 text-center text-[#5A6272]">No customer orders yet</td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
                     </div>
-                  </div>
+                  </section>
                 </div>
               </div>
             )}
@@ -1227,27 +1131,27 @@ export default function AdminPage() {
               <div className="space-y-6 animate-fade-in-up">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div>
-                    <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-1">Products</h1>
-                    <p className="text-muted-foreground">Manage your product catalog</p>
+                    <h1 className="kbc-display text-[26px] font-semibold leading-8 tracking-tight sm:text-[28px] sm:leading-[34px]">Products</h1>
+                    <p className="text-[#5A6272]">Manage your product catalog</p>
                   </div>
                   <div className="flex items-center gap-3">
                     <Input
                       placeholder="Search products..."
                       value={productSearch}
                       onChange={(e) => { setProductSearch(e.target.value); setProductPage(1) }}
-                      className="w-64 bg-slate-800/50 border-slate-600/50"
+                      className="w-64 bg-white border-[#E3E6EC]"
                     />
                     <Button
                       onClick={() => { window.location.href = '/admin/bulk-images' }}
                       variant="outline"
-                      className="border-primary/40 text-foreground font-bold gap-2"
+                      className="border-[#E3E6EC] text-[#121826] font-bold gap-2"
                     >
                       <Upload className="w-4 h-4" />
                       Bulk Images
                     </Button>
                     <Button
                       onClick={() => setShowAddProductModal(true)}
-                      className="bg-gradient-to-r from-primary to-secondary hover:from-primary/80 hover:to-secondary/80 text-white font-bold gap-2"
+                      className="bg-[#C8102E] hover:bg-[#A50D26] text-white font-bold gap-2"
                     >
                       <Plus className="w-4 h-4" />
                       Add Product
@@ -1255,42 +1159,42 @@ export default function AdminPage() {
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-br from-card to-card/50 border border-primary/20 rounded-xl overflow-hidden shadow-xl shadow-primary/10 backdrop-blur-sm">
+                <div className="bg-white border border-[#E3E6EC] rounded-lg overflow-hidden">
                   <div className="overflow-x-auto">
                     <table className="w-full">
-                      <thead className="bg-gradient-to-r from-primary/20 to-secondary/20 border-b border-primary/30">
+                      <thead className="bg-[#F8F9FB] border-b border-[#E3E6EC]">
                         <tr>
-                          <th className="py-4 px-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">Image</th>
-                          <th className="py-4 px-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">SKU</th>
-                          <th className="py-4 px-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">Name</th>
-                          <th className="py-4 px-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">Price</th>
-                          <th className="py-4 px-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">Stock</th>
-                          <th className="py-4 px-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">Actions</th>
+                          <th className="py-4 px-4 text-left text-xs font-bold text-[#5A6272] uppercase tracking-wider">Image</th>
+                          <th className="py-4 px-4 text-left text-xs font-bold text-[#5A6272] uppercase tracking-wider">SKU</th>
+                          <th className="py-4 px-4 text-left text-xs font-bold text-[#5A6272] uppercase tracking-wider">Name</th>
+                          <th className="py-4 px-4 text-left text-xs font-bold text-[#5A6272] uppercase tracking-wider">Price</th>
+                          <th className="py-4 px-4 text-left text-xs font-bold text-[#5A6272] uppercase tracking-wider">Stock</th>
+                          <th className="py-4 px-4 text-left text-xs font-bold text-[#5A6272] uppercase tracking-wider">Actions</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-border">
+                      <tbody className="divide-y divide-[#EEF0F3]">
                         {paginatedProducts.map((product: any) => (
-                          <tr key={product.sku} className="hover:bg-slate-400/10 transition-colors">
+                          <tr key={product.sku} className="hover:bg-[#F4F5F7] transition-colors">
                             <td className="py-3 px-4">
                               {productImages[product.sku]?.[0] ? (
                                 <img src={productImages[product.sku][0]} alt="" className="w-10 h-10 object-cover rounded" />
                               ) : (
-                                <div className="w-10 h-10 bg-slate-600 rounded flex items-center justify-center">
-                                  <ImageIcon className="w-5 h-5 text-slate-400" />
+                                <div className="w-10 h-10 bg-[#EEF0F3] rounded flex items-center justify-center">
+                                  <ImageIcon className="w-5 h-5 text-[#5A6272]" />
                                 </div>
                               )}
                             </td>
-                            <td className="py-3 px-4 font-mono text-sm text-foreground">{product.sku}</td>
-                            <td className="py-3 px-4 text-foreground">{product.description}</td>
-                            <td className="py-3 px-4 text-foreground">R{product.price?.toFixed(2)}</td>
-                            <td className="py-3 px-4 text-foreground">{product.inventory_quantity ?? 'N/A'}</td>
+                            <td className="py-3 px-4 font-mono text-sm text-[#121826]">{product.sku}</td>
+                            <td className="py-3 px-4 text-[#121826]">{product.description}</td>
+                            <td className="py-3 px-4 text-[#121826]">R{product.price?.toFixed(2)}</td>
+                            <td className="py-3 px-4 text-[#121826]">{product.inventory_quantity ?? 'N/A'}</td>
                             <td className="py-3 px-4">
                               <div className="flex items-center gap-2">
                                 <Button 
                                   variant="ghost" 
                                   size="icon"
                                   onClick={() => setEditingProduct(product)}
-                                  className="text-primary hover:text-primary/80 hover:bg-primary/10"
+                                  className="text-[#1D3A8A] hover:text-[#132A6B] hover:bg-[#F4F5F7]"
                                 >
                                   <Edit2 className="w-4 h-4" />
                                 </Button>
@@ -1298,7 +1202,7 @@ export default function AdminPage() {
                                   variant="ghost" 
                                   size="icon"
                                   onClick={() => handleDeleteProduct(product.sku)}
-                                  className="text-red-500 hover:text-red-400 hover:bg-red-500/10"
+                                  className="text-red-500 hover:text-[#A4161A] hover:bg-[#F4F5F7]"
                                 >
                                   <Trash2 className="w-4 h-4" />
                                 </Button>
@@ -1310,8 +1214,8 @@ export default function AdminPage() {
                     </table>
                   </div>
                   {totalProductPages > 1 && (
-                    <div className="flex items-center justify-between px-4 py-3 border-t border-primary/20">
-                      <p className="text-sm text-muted-foreground">
+                    <div className="flex items-center justify-between px-4 py-3 border-t border-[#E3E6EC]">
+                      <p className="text-sm text-[#5A6272]">
                         Showing {((productPage - 1) * PRODUCTS_PER_PAGE) + 1} to {Math.min(productPage * PRODUCTS_PER_PAGE, filteredProducts.length)} of {filteredProducts.length}
                       </p>
                       <div className="flex items-center gap-2">
@@ -1320,17 +1224,17 @@ export default function AdminPage() {
                           size="sm"
                           onClick={() => setProductPage(p => Math.max(1, p - 1))}
                           disabled={productPage === 1}
-                          className="border-slate-600/50"
+                          className="border-[#E3E6EC]"
                         >
                           Previous
                         </Button>
-                        <span className="text-sm text-muted-foreground">Page {productPage} of {totalProductPages}</span>
+                        <span className="text-sm text-[#5A6272]">Page {productPage} of {totalProductPages}</span>
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => setProductPage(p => Math.min(totalProductPages, p + 1))}
                           disabled={productPage === totalProductPages}
-                          className="border-slate-600/50"
+                          className="border-[#E3E6EC]"
                         >
                           Next
                         </Button>
@@ -1358,15 +1262,15 @@ export default function AdminPage() {
               <div id="customers" className="space-y-6 scroll-mt-24 animate-fade-in-up">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div>
-                    <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-1">Customers</h1>
-                    <p className="text-muted-foreground">Manage customer accounts</p>
+                    <h1 className="kbc-display text-[26px] font-semibold leading-8 tracking-tight sm:text-[28px] sm:leading-[34px]">Customers</h1>
+                    <p className="text-[#5A6272]">Manage customer accounts</p>
                   </div>
                   <div className="flex items-center gap-3">
                     <Input
                       placeholder="Search customers..."
                       value={customerSearch}
                       onChange={(e) => { setCustomerSearch(e.target.value); setCustomerPage(1) }}
-                      className="w-64 bg-slate-800/50 border-slate-600/50"
+                      className="w-64 bg-white border-[#E3E6EC]"
                     />
                     <Button 
                       onClick={() => {
@@ -1375,7 +1279,7 @@ export default function AdminPage() {
                         setCreateLoginSuccess('')
                         setShowCreateLoginModal(true)
                       }}
-                      className="bg-gradient-to-r from-primary to-secondary hover:from-primary/80 hover:to-secondary/80 text-white font-bold gap-2"
+                      className="bg-[#C8102E] hover:bg-[#A50D26] text-white font-bold gap-2"
                     >
                       <Plus className="w-4 h-4" />
                       Create Login
@@ -1383,31 +1287,31 @@ export default function AdminPage() {
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-br from-card to-card/50 border border-primary/20 rounded-xl overflow-hidden shadow-xl shadow-primary/10 backdrop-blur-sm">
+                <div className="bg-white border border-[#E3E6EC] rounded-lg overflow-hidden">
                   <div className="overflow-x-auto">
                     <table className="w-full">
-                      <thead className="bg-gradient-to-r from-primary/20 to-secondary/20 border-b border-primary/30">
+                      <thead className="bg-[#F8F9FB] border-b border-[#E3E6EC]">
                         <tr>
-                          <th className="py-4 px-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">Account #</th>
-                          <th className="py-4 px-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">Name</th>
-                          <th className="py-4 px-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">Email</th>
-                          <th className="py-4 px-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">Phone</th>
-                          <th className="py-4 px-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">Actions</th>
+                          <th className="py-4 px-4 text-left text-xs font-bold text-[#5A6272] uppercase tracking-wider">Account #</th>
+                          <th className="py-4 px-4 text-left text-xs font-bold text-[#5A6272] uppercase tracking-wider">Name</th>
+                          <th className="py-4 px-4 text-left text-xs font-bold text-[#5A6272] uppercase tracking-wider">Email</th>
+                          <th className="py-4 px-4 text-left text-xs font-bold text-[#5A6272] uppercase tracking-wider">Phone</th>
+                          <th className="py-4 px-4 text-left text-xs font-bold text-[#5A6272] uppercase tracking-wider">Actions</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-border">
+                      <tbody className="divide-y divide-[#EEF0F3]">
                         {paginatedCustomers.map((client: any) => (
-                          <tr key={client.account_no} className="hover:bg-slate-400/10 transition-colors">
-                            <td className="py-3 px-4 font-mono text-sm text-foreground">{client.account_no}</td>
-                            <td className="py-3 px-4 text-foreground">{client.client_name || client.full_name || '-'}</td>
-                            <td className="py-3 px-4 text-foreground">{client.email || '-'}</td>
-                            <td className="py-3 px-4 text-foreground">{client.phone_number || '-'}</td>
+                          <tr key={client.account_no} className="hover:bg-[#F4F5F7] transition-colors">
+                            <td className="py-3 px-4 font-mono text-sm text-[#121826]">{client.account_no}</td>
+                            <td className="py-3 px-4 text-[#121826]">{client.client_name || client.full_name || '-'}</td>
+                            <td className="py-3 px-4 text-[#121826]">{client.email || '-'}</td>
+                            <td className="py-3 px-4 text-[#121826]">{client.phone_number || '-'}</td>
                             <td className="py-3 px-4">
                               <Button 
                                 variant="ghost" 
                                 size="icon"
                                 onClick={() => setEditingCustomer(client)}
-                                className="text-primary hover:text-primary/80 hover:bg-primary/10"
+                                className="text-[#1D3A8A] hover:text-[#132A6B] hover:bg-[#F4F5F7]"
                               >
                                 <Edit2 className="w-4 h-4" />
                               </Button>
@@ -1418,8 +1322,8 @@ export default function AdminPage() {
                     </table>
                   </div>
                   {totalCustomerPages > 1 && (
-                    <div className="flex items-center justify-between px-4 py-3 border-t border-primary/20">
-                      <p className="text-sm text-muted-foreground">
+                    <div className="flex items-center justify-between px-4 py-3 border-t border-[#E3E6EC]">
+                      <p className="text-sm text-[#5A6272]">
                         Showing {((customerPage - 1) * CUSTOMERS_PER_PAGE) + 1} to {Math.min(customerPage * CUSTOMERS_PER_PAGE, filteredCustomers.length)} of {filteredCustomers.length}
                       </p>
                       <div className="flex items-center gap-2">
@@ -1428,17 +1332,17 @@ export default function AdminPage() {
                           size="sm"
                           onClick={() => setCustomerPage(p => Math.max(1, p - 1))}
                           disabled={customerPage === 1}
-                          className="border-slate-600/50"
+                          className="border-[#E3E6EC]"
                         >
                           Previous
                         </Button>
-                        <span className="text-sm text-muted-foreground">Page {customerPage} of {totalCustomerPages}</span>
+                        <span className="text-sm text-[#5A6272]">Page {customerPage} of {totalCustomerPages}</span>
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => setCustomerPage(p => Math.min(totalCustomerPages, p + 1))}
                           disabled={customerPage === totalCustomerPages}
-                          className="border-slate-600/50"
+                          className="border-[#E3E6EC]"
                         >
                           Next
                         </Button>
@@ -1464,36 +1368,36 @@ export default function AdminPage() {
               <div id="orders" className="space-y-6 scroll-mt-24 animate-fade-in-up">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div>
-                    <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-1">Orders</h1>
-                    <p className="text-muted-foreground">Manage customer orders</p>
+                    <h1 className="kbc-display text-[26px] font-semibold leading-8 tracking-tight sm:text-[28px] sm:leading-[34px]">Orders</h1>
+                    <p className="text-[#5A6272]">Manage customer orders</p>
                   </div>
                   <Input
                     placeholder="Search orders..."
                     value={orderSearch}
                     onChange={(e) => { setOrderSearch(e.target.value); setOrderPage(1) }}
-                    className="w-64 bg-slate-800/50 border-slate-600/50"
+                    className="w-64 bg-white border-[#E3E6EC]"
                   />
                 </div>
 
-                <div className="bg-gradient-to-br from-card to-card/50 border border-primary/20 rounded-xl overflow-hidden shadow-xl shadow-primary/10 backdrop-blur-sm">
+                <div className="bg-white border border-[#E3E6EC] rounded-lg overflow-hidden">
                   <div className="overflow-x-auto">
                     <table className="w-full">
-                      <thead className="bg-gradient-to-r from-primary/20 to-secondary/20 border-b border-primary/30">
+                      <thead className="bg-[#F8F9FB] border-b border-[#E3E6EC]">
                         <tr>
-                          <th className="py-4 px-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider w-12"></th>
-                          <th className="py-4 px-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">Order #</th>
-                          <th className="py-4 px-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">Customer</th>
-                          <th className="py-4 px-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">Name</th>
-                          <th className="py-4 px-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">Date</th>
-                          <th className="py-4 px-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">Items</th>
-                          <th className="py-4 px-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">Total</th>
-                          <th className="py-4 px-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">Status</th>
+                          <th className="py-4 px-4 text-left text-xs font-bold text-[#5A6272] uppercase tracking-wider w-12"></th>
+                          <th className="py-4 px-4 text-left text-xs font-bold text-[#5A6272] uppercase tracking-wider">Order #</th>
+                          <th className="py-4 px-4 text-left text-xs font-bold text-[#5A6272] uppercase tracking-wider">Customer</th>
+                          <th className="py-4 px-4 text-left text-xs font-bold text-[#5A6272] uppercase tracking-wider">Name</th>
+                          <th className="py-4 px-4 text-left text-xs font-bold text-[#5A6272] uppercase tracking-wider">Date</th>
+                          <th className="py-4 px-4 text-left text-xs font-bold text-[#5A6272] uppercase tracking-wider">Items</th>
+                          <th className="py-4 px-4 text-left text-xs font-bold text-[#5A6272] uppercase tracking-wider">Total</th>
+                          <th className="py-4 px-4 text-left text-xs font-bold text-[#5A6272] uppercase tracking-wider">Status</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-border">
+                      <tbody className="divide-y divide-[#EEF0F3]">
                         {paginatedOrders.map((order: any) => (
                           <React.Fragment key={order.order_number}>
-                            <tr className="hover:bg-slate-400/10 transition-colors">
+                            <tr className="hover:bg-[#F4F5F7] transition-colors">
                               <td className="py-4 px-4">
                                 <button
                                   onClick={() => {
@@ -1505,22 +1409,22 @@ export default function AdminPage() {
                                     }
                                     setExpandedOrders(newExpanded)
                                   }}
-                                  className="p-1 hover:bg-primary/20 rounded transition-all"
+                                  className="p-1 hover:bg-[#F4F5F7] rounded transition-all"
                                 >
-                                  <ChevronDown className={`w-5 h-5 text-foreground transition-transform ${expandedOrders.has(order.order_number) ? 'rotate-180' : ''}`} />
+                                  <ChevronDown className={`w-5 h-5 text-[#121826] transition-transform ${expandedOrders.has(order.order_number) ? 'rotate-180' : ''}`} />
                                 </button>
                               </td>
-                              <td className="py-4 font-bold text-secondary">{order.order_number}</td>
-                              <td className="py-4 text-foreground">
+                              <td className="py-4 kbc-mono font-semibold text-[#121826]">{order.order_number}</td>
+                              <td className="py-4 text-[#121826]">
                                 <div className="text-sm">
                                   <p className="font-bold">{order.client_name}</p>
-                                  <p className="text-xs text-muted-foreground">{order.client_account_no}</p>
+                                  <p className="text-xs text-[#5A6272]">{order.client_account_no}</p>
                                 </div>
                               </td>
-                              <td className="py-4 text-foreground">{order.client_name}</td>
-                              <td className="py-4 text-muted-foreground text-xs">{formatDate(order.order_date)}</td>
-                              <td className="py-4 text-muted-foreground">{order.order_items?.length || 0}</td>
-                              <td className="py-4 font-bold text-foreground">R{Number(order.total_amount).toLocaleString()}</td>
+                              <td className="py-4 text-[#121826]">{order.client_name}</td>
+                              <td className="py-4 text-[#5A6272] text-xs">{formatDate(order.order_date)}</td>
+                              <td className="py-4 text-[#5A6272]">{order.order_items?.length || 0}</td>
+                              <td className="py-4 font-bold text-[#121826]">R{Number(order.total_amount).toLocaleString()}</td>
                               <td className="py-4">
                                 <div className="flex items-center gap-2">
                                   <select
@@ -1536,12 +1440,12 @@ export default function AdminPage() {
                                     <option value="Failed">Failed</option>
                                   </select>
                                   {statusUpdateSuccess === order.order_number && (
-                                    <Check className="w-4 h-4 text-green-400" />
+                                    <Check className="w-4 h-4 text-[#0B6B41]" />
                                   )}
                                 </div>
                               </td>
                               <td className="py-4">
-                                <Button size="sm" variant="ghost" className="text-secondary hover:text-secondary/70 font-bold" onClick={() => setViewingOrder(order)}>
+                                <Button size="sm" variant="ghost" className="text-[#1D3A8A] hover:text-[#132A6B] font-bold" onClick={() => setViewingOrder(order)}>
                                   View
                                 </Button>
                               </td>
@@ -1549,27 +1453,27 @@ export default function AdminPage() {
                             {expandedOrders.has(order.order_number) && (
                               <tr>
                                 <td colSpan={9} className="p-0">
-                                  <div className="bg-primary/5 border-t border-primary/10 p-6">
+                                  <div className="bg-[#F8F9FB] border-t border-[#E3E6EC] p-6">
                                     <table className="w-full text-sm">
                                       <thead>
-                                        <tr className="border-b border-primary/20">
-                                          <th className="text-left py-3 px-4 font-bold text-foreground">Product Name</th>
-                                          <th className="text-left py-3 px-4 font-bold text-foreground">SKU</th>
-                                          <th className="text-left py-3 px-4 font-bold text-foreground">Quantity</th>
-                                          <th className="text-left py-3 px-4 font-bold text-foreground">Unit Price</th>
-                                          <th className="text-left py-3 px-4 font-bold text-foreground">Tax</th>
-                                          <th className="text-left py-3 px-4 font-bold text-foreground">Subtotal</th>
+                                        <tr className="border-b border-[#E3E6EC]">
+                                          <th className="text-left py-3 px-4 font-bold text-[#121826]">Product Name</th>
+                                          <th className="text-left py-3 px-4 font-bold text-[#121826]">SKU</th>
+                                          <th className="text-left py-3 px-4 font-bold text-[#121826]">Quantity</th>
+                                          <th className="text-left py-3 px-4 font-bold text-[#121826]">Unit Price</th>
+                                          <th className="text-left py-3 px-4 font-bold text-[#121826]">Tax</th>
+                                          <th className="text-left py-3 px-4 font-bold text-[#121826]">Subtotal</th>
                                         </tr>
                                       </thead>
-                                      <tbody className="divide-y divide-primary/10">
+                                      <tbody className="divide-y divide-[#EEF0F3]">
                                         {order.order_items?.map((item: any, idx: number) => (
-                                          <tr key={idx} className="hover:bg-primary/5">
-                                            <td className="py-3 px-4 text-foreground">{item.products?.title || 'Unknown'}</td>
-                                            <td className="py-3 px-4 text-muted-foreground font-mono">{item.sku}</td>
-                                            <td className="py-3 px-4 text-muted-foreground">{item.quantity}</td>
-                                            <td className="py-3 px-4 text-foreground">R{Number(item.price).toLocaleString()}</td>
-                                            <td className="py-3 px-4 text-foreground">R{Number(item.tax).toLocaleString()}</td>
-                                            <td className="py-3 px-4 font-bold text-foreground">R{(Number(item.price) * item.quantity + Number(item.tax)).toLocaleString()}</td>
+                                          <tr key={idx} className="hover:bg-[#F4F5F7]">
+                                            <td className="py-3 px-4 text-[#121826]">{item.products?.title || 'Unknown'}</td>
+                                            <td className="py-3 px-4 text-[#5A6272] font-mono">{item.sku}</td>
+                                            <td className="py-3 px-4 text-[#5A6272]">{item.quantity}</td>
+                                            <td className="py-3 px-4 text-[#121826]">R{Number(item.price).toLocaleString()}</td>
+                                            <td className="py-3 px-4 text-[#121826]">R{Number(item.tax).toLocaleString()}</td>
+                                            <td className="py-3 px-4 font-bold text-[#121826]">R{(Number(item.price) * item.quantity + Number(item.tax)).toLocaleString()}</td>
                                           </tr>
                                         ))}
                                       </tbody>
@@ -1584,8 +1488,8 @@ export default function AdminPage() {
                     </table>
                   </div>
                   {totalOrderPages > 1 && (
-                    <div className="flex items-center justify-between px-4 py-3 border-t border-primary/20">
-                      <p className="text-sm text-muted-foreground">
+                    <div className="flex items-center justify-between px-4 py-3 border-t border-[#E3E6EC]">
+                      <p className="text-sm text-[#5A6272]">
                         Showing {((orderPage - 1) * ORDERS_PER_PAGE) + 1} to {Math.min(orderPage * ORDERS_PER_PAGE, filteredOrders.length)} of {filteredOrders.length}
                       </p>
                       <div className="flex items-center gap-2">
@@ -1594,17 +1498,17 @@ export default function AdminPage() {
                           size="sm"
                           onClick={() => setOrderPage(p => Math.max(1, p - 1))}
                           disabled={orderPage === 1}
-                          className="border-slate-600/50"
+                          className="border-[#E3E6EC]"
                         >
                           Previous
                         </Button>
-                        <span className="text-sm text-muted-foreground">Page {orderPage} of {totalOrderPages}</span>
+                        <span className="text-sm text-[#5A6272]">Page {orderPage} of {totalOrderPages}</span>
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => setOrderPage(p => Math.min(totalOrderPages, p + 1))}
                           disabled={orderPage === totalOrderPages}
-                          className="border-slate-600/50"
+                          className="border-[#E3E6EC]"
                         >
                           Next
                         </Button>
@@ -1621,12 +1525,12 @@ export default function AdminPage() {
               <div className="space-y-6 animate-fade-in-up">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div>
-                    <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-1">Payment</h1>
-                    <p className="text-muted-foreground">Send a manual PayFast payment link by customer name</p>
+                    <h1 className="kbc-display text-[26px] font-semibold leading-8 tracking-tight sm:text-[28px] sm:leading-[34px]">Payment</h1>
+                    <p className="text-[#5A6272]">Send a manual PayFast payment link by customer name</p>
                   </div>
                   <Button
                     variant="outline"
-                    className="border-red-500 text-red-400 hover:bg-red-500/10 font-bold bg-transparent gap-2"
+                    className="border-red-500 text-[#A4161A] hover:bg-[#F4F5F7] font-bold bg-transparent gap-2"
                     onClick={() => {
                       setPaymentCustomerSearch('')
                       setSelectedPaymentCustomer(null)
@@ -1643,11 +1547,11 @@ export default function AdminPage() {
                 </div>
 
                 <div className="grid grid-cols-1 xl:grid-cols-[1.3fr_0.9fr] gap-6">
-                  <div className="bg-gradient-to-br from-card to-card/50 border border-primary/20 rounded-xl overflow-hidden shadow-xl shadow-primary/10 backdrop-blur-sm p-6 space-y-5">
+                  <div className="bg-white border border-[#E3E6EC] rounded-lg overflow-hidden p-6 space-y-5">
                     <div>
-                      <label className="block text-sm font-bold text-slate-300 mb-2">Search Customer by Name</label>
+                      <label className="block text-sm font-bold text-[#3D4452] mb-2">Search Customer by Name</label>
                       <div className="relative">
-                        <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                        <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#5A6272]" />
                         <Input
                           value={paymentCustomerSearch}
                           onChange={(e) => {
@@ -1655,13 +1559,13 @@ export default function AdminPage() {
                             setManualPaymentSuccess(null)
                           }}
                           placeholder="Type a customer name..."
-                          className="pl-10 border-slate-400/50 focus:border-red-500 bg-white/10 text-white placeholder:text-slate-400"
+                          className="pl-10 border-[#E3E6EC] focus:border-[#0F1B3D] bg-white text-[#121826] placeholder:text-[#8A919E]"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <p className="text-xs uppercase tracking-wider text-slate-400 font-bold mb-3">Matching Customers</p>
+                      <p className="text-xs uppercase tracking-wider text-[#5A6272] font-bold mb-3">Matching Customers</p>
                       <div className="max-h-72 overflow-y-auto space-y-2 pr-1">
                         {filteredPaymentCustomers.length > 0 ? filteredPaymentCustomers.map((customer: any) => {
                           const isSelected = selectedPaymentCustomer?.account_no === customer.account_no
@@ -1677,22 +1581,22 @@ export default function AdminPage() {
                               }}
                               className={`w-full text-left rounded-lg border px-4 py-3 transition-all ${
                                 isSelected
-                                  ? 'border-red-500 bg-red-500/10'
-                                  : 'border-slate-400/30 hover:border-red-500/40 hover:bg-slate-400/5'
+                                  ? 'border-red-500 bg-[#FDECEA]'
+                                  : 'border-[#E3E6EC] hover:border-[#E8A5A5] hover:bg-[#F4F5F7]'
                               }`}
                             >
                               <div className="flex items-start justify-between gap-3">
                                 <div>
-                                  <p className="font-bold text-white">{customer.client_name || customer.full_name || 'Unnamed customer'}</p>
-                                  <p className="text-xs text-slate-400">{customer.account_no}</p>
-                                  <p className="text-xs text-slate-300 mt-1 break-all">{customer.email || customer.contact?.email || 'No email on file'}</p>
+                                  <p className="font-bold text-[#121826]">{customer.client_name || customer.full_name || 'Unnamed customer'}</p>
+                                  <p className="text-xs text-[#5A6272]">{customer.account_no}</p>
+                                  <p className="text-xs text-[#3D4452] mt-1 break-all">{customer.email || customer.contact?.email || 'No email on file'}</p>
                                 </div>
-                                {isSelected && <Check className="w-4 h-4 text-red-400 mt-1" />}
+                                {isSelected && <Check className="w-4 h-4 text-[#A4161A] mt-1" />}
                               </div>
                             </button>
                           )
                         }) : (
-                          <div className="rounded-lg border border-dashed border-slate-400/30 px-4 py-8 text-center text-slate-400">
+                          <div className="rounded-lg border border-dashed border-[#E3E6EC] px-4 py-8 text-center text-[#5A6272]">
                             No customers match this name.
                           </div>
                         )}
@@ -1700,19 +1604,19 @@ export default function AdminPage() {
                     </div>
                   </div>
 
-                  <div className="bg-gradient-to-br from-[#0056a1]/30 to-[#002463]/30 border border-slate-400/40 rounded-xl p-6 shadow-xl shadow-red-500/10 backdrop-blur-sm space-y-5">
+                  <div className="bg-white border border-[#E3E6EC] rounded-lg p-6 space-y-5">
                     <div>
-                      <p className="text-xs uppercase tracking-wider text-slate-400 font-bold">Selected Customer</p>
-                      <p className="text-xl font-bold text-white mt-2">
+                      <p className="text-xs uppercase tracking-wider text-[#5A6272] font-bold">Selected Customer</p>
+                      <p className="text-xl font-bold text-[#121826] mt-2">
                         {selectedPaymentCustomer?.client_name || selectedPaymentCustomer?.full_name || 'No customer selected'}
                       </p>
-                      <p className="text-sm text-slate-400 mt-1">{selectedPaymentCustomer?.account_no || 'Search and select a customer'}</p>
-                      <p className="text-sm text-slate-300 mt-1 break-all">{selectedPaymentCustomer?.email || selectedPaymentCustomer?.contact?.email || 'No email on file yet'}</p>
+                      <p className="text-sm text-[#5A6272] mt-1">{selectedPaymentCustomer?.account_no || 'Search and select a customer'}</p>
+                      <p className="text-sm text-[#3D4452] mt-1 break-all">{selectedPaymentCustomer?.email || selectedPaymentCustomer?.contact?.email || 'No email on file yet'}</p>
                     </div>
 
                     <div className="grid grid-cols-1 gap-4">
                       <div>
-                        <label className="block text-sm font-bold text-slate-300 mb-2">Amount (R)</label>
+                        <label className="block text-sm font-bold text-[#3D4452] mb-2">Amount (R)</label>
                         <Input
                           type="number"
                           min="0"
@@ -1720,37 +1624,37 @@ export default function AdminPage() {
                           value={manualPaymentAmount}
                           onChange={(e) => setManualPaymentAmount(e.target.value)}
                           placeholder="Enter amount"
-                          className="border-slate-400/50 focus:border-red-500 bg-white/10 text-white placeholder:text-slate-400"
+                          className="border-[#E3E6EC] focus:border-[#0F1B3D] bg-white text-[#121826] placeholder:text-[#8A919E]"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-bold text-slate-300 mb-2">Note / Description</label>
+                        <label className="block text-sm font-bold text-[#3D4452] mb-2">Note / Description</label>
                         <Textarea
                           value={manualPaymentNote}
                           onChange={(e) => setManualPaymentNote(e.target.value)}
                           placeholder="Optional note to include in the email"
-                          className="border-slate-400/50 focus:border-red-500 bg-white/10 text-white placeholder:text-slate-400"
+                          className="border-[#E3E6EC] focus:border-[#0F1B3D] bg-white text-[#121826] placeholder:text-[#8A919E]"
                           rows={4}
                         />
                       </div>
                     </div>
 
-                    <div className="rounded-lg border border-slate-400/30 bg-black/10 p-4 space-y-3">
+                    <div className="rounded-lg border border-[#E3E6EC] bg-[#F8F9FB] p-4 space-y-3">
                       <div>
-                        <p className="text-xs uppercase tracking-wider text-slate-400 font-bold">From</p>
-                        <p className="text-sm text-white font-medium break-all">kbc@notification.leadsync.co.za</p>
+                        <p className="text-xs uppercase tracking-wider text-[#5A6272] font-bold">From</p>
+                        <p className="text-sm text-[#121826] font-medium break-all">kbc@notification.leadsync.co.za</p>
                       </div>
                       <div>
-                        <p className="text-xs uppercase tracking-wider text-slate-400 font-bold mb-1">Link</p>
+                        <p className="text-xs uppercase tracking-wider text-[#5A6272] font-bold mb-1">Link</p>
                         <div className="flex gap-2 items-center">
-                          <div className="flex-1 rounded-md border border-slate-400/30 bg-white/5 px-3 py-2 text-sm text-slate-200 break-all">
+                          <div className="flex-1 rounded-md border border-[#E3E6EC] bg-[#F8F9FB] px-3 py-2 text-sm text-[#121826] break-all">
                             {manualPaymentLinkPreview || 'Will be generated when you click Send Payment Link'}
                           </div>
                           {manualPaymentLinkPreview && (
                             <Button
                               variant="outline"
                               size="sm"
-                              className="border-slate-400/50 text-slate-300 hover:text-slate-200 hover:bg-slate-400/10 font-bold bg-transparent"
+                              className="border-[#E3E6EC] text-[#3D4452] hover:text-[#121826] hover:bg-[#F4F5F7] font-bold bg-transparent"
                               onClick={() => navigator.clipboard.writeText(manualPaymentLinkPreview)}
                             >
                               Copy
@@ -1761,14 +1665,14 @@ export default function AdminPage() {
                     </div>
 
                     {manualPaymentError && (
-                      <p className="text-sm text-red-400 font-medium">{manualPaymentError}</p>
+                      <p className="text-sm text-[#A4161A] font-medium">{manualPaymentError}</p>
                     )}
                     {manualPaymentSuccess && (
-                      <p className="text-sm text-green-400 font-medium">{manualPaymentSuccess}</p>
+                      <p className="text-sm text-[#0B6B41] font-medium">{manualPaymentSuccess}</p>
                     )}
 
                     <Button
-                      className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold shadow-lg shadow-red-600/50 hover:shadow-red-600/70 transition-all gap-2"
+                      className="bg-[#C8102E] hover:bg-[#A50D26] w-full text-white font-bold transition-all gap-2"
                       disabled={manualPaymentLoading || !selectedPaymentCustomer || !manualPaymentAmount}
                       onClick={handleSendManualPaymentLink}
                     >
@@ -1784,97 +1688,97 @@ export default function AdminPage() {
             {activeTab === 'settings' && (
               <div className="space-y-8 animate-fade-in-up">
                 <div>
-                  <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-1">Settings</h1>
-                  <p className="text-muted-foreground">Manage your account and system preferences</p>
+                  <h1 className="kbc-display text-[26px] font-semibold leading-8 tracking-tight sm:text-[28px] sm:leading-[34px]">Settings</h1>
+                  <p className="text-[#5A6272]">Manage your account and system preferences</p>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                   {/* Security Settings Card */}
-                  <div className="bg-gradient-to-br from-card to-card/50 border border-primary/20 rounded-xl overflow-hidden shadow-xl shadow-primary/10 backdrop-blur-sm">
-                    <div className="bg-gradient-to-r from-primary/20 to-secondary/20 px-6 py-4 border-b border-primary/30">
+                  <div className="bg-white border border-[#E3E6EC] rounded-lg overflow-hidden">
+                    <div className="bg-[#F8F9FB] px-6 py-4 border-b border-[#E3E6EC]">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
-                          <Shield className="w-5 h-5 text-white" />
+                        <div className="bg-[#EEF1F6] text-[#0F1B3D] w-10 h-10 rounded-lg flex items-center justify-center">
+                          <Shield className="w-5 h-5 text-[#121826]" />
                         </div>
                         <div>
-                          <h3 className="text-lg font-bold text-foreground">Security</h3>
-                          <p className="text-xs text-muted-foreground">Password & authentication</p>
+                          <h3 className="text-lg font-bold text-[#121826]">Security</h3>
+                          <p className="text-xs text-[#5A6272]">Password & authentication</p>
                         </div>
                       </div>
                     </div>
                     <div className="p-6 space-y-3">
                       <button 
                         onClick={() => setShowChangePasswordModal(true)}
-                        className="w-full flex items-center gap-4 p-4 rounded-lg bg-slate-800/50 hover:bg-slate-700/50 border border-slate-600/30 hover:border-primary/50 transition-all group"
+                        className="w-full flex items-center gap-4 p-4 rounded-lg bg-white hover:bg-[#F4F5F7] border border-[#E3E6EC] hover:border-[#E3E6EC] transition-all group"
                       >
-                        <div className="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center group-hover:bg-primary/30 transition-colors">
-                          <Lock className="w-5 h-5 text-primary" />
+                        <div className="w-10 h-10 bg-[#F8F9FB] rounded-lg flex items-center justify-center group-hover:bg-[#E6EAF3] transition-colors">
+                          <Lock className="w-5 h-5 text-[#0F1B3D]" />
                         </div>
                         <div className="flex-1 text-left">
-                          <p className="font-semibold text-foreground">Change Password</p>
-                          <p className="text-xs text-muted-foreground">Update your account password</p>
+                          <p className="font-semibold text-[#121826]">Change Password</p>
+                          <p className="text-xs text-[#5A6272]">Update your account password</p>
                         </div>
-                        <ChevronDown className="w-5 h-5 text-muted-foreground -rotate-90" />
+                        <ChevronDown className="w-5 h-5 text-[#5A6272] -rotate-90" />
                       </button>
                     </div>
                   </div>
 
                   {/* Email Settings Card */}
-                  <div className="bg-gradient-to-br from-card to-card/50 border border-primary/20 rounded-xl overflow-hidden shadow-xl shadow-primary/10 backdrop-blur-sm">
-                    <div className="bg-gradient-to-r from-primary/20 to-secondary/20 px-6 py-4 border-b border-primary/30">
+                  <div className="bg-white border border-[#E3E6EC] rounded-lg overflow-hidden">
+                    <div className="bg-[#F8F9FB] px-6 py-4 border-b border-[#E3E6EC]">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
-                          <Mail className="w-5 h-5 text-white" />
+                        <div className="bg-[#EEF1F6] text-[#0F1B3D] w-10 h-10 rounded-lg flex items-center justify-center">
+                          <Mail className="w-5 h-5 text-[#121826]" />
                         </div>
                         <div>
-                          <h3 className="text-lg font-bold text-foreground">Notifications</h3>
-                          <p className="text-xs text-muted-foreground">Email & alerts configuration</p>
+                          <h3 className="text-lg font-bold text-[#121826]">Notifications</h3>
+                          <p className="text-xs text-[#5A6272]">Email & alerts configuration</p>
                         </div>
                       </div>
                     </div>
                     <div className="p-6 space-y-3">
                       <button 
                         onClick={() => setShowEmailSettingsModal(true)}
-                        className="w-full flex items-center gap-4 p-4 rounded-lg bg-slate-800/50 hover:bg-slate-700/50 border border-slate-600/30 hover:border-blue-500/50 transition-all group"
+                        className="w-full flex items-center gap-4 p-4 rounded-lg bg-white hover:bg-[#F4F5F7] border border-[#E3E6EC] hover:border-[#E3E6EC] transition-all group"
                       >
-                        <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center group-hover:bg-blue-500/30 transition-colors">
-                          <Bell className="w-5 h-5 text-blue-400" />
+                        <div className="w-10 h-10 bg-[#E6EAF3] rounded-lg flex items-center justify-center group-hover:bg-blue-500/30 transition-colors">
+                          <Bell className="w-5 h-5 text-[#0F1B3D]" />
                         </div>
                         <div className="flex-1 text-left">
-                          <p className="font-semibold text-foreground">Email Settings</p>
-                          <p className="text-xs text-muted-foreground">Configure notification emails</p>
+                          <p className="font-semibold text-[#121826]">Email Settings</p>
+                          <p className="text-xs text-[#5A6272]">Configure notification emails</p>
                         </div>
-                        <ChevronDown className="w-5 h-5 text-muted-foreground -rotate-90" />
+                        <ChevronDown className="w-5 h-5 text-[#5A6272] -rotate-90" />
                       </button>
                     </div>
                   </div>
 
                   {/* Company Info Card */}
-                  <div className="bg-gradient-to-br from-card to-card/50 border border-primary/20 rounded-xl overflow-hidden shadow-xl shadow-primary/10 backdrop-blur-sm">
-                    <div className="bg-gradient-to-r from-primary/20 to-secondary/20 px-6 py-4 border-b border-primary/30">
+                  <div className="bg-white border border-[#E3E6EC] rounded-lg overflow-hidden">
+                    <div className="bg-[#F8F9FB] px-6 py-4 border-b border-[#E3E6EC]">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-lg flex items-center justify-center">
-                          <Building2 className="w-5 h-5 text-white" />
+                        <div className="bg-[#EEF1F6] text-[#0F1B3D] w-10 h-10 rounded-lg flex items-center justify-center">
+                          <Building2 className="w-5 h-5 text-[#121826]" />
                         </div>
                         <div>
-                          <h3 className="text-lg font-bold text-foreground">Company</h3>
-                          <p className="text-xs text-muted-foreground">Business information</p>
+                          <h3 className="text-lg font-bold text-[#121826]">Company</h3>
+                          <p className="text-xs text-[#5A6272]">Business information</p>
                         </div>
                       </div>
                     </div>
                     <div className="p-6">
                       <div className="space-y-4 text-sm">
-                        <div className="flex items-center justify-between py-2 border-b border-slate-700/50">
-                          <span className="text-muted-foreground">Company Name</span>
-                          <span className="font-semibold text-foreground">KBC Trading</span>
+                        <div className="flex items-center justify-between py-2 border-b border-[#E3E6EC]">
+                          <span className="text-[#5A6272]">Company Name</span>
+                          <span className="font-semibold text-[#121826]">KBC Trading</span>
                         </div>
-                        <div className="flex items-center justify-between py-2 border-b border-slate-700/50">
-                          <span className="text-muted-foreground">Support Email</span>
-                          <span className="font-semibold text-foreground">support@kbc.co.za</span>
+                        <div className="flex items-center justify-between py-2 border-b border-[#E3E6EC]">
+                          <span className="text-[#5A6272]">Support Email</span>
+                          <span className="font-semibold text-[#121826]">support@kbc.co.za</span>
                         </div>
                         <div className="flex items-center justify-between py-2">
-                          <span className="text-muted-foreground">Version</span>
-                          <span className="font-semibold text-emerald-400">v1.0.0</span>
+                          <span className="text-[#5A6272]">Version</span>
+                          <span className="font-semibold text-[#0B6B41]">v1.0.0</span>
                         </div>
                       </div>
                     </div>
@@ -1882,13 +1786,13 @@ export default function AdminPage() {
                 </div>
 
                 {/* CRM Insights */}
-                <div className="rounded-2xl border border-white/10 bg-gradient-to-br from-[#0b2a5b]/90 to-[#07163f]/90 p-6 shadow-[0_20px_50px_rgba(0,0,0,0.2)] backdrop-blur-xl">
+                <div className="bg-white rounded-lg border border-[#E3E6EC] p-6">
                   <div className="mb-4 flex items-center justify-between">
                     <div>
-                      <p className="text-[11px] uppercase tracking-[0.35em] text-slate-400 mb-2">CRM insights</p>
-                      <h3 className="text-lg font-bold text-white">Operational Signals</h3>
+                      <p className="text-[11px] uppercase tracking-[0.08em] text-[#5A6272] mb-2">CRM insights</p>
+                      <h3 className="text-lg font-bold text-[#121826]">Operational Signals</h3>
                     </div>
-                    <Database className="h-5 w-5 text-slate-400" />
+                    <Database className="h-5 w-5 text-[#5A6272]" />
                   </div>
                   <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
                     {[
@@ -1925,16 +1829,16 @@ export default function AdminPage() {
                       return (
                         <div
                           key={stat.label}
-                          className="group rounded-2xl border border-white/10 bg-white/5 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-red-500/30 hover:bg-white/[0.08]"
+                          className="group rounded-lg border border-[#E3E6EC] bg-[#F8F9FB] p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[#E8A5A5] hover:bg-white/[0.08]"
                           style={{ animationDelay: `${idx * 0.08}s` }}
                         >
                           <div className="flex items-start justify-between gap-3">
                             <div>
-                              <p className="text-[11px] uppercase tracking-[0.32em] text-slate-400">{stat.label}</p>
-                              <p className="mt-3 text-3xl font-black text-white">{stat.value}</p>
-                              <p className="mt-2 text-sm text-slate-400">{stat.helper}</p>
+                              <p className="text-[11px] uppercase tracking-[0.08em] text-[#5A6272]">{stat.label}</p>
+                              <p className="mt-3 text-3xl font-semibold text-[#121826]">{stat.value}</p>
+                              <p className="mt-2 text-sm text-[#5A6272]">{stat.helper}</p>
                             </div>
-                            <div className={`flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${stat.color} text-white shadow-lg`}>
+                            <div className="flex h-10 w-10 items-center justify-center rounded-md bg-[#EEF1F6] text-[#0F1B3D]">
                               <Icon className="h-6 w-6" />
                             </div>
                           </div>
@@ -1945,24 +1849,21 @@ export default function AdminPage() {
                 </div>
               </div>
             )}
-          </div>
-        </main>
-      </div>
 
       {/* Customer Edit Modal */}
       {editingCustomer && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-gradient-to-br from-[#0056a1]/40 to-[#002463]/40 border border-slate-400/40 rounded-xl shadow-2xl shadow-red-500/20 w-full max-w-4xl my-8">
+        <div className="fixed inset-0 bg-[#0F1B3D]/45 z-50 flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white border border-[#E3E6EC] rounded-lg w-full max-w-4xl my-8">
             {/* Modal Header */}
-            <div className="sticky top-0 bg-gradient-to-r from-red-600 to-red-700 text-white px-8 py-6 border-b border-red-500/30 flex items-center justify-between rounded-t-xl">
+            <div className="bg-white text-[#121826] sticky top-0 px-8 py-6 border-b border-[#E3E6EC] flex items-center justify-between rounded-t-xl">
               <div>
                 <h2 className="text-2xl font-bold">Edit Account Details</h2>
-                <p className="text-sm text-red-100">{editingCustomer.account_no}</p>
+                <p className="text-sm text-[#A4161A]">{editingCustomer.account_no}</p>
               </div>
               <Button
                 variant="ghost"
                 size="icon"
-                className="hover:bg-white/10 text-white"
+                className="hover:bg-[#F4F5F7] text-[#121826]"
                 onClick={() => setEditingCustomer(null)}
               >
                 <X className="w-5 h-5" />
@@ -1970,7 +1871,7 @@ export default function AdminPage() {
             </div>
 
             {/* Modal Tabs */}
-            <div className="border-b border-slate-400/30 bg-black/20">
+            <div className="border-b border-[#E3E6EC] bg-[#F8F9FB]">
               <div className="flex gap-1 px-8 overflow-x-auto">
                 {[
                   { id: 'account', label: 'Account' },
@@ -1982,8 +1883,8 @@ export default function AdminPage() {
                     onClick={() => setCustomerModalTab(tab.id)}
                     className={`px-6 py-4 font-bold text-sm border-b-2 transition-all ${
                       customerModalTab === tab.id
-                        ? 'border-red-500 text-red-400'
-                        : 'border-transparent text-slate-400 hover:text-slate-200'
+                        ? 'border-red-500 text-[#A4161A]'
+                        : 'border-transparent text-[#5A6272] hover:text-[#121826]'
                     }`}
                   >
                     {tab.label}
@@ -1999,15 +1900,15 @@ export default function AdminPage() {
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-bold text-slate-300 mb-2">Account No</label>
-                      <Input value={editingCustomer.account_no} className="border-slate-400/50 focus:border-red-500 bg-white/10 text-white" readOnly />
+                      <label className="block text-sm font-bold text-[#3D4452] mb-2">Account No</label>
+                      <Input value={editingCustomer.account_no} className="border-[#E3E6EC] focus:border-[#0F1B3D] bg-white text-[#121826]" readOnly />
                     </div>
                   <div>
-                    <label className="block text-sm font-bold text-slate-300 mb-2">Status</label>
+                    <label className="block text-sm font-bold text-[#3D4452] mb-2">Status</label>
                     <select 
                         value={formData.status ?? editingCustomer.status ?? ''} 
                         onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                        className="w-full border-slate-400/50 focus:border-red-500 bg-white/10 text-white rounded px-3 py-2 border font-medium"
+                        className="w-full border-[#E3E6EC] focus:border-[#0F1B3D] bg-white text-[#121826] rounded px-3 py-2 border font-medium"
                       >
                         <option value="pending">Pending</option>
                         <option value="approved">Approved</option>
@@ -2016,19 +1917,19 @@ export default function AdminPage() {
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-bold text-slate-300 mb-2">Client Name</label>
+                    <label className="block text-sm font-bold text-[#3D4452] mb-2">Client Name</label>
                     <Input 
                       value={formData.client_name ?? editingCustomer.client_name ?? ''} 
                       onChange={(e) => setFormData({ ...formData, client_name: e.target.value })}
-                      className="border-slate-400/50 focus:border-red-500 bg-white/10 text-white" 
+                      className="border-[#E3E6EC] focus:border-[#0F1B3D] bg-white text-[#121826]" 
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-bold text-slate-300 mb-2">Address</label>
+                    <label className="block text-sm font-bold text-[#3D4452] mb-2">Address</label>
                     <Input 
                       value={formData.address ?? editingCustomer.address ?? ''} 
                       onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                      className="border-slate-400/50 focus:border-red-500 bg-white/10 text-white" 
+                      className="border-[#E3E6EC] focus:border-[#0F1B3D] bg-white text-[#121826]" 
                     />
                   </div>
                 </div>
@@ -2038,36 +1939,36 @@ export default function AdminPage() {
               {customerModalTab === 'contact' && (
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-bold text-slate-300 mb-2">Full Name</label>
+                    <label className="block text-sm font-bold text-[#3D4452] mb-2">Full Name</label>
                     <Input 
                       value={formData.full_name ?? editingCustomer.full_name ?? ''} 
                       onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-                      className="border-slate-400/50 focus:border-red-500 bg-white/10 text-white" 
+                      className="border-[#E3E6EC] focus:border-[#0F1B3D] bg-white text-[#121826]" 
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-bold text-slate-300 mb-2">Phone Number</label>
+                    <label className="block text-sm font-bold text-[#3D4452] mb-2">Phone Number</label>
                     <Input 
                       value={formData.phone_number ?? editingCustomer.phone_number ?? ''} 
                       onChange={(e) => setFormData({ ...formData, phone_number: e.target.value })}
-                      className="border-slate-400/50 focus:border-red-500 bg-white/10 text-white" 
+                      className="border-[#E3E6EC] focus:border-[#0F1B3D] bg-white text-[#121826]" 
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-bold text-slate-300 mb-2">Business Type</label>
+                    <label className="block text-sm font-bold text-[#3D4452] mb-2">Business Type</label>
                     <Input 
                       value={formData.business_type ?? editingCustomer.business_type ?? ''} 
                       onChange={(e) => setFormData({ ...formData, business_type: e.target.value })}
-                      className="border-slate-400/50 focus:border-red-500 bg-white/10 text-white" 
+                      className="border-[#E3E6EC] focus:border-[#0F1B3D] bg-white text-[#121826]" 
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-bold text-slate-300 mb-2">Email</label>
+                    <label className="block text-sm font-bold text-[#3D4452] mb-2">Email</label>
                     <Input 
                       type="email"
                       value={formData.email ?? editingCustomer.email ?? ''} 
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="border-slate-400/50 focus:border-red-500 bg-white/10 text-white" 
+                      className="border-[#E3E6EC] focus:border-[#0F1B3D] bg-white text-[#121826]" 
                     />
                   </div>
                 </div>
@@ -2078,30 +1979,30 @@ export default function AdminPage() {
                 <div className="space-y-4">
                   {!editingCustomer.user_id ? (
                     <>
-                      <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4 mb-4">
-                        <p className="text-blue-200 text-sm">This customer has no login yet. Create one below.</p>
+                      <div className="bg-[#E6EAF3] border border-[#E3E6EC] rounded-lg p-4 mb-4">
+                        <p className="text-[#0F1B3D] text-sm">This customer has no login yet. Create one below.</p>
                       </div>
                       <div>
-                        <label className="block text-sm font-bold text-slate-300 mb-2">Email</label>
+                        <label className="block text-sm font-bold text-[#3D4452] mb-2">Email</label>
                         <Input 
                           type="email"
                           placeholder="customer@example.com"
                           value={formData.loginEmail || ''} 
                           onChange={(e) => setFormData({ ...formData, loginEmail: e.target.value })}
-                          className="border-slate-400/50 focus:border-red-500 bg-white/10 text-white" 
+                          className="border-[#E3E6EC] focus:border-[#0F1B3D] bg-white text-[#121826]" 
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-bold text-slate-300 mb-2">Password</label>
+                        <label className="block text-sm font-bold text-[#3D4452] mb-2">Password</label>
                         <div className="flex gap-2 mb-2">
                           <Input 
                             type="text"
                             value={formData.loginPassword || ''} 
-                            className="border-slate-400/50 focus:border-red-500 bg-white/10 text-white flex-1" 
+                            className="border-[#E3E6EC] focus:border-[#0F1B3D] bg-white text-[#121826] flex-1" 
                             readOnly
                           />
                           <Button
-                            className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold"
+                            className="bg-[#0F1B3D] hover:bg-[#1E2C57] text-white font-bold"
                             onClick={() => {
                               const newPassword = Math.random().toString(36).substring(2, 10)
                               setFormData({ ...formData, loginPassword: newPassword })
@@ -2111,7 +2012,7 @@ export default function AdminPage() {
                           </Button>
                           {formData.loginPassword && (
                             <Button
-                              className="bg-gradient-to-r from-slate-600 to-slate-700 hover:from-slate-700 hover:to-slate-800 text-white font-bold"
+                              className="bg-[#C8102E] hover:bg-[#A50D26] text-white font-bold"
                               onClick={() => {
                                 navigator.clipboard.writeText(formData.loginPassword)
                                 // Show copied confirmation
@@ -2127,7 +2028,7 @@ export default function AdminPage() {
                         </div>
                       </div>
                       <Button
-                        className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold"
+                        className="bg-white hover:bg-white w-full text-white font-bold"
                         onClick={async () => {
                           if (!formData.loginEmail || !formData.loginPassword) {
                             alert('Please enter email and generate password')
@@ -2176,36 +2077,36 @@ export default function AdminPage() {
                     </>
                   ) : (
                     <>
-                      <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4 mb-4">
+                      <div className="bg-[#E7F4EE] border border-[#E3E6EC] rounded-lg p-4 mb-4">
                         <div className="flex items-center gap-2 mb-2">
-                          <CheckCircle2 className="w-5 h-5 text-green-400" />
-                          <p className="text-green-200 text-sm font-bold">Login Active</p>
+                          <CheckCircle2 className="w-5 h-5 text-[#0B6B41]" />
+                          <p className="text-[#0B6B41] text-sm font-bold">Login Active</p>
                         </div>
-                        <p className="text-green-100 text-xs">This customer has an active login account.</p>
+                        <p className="text-[#0B6B41] text-xs">This customer has an active login account.</p>
                       </div>
                       <div>
-                        <label className="block text-sm font-bold text-slate-300 mb-2">Email</label>
+                        <label className="block text-sm font-bold text-[#3D4452] mb-2">Email</label>
                         <Input 
                           value={editingCustomer.email || ''} 
-                          className="border-slate-400/50 focus:border-red-500 bg-white/10 text-white" 
+                          className="border-[#E3E6EC] focus:border-[#0F1B3D] bg-white text-[#121826]" 
                           readOnly 
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-bold text-slate-300 mb-2">Status</label>
+                        <label className="block text-sm font-bold text-[#3D4452] mb-2">Status</label>
                         <div className="flex items-center gap-2">
                           <span className={`inline-flex px-3 py-1 rounded-full text-xs font-bold border ${
                             editingCustomer.user_status === 'approved' 
-                              ? 'bg-green-500/20 border-green-500/50 text-green-300'
-                              : 'bg-yellow-500/20 border-yellow-500/50 text-yellow-300'
+                              ? 'bg-[#E7F4EE] border-[#E3E6EC] text-[#0B6B41]'
+                              : 'bg-[#FFF4DB] border-[#E3E6EC] text-[#7A4F00]'
                           }`}>
                             {editingCustomer.user_status || 'Active'}
                           </span>
                         </div>
                       </div>
-                      <div className="border-t border-slate-400/30 pt-4 space-y-3">
+                      <div className="border-t border-[#E3E6EC] pt-4 space-y-3">
                         <Button
-                          className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold gap-2"
+                          className="bg-[#0F1B3D] hover:bg-[#1E2C57] w-full text-white font-bold gap-2"
                           onClick={handleResetClientPassword}
                           disabled={loginActionLoading === 'reset'}
                         >
@@ -2217,7 +2118,7 @@ export default function AdminPage() {
                           ) : 'Reset Password'}
                         </Button>
                         <Button
-                          className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold gap-2"
+                          className="bg-[#C8102E] hover:bg-[#A50D26] w-full text-white font-bold gap-2"
                           onClick={handleRevokeClientAccess}
                           disabled={loginActionLoading === 'revoke'}
                         >
@@ -2236,33 +2137,28 @@ export default function AdminPage() {
             </div>
 
             {/* Modal Footer */}
-            <div className="border-t border-slate-400/30 bg-black/20 px-8 py-4 rounded-b-xl flex justify-end gap-3">
+            <div className="border-t border-[#E3E6EC] bg-[#F8F9FB] px-8 py-4 rounded-b-xl flex justify-end gap-3">
               <Button
                 variant="outline"
-                className="border-slate-400/50 text-slate-300 hover:text-slate-200 hover:bg-slate-400/10 font-bold bg-transparent"
+                className="border-[#E3E6EC] text-[#3D4452] hover:text-[#121826] hover:bg-[#F4F5F7] font-bold bg-transparent"
                 onClick={() => setEditingCustomer(null)}
               >
                 Cancel
               </Button>
               <Button
-                className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold shadow-lg shadow-red-600/50 hover:shadow-red-600/70 transition-all"
+                className="bg-[#C8102E] hover:bg-[#A50D26] text-white font-bold transition-all"
                 onClick={async () => {
                   try {
-                    const supabase = createClient()
                     const clientUpdates = {
                       client_name: formData.client_name ?? editingCustomer.client_name,
                       address: formData.address ?? editingCustomer.address,
                     }
-                    
-                    // Update clients table
-                    const { error: clientError } = await supabase
-                      .from('clients')
-                      .update(clientUpdates)
-                      .eq('account_no', editingCustomer.account_no)
-                    
-                    if (clientError) {
+
+                    try {
+                      await adminWrite({ table: 'clients', action: 'update', key: editingCustomer.account_no, values: clientUpdates })
+                    } catch (clientError) {
                       console.error('[v0] Error updating clients:', clientError)
-                      alert(clientError.message || 'Error updating client details')
+                      alert(clientError instanceof Error ? clientError.message : 'Error updating client details')
                       return
                     }
 
@@ -2377,10 +2273,10 @@ export default function AdminPage() {
 
       {/* Login Credentials Modal */}
       {createdLoginCredentials && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-          <div className="bg-gradient-to-br from-[#0056a1]/40 to-[#002463]/40 border border-slate-400/30 rounded-xl shadow-xl max-w-md w-full">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0F1B3D]/45 p-4">
+          <div className="bg-white border border-[#E3E6EC] rounded-lg max-w-md w-full">
             {/* Modal Header */}
-            <div className="bg-gradient-to-r from-green-600/80 to-green-700/80 text-white border-b border-slate-400/30 p-6 flex items-center justify-between">
+            <div className="bg-white text-[#121826] border-b border-[#E3E6EC] p-6 flex items-center justify-between">
               <h2 className="text-xl font-bold flex items-center gap-2">
                 <CheckCircle2 className="w-5 h-5" />
                 Login Created Successfully
@@ -2388,7 +2284,7 @@ export default function AdminPage() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-white hover:bg-white/10"
+                className="text-[#121826] hover:bg-[#F4F5F7]"
                 onClick={() => setCreatedLoginCredentials(null)}
               >
                 <X className="w-5 h-5" />
@@ -2397,26 +2293,26 @@ export default function AdminPage() {
 
             {/* Modal Content */}
             <div className="p-6 space-y-4">
-              <p className="text-sm text-slate-300 mb-6">Share these credentials with the client:</p>
+              <p className="text-sm text-[#3D4452] mb-6">Share these credentials with the client:</p>
               
               <div className="space-y-3">
                 <div>
-                  <label className="block text-xs font-bold text-slate-400 mb-1">Email</label>
-                  <div className="bg-white/5 border border-slate-400/30 rounded px-3 py-2 text-white font-mono text-sm break-all">
+                  <label className="block text-xs font-bold text-[#5A6272] mb-1">Email</label>
+                  <div className="bg-[#F8F9FB] border border-[#E3E6EC] rounded px-3 py-2 text-[#121826] font-mono text-sm break-all">
                     {createdLoginCredentials.email}
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-400 mb-1">Temporary Password</label>
+                  <label className="block text-xs font-bold text-[#5A6272] mb-1">Temporary Password</label>
                   <div className="flex gap-2">
-                    <div className="flex-1 bg-white/5 border border-slate-400/30 rounded px-3 py-2 text-white font-mono text-sm">
+                    <div className="flex-1 bg-[#F8F9FB] border border-[#E3E6EC] rounded px-3 py-2 text-[#121826] font-mono text-sm">
                       {'•'.repeat(createdLoginCredentials.password.length)}
                     </div>
                     <Button
                       size="sm"
                       variant="outline"
-                      className="border-slate-400/50 text-slate-300 hover:text-slate-200 hover:bg-slate-400/10 font-bold bg-transparent"
+                      className="border-[#E3E6EC] text-[#3D4452] hover:text-[#121826] hover:bg-[#F4F5F7] font-bold bg-transparent"
                       onClick={handleCopyPassword}
                     >
                       Copy
@@ -2425,15 +2321,15 @@ export default function AdminPage() {
                 </div>
               </div>
 
-              <div className="bg-yellow-500/10 border border-yellow-500/30 rounded p-3 text-xs text-yellow-200">
+              <div className="bg-[#FFF4DB] border border-[#E3E6EC] rounded p-3 text-xs text-[#7A4F00]">
                 The client must change their password on first login.
               </div>
             </div>
 
             {/* Modal Footer */}
-            <div className="border-t border-slate-400/30 bg-black/20 px-6 py-4 flex justify-end gap-3">
+            <div className="border-t border-[#E3E6EC] bg-[#F8F9FB] px-6 py-4 flex justify-end gap-3">
               <Button
-                className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold shadow-lg shadow-green-600/50 hover:shadow-green-600/70 transition-all"
+                className="bg-white hover:bg-white text-white font-bold transition-all"
                 onClick={() => setCreatedLoginCredentials(null)}
               >
                 Done
@@ -2445,17 +2341,17 @@ export default function AdminPage() {
 
       {/* Create Login Customer Picker */}
       {showCreateLoginModal && !selectedCustomerForLogin && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-          <div className="bg-gradient-to-br from-[#0056a1]/40 to-[#002463]/40 border border-slate-400/30 rounded-xl shadow-xl max-w-2xl w-full max-h-[80vh] overflow-hidden">
-            <div className="bg-gradient-to-r from-blue-600/80 to-blue-700/80 text-white border-b border-slate-400/30 p-6 flex items-center justify-between">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0F1B3D]/45 p-4">
+          <div className="bg-white border border-[#E3E6EC] rounded-lg max-w-2xl w-full max-h-[80vh] overflow-hidden">
+            <div className="bg-white text-[#121826] border-b border-[#E3E6EC] p-6 flex items-center justify-between">
               <div>
                 <h2 className="text-xl font-bold">Create Client Login</h2>
-                <p className="text-sm text-blue-100/90 mt-1">Choose the customer who needs access</p>
+                <p className="text-sm text-[#0F1B3D] mt-1">Choose the customer who needs access</p>
               </div>
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-white hover:bg-white/10"
+                className="text-[#121826] hover:bg-[#F4F5F7]"
                 onClick={() => setShowCreateLoginModal(false)}
               >
                 <X className="w-5 h-5" />
@@ -2467,7 +2363,7 @@ export default function AdminPage() {
                 placeholder="Search customers by name, account, or email..."
                 value={createLoginSearch}
                 onChange={(e) => setCreateLoginSearch(e.target.value)}
-                className="border-slate-400/50 focus:border-blue-500 bg-white/10 text-white placeholder:text-slate-400"
+                className="border-[#E3E6EC] focus:border-[#0F1B3D] bg-white text-[#121826] placeholder:text-[#8A919E]"
               />
 
               <div className="max-h-[50vh] overflow-y-auto space-y-2 pr-1">
@@ -2492,15 +2388,15 @@ export default function AdminPage() {
                         setCreateLoginError('')
                         setCreateLoginSuccess('')
                       }}
-                      className="w-full text-left rounded-xl border border-slate-400/20 bg-white/5 px-4 py-3 transition-all hover:border-blue-400/50 hover:bg-white/10"
+                      className="w-full text-left rounded-lg border border-[#E3E6EC] bg-[#F8F9FB] px-4 py-3 transition-all hover:border-[#E3E6EC] hover:bg-[#F4F5F7]"
                     >
                       <div className="flex items-center justify-between gap-3">
                         <div>
-                          <p className="font-bold text-white">{customer.client_name || customer.full_name || 'Unnamed customer'}</p>
-                          <p className="text-xs text-slate-400">{customer.account_no}</p>
-                          <p className="text-xs text-slate-300 mt-1 break-all">{customer.email || 'No email on file'}</p>
+                          <p className="font-bold text-[#121826]">{customer.client_name || customer.full_name || 'Unnamed customer'}</p>
+                          <p className="text-xs text-[#5A6272]">{customer.account_no}</p>
+                          <p className="text-xs text-[#3D4452] mt-1 break-all">{customer.email || 'No email on file'}</p>
                         </div>
-                        <Plus className="w-4 h-4 text-blue-300" />
+                        <Plus className="w-4 h-4 text-[#0F1B3D]" />
                       </div>
                     </button>
                   ))}
@@ -2513,7 +2409,7 @@ export default function AdminPage() {
                     customer.account_no?.toLowerCase().includes(q) ||
                     customer.email?.toLowerCase().includes(q)
                 }).length === 0 && (
-                  <div className="rounded-xl border border-dashed border-slate-400/30 px-4 py-8 text-center text-slate-400">
+                  <div className="rounded-lg border border-dashed border-[#E3E6EC] px-4 py-8 text-center text-[#5A6272]">
                     No customers match your search.
                   </div>
                 )}
@@ -2525,15 +2421,15 @@ export default function AdminPage() {
 
       {/* Create Client Login Modal */}
       {selectedCustomerForLogin && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-          <div className="bg-gradient-to-br from-[#0056a1]/40 to-[#002463]/40 border border-slate-400/30 rounded-xl shadow-xl max-w-md w-full">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0F1B3D]/45 p-4">
+          <div className="bg-white border border-[#E3E6EC] rounded-lg max-w-md w-full">
             {/* Modal Header */}
-            <div className="bg-gradient-to-r from-blue-600/80 to-blue-700/80 text-white border-b border-slate-400/30 p-6 flex items-center justify-between">
+            <div className="bg-white text-[#121826] border-b border-[#E3E6EC] p-6 flex items-center justify-between">
               <h2 className="text-xl font-bold">Create Client Login</h2>
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-white hover:bg-white/10"
+                className="text-[#121826] hover:bg-[#F4F5F7]"
                 onClick={() => setSelectedCustomerForLogin(null)}
               >
                 <X className="w-5 h-5" />
@@ -2543,25 +2439,25 @@ export default function AdminPage() {
             {/* Modal Content */}
             <div className="p-6 space-y-4">
               <div>
-                <p className="text-sm text-slate-300 mb-4">Create a login for <span className="font-bold text-white">{selectedCustomerForLogin.client_name}</span></p>
-                <label className="block text-sm font-bold text-slate-300 mb-2">Email Address</label>
+                <p className="text-sm text-[#3D4452] mb-4">Create a login for <span className="font-bold text-[#121826]">{selectedCustomerForLogin.client_name}</span></p>
+                <label className="block text-sm font-bold text-[#3D4452] mb-2">Email Address</label>
                 <Input
                   type="email"
                   value={createLoginEmail}
                   onChange={(e) => setCreateLoginEmail(e.target.value)}
                   placeholder="Enter email address"
-                  className="border-slate-400/50 focus:border-blue-500 bg-white/10 text-white placeholder:text-slate-400"
+                  className="border-[#E3E6EC] focus:border-[#0F1B3D] bg-white text-[#121826] placeholder:text-[#8A919E]"
                 />
               </div>
 
               {createLoginError && (
-                <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm">
+                <div className="p-3 rounded-lg bg-[#FDECEA] border border-[#E8A5A5] text-[#A4161A] text-sm">
                   {createLoginError}
                 </div>
               )}
 
               {createLoginSuccess && (
-                <div className="p-3 rounded-lg bg-green-500/10 border border-green-500/30 text-green-400 text-sm flex items-center gap-2">
+                <div className="p-3 rounded-lg bg-[#E7F4EE] border border-[#E3E6EC] text-[#0B6B41] text-sm flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4" />
                   {createLoginSuccess}
                 </div>
@@ -2569,16 +2465,16 @@ export default function AdminPage() {
             </div>
 
             {/* Modal Footer */}
-            <div className="border-t border-slate-400/30 bg-black/20 px-6 py-4 flex justify-end gap-3">
+            <div className="border-t border-[#E3E6EC] bg-[#F8F9FB] px-6 py-4 flex justify-end gap-3">
               <Button
                 variant="outline"
-                className="border-slate-400/50 text-slate-300 hover:text-slate-200 hover:bg-slate-400/10 font-bold bg-transparent"
+                className="border-[#E3E6EC] text-[#3D4452] hover:text-[#121826] hover:bg-[#F4F5F7] font-bold bg-transparent"
                 onClick={() => setSelectedCustomerForLogin(null)}
               >
                 Cancel
               </Button>
               <Button
-                className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold shadow-lg shadow-blue-600/50 hover:shadow-blue-600/70 transition-all"
+                className="bg-[#0F1B3D] hover:bg-[#1E2C57] text-white font-bold transition-all"
                 disabled={creatingLogin === selectedCustomerForLogin.account_no}
                 onClick={() => handleCreateClientLogin()}
               >
@@ -2596,15 +2492,15 @@ export default function AdminPage() {
 
       {/* Product Add Modal */}
       {showAddProductModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-          <div className="bg-gradient-to-br from-[#0056a1]/40 to-[#002463]/40 border border-slate-400/30 rounded-xl shadow-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0F1B3D]/45 p-4">
+          <div className="bg-white border border-[#E3E6EC] rounded-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto">
             {/* Modal Header */}
-            <div className="sticky top-0 bg-gradient-to-r from-red-600/80 to-red-700/80 text-white border-b border-slate-400/30 p-6 flex items-center justify-between">
+            <div className="bg-white sticky top-0 text-[#121826] border-b border-[#E3E6EC] p-6 flex items-center justify-between">
               <h2 className="text-2xl font-bold">Add New Product</h2>
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-white hover:bg-white/10"
+                className="text-[#121826] hover:bg-[#F4F5F7]"
                 onClick={() => {
                   setShowAddProductModal(false)
                   setProductFormData({})
@@ -2617,68 +2513,68 @@ export default function AdminPage() {
             {/* Modal Content */}
             <div className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-bold text-slate-300 mb-2">Product Name</label>
+                <label className="block text-sm font-bold text-[#3D4452] mb-2">Product Name</label>
                 <Input
                   value={productFormData.title || ''}
                   onChange={(e) => setProductFormData({ ...productFormData, title: e.target.value })}
-                  className="border-slate-400/50 focus:border-red-500 bg-white/10 text-white placeholder:text-slate-400"
+                  className="border-[#E3E6EC] focus:border-[#0F1B3D] bg-white text-[#121826] placeholder:text-[#8A919E]"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-bold text-slate-300 mb-2">SKU</label>
+                  <label className="block text-sm font-bold text-[#3D4452] mb-2">SKU</label>
                   <Input
                     value={productFormData.sku || ''}
                     onChange={(e) => setProductFormData({ ...productFormData, sku: e.target.value })}
-                    className="border-slate-400/50 focus:border-red-500 bg-white/10 text-white placeholder:text-slate-400"
+                    className="border-[#E3E6EC] focus:border-[#0F1B3D] bg-white text-[#121826] placeholder:text-[#8A919E]"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-slate-300 mb-2">Price</label>
+                  <label className="block text-sm font-bold text-[#3D4452] mb-2">Price</label>
                   <Input
                     type="number"
                     value={productFormData.price || ''}
                     onChange={(e) => setProductFormData({ ...productFormData, price: e.target.value })}
-                    className="border-slate-400/50 focus:border-red-500 bg-white/10 text-white"
+                    className="border-[#E3E6EC] focus:border-[#0F1B3D] bg-white text-[#121826]"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-bold text-slate-300 mb-2">Stock Quantity</label>
+                  <label className="block text-sm font-bold text-[#3D4452] mb-2">Stock Quantity</label>
                   <Input
                     type="number"
                     value={productFormData.inventory_quantity || ''}
                     onChange={(e) => setProductFormData({ ...productFormData, inventory_quantity: e.target.value })}
-                    className="border-slate-400/50 focus:border-red-500 bg-white/10 text-white"
+                    className="border-[#E3E6EC] focus:border-[#0F1B3D] bg-white text-[#121826]"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-slate-300 mb-2">Product Type</label>
+                  <label className="block text-sm font-bold text-[#3D4452] mb-2">Product Type</label>
                   <Input
                     value={productFormData.product_type || ''}
                     onChange={(e) => setProductFormData({ ...productFormData, product_type: e.target.value })}
-                    className="border-slate-400/50 focus:border-red-500 bg-white/10 text-white placeholder:text-slate-400"
+                    className="border-[#E3E6EC] focus:border-[#0F1B3D] bg-white text-[#121826] placeholder:text-[#8A919E]"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-slate-300 mb-2">Description</label>
+                <label className="block text-sm font-bold text-[#3D4452] mb-2">Description</label>
                 <Textarea
                   value={productFormData.description || ''}
                   onChange={(e) => setProductFormData({ ...productFormData, description: e.target.value })}
-                  className="border-slate-400/50 focus:border-red-500 bg-white/10 text-white placeholder:text-slate-400"
+                  className="border-[#E3E6EC] focus:border-[#0F1B3D] bg-white text-[#121826] placeholder:text-[#8A919E]"
                   rows={3}
                 />
               </div>
 
-              <div className="border-t border-slate-400/30 pt-4">
-                <label className="block text-sm font-bold text-slate-300 mb-3">Product Image</label>
+              <div className="border-t border-[#E3E6EC] pt-4">
+                <label className="block text-sm font-bold text-[#3D4452] mb-3">Product Image</label>
                 <div className="flex items-center gap-4">
-                  <label className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white rounded-lg font-bold cursor-pointer transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                  <label className="bg-[#C8102E] hover:bg-[#A50D26] flex items-center gap-2 px-4 py-2 text-white rounded-lg font-bold cursor-pointer transition-all disabled:opacity-50 disabled:cursor-not-allowed">
                     <Upload className="w-4 h-4" />
                     Upload Images
                     <input
@@ -2694,22 +2590,22 @@ export default function AdminPage() {
                       className="hidden"
                     />
                   </label>
-                  {uploadingImage !== null && <span className="text-sm text-slate-300">Uploading...</span>}
-                  {imageUploadError && <span className="text-sm text-red-400 font-medium">{imageUploadError}</span>}
+                  {uploadingImage !== null && <span className="text-sm text-[#3D4452]">Uploading...</span>}
+                  {imageUploadError && <span className="text-sm text-[#A4161A] font-medium">{imageUploadError}</span>}
                 </div>
                 {previewImage && (
                   <div className="mt-3">
-                    <img src={previewImage} alt="Preview" className="w-20 h-20 object-cover rounded-lg border border-slate-400/30" />
+                    <img src={previewImage} alt="Preview" className="w-20 h-20 object-cover rounded-lg border border-[#E3E6EC]" />
                   </div>
                 )}
               </div>
             </div>
 
             {/* Modal Footer */}
-            <div className="border-t border-slate-400/30 bg-black/20 px-6 py-4 flex justify-end gap-3">
+            <div className="border-t border-[#E3E6EC] bg-[#F8F9FB] px-6 py-4 flex justify-end gap-3">
               <Button
                 variant="outline"
-                className="border-slate-400/50 text-slate-300 hover:text-slate-200 hover:bg-slate-400/10 font-bold bg-transparent"
+                className="border-[#E3E6EC] text-[#3D4452] hover:text-[#121826] hover:bg-[#F4F5F7] font-bold bg-transparent"
                 onClick={() => {
                   setShowAddProductModal(false)
                   setProductFormData({})
@@ -2719,9 +2615,9 @@ export default function AdminPage() {
                 Cancel
               </Button>
               <Button
-                className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold shadow-lg shadow-red-600/50 hover:shadow-red-600/70 transition-all"
+                className="bg-[#C8102E] hover:bg-[#A50D26] text-white font-bold transition-all"
                 disabled={savingProduct}
-                onClick={() => handleAddProduct()}
+                onClick={() => handleSaveProduct()}
               >
                 {savingProduct ? 'Adding...' : 'Add Product'}
               </Button>
@@ -2732,15 +2628,15 @@ export default function AdminPage() {
 
       {/* Product Edit Modal */}
       {editingProduct && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-          <div className="bg-gradient-to-br from-[#0056a1]/40 to-[#002463]/40 border border-slate-400/30 rounded-xl shadow-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0F1B3D]/45 p-4">
+          <div className="bg-white border border-[#E3E6EC] rounded-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto">
             {/* Modal Header */}
-            <div className="sticky top-0 bg-gradient-to-r from-red-600/80 to-red-700/80 text-white border-b border-slate-400/30 p-6 flex items-center justify-between">
+            <div className="bg-white sticky top-0 text-[#121826] border-b border-[#E3E6EC] p-6 flex items-center justify-between">
               <h2 className="text-2xl font-bold">Edit Product</h2>
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-white hover:bg-white/10"
+                className="text-[#121826] hover:bg-[#F4F5F7]"
                 onClick={() => setEditingProduct(null)}
               >
                 <X className="w-5 h-5" />
@@ -2750,68 +2646,68 @@ export default function AdminPage() {
             {/* Modal Content */}
             <div className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-bold text-slate-300 mb-2">Product Name</label>
+                <label className="block text-sm font-bold text-[#3D4452] mb-2">Product Name</label>
                 <Input
                   value={productFormData.title || ''}
                   onChange={(e) => setProductFormData({ ...productFormData, title: e.target.value })}
-                  className="border-slate-400/50 focus:border-red-500 bg-white/10 text-white placeholder:text-slate-400"
+                  className="border-[#E3E6EC] focus:border-[#0F1B3D] bg-white text-[#121826] placeholder:text-[#8A919E]"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-bold text-slate-300 mb-2">SKU</label>
+                  <label className="block text-sm font-bold text-[#3D4452] mb-2">SKU</label>
                   <Input
                     disabled
                     value={productFormData.sku || ''}
-                    className="border-slate-400/50 bg-white/5 text-slate-400 cursor-not-allowed"
+                    className="border-[#E3E6EC] bg-[#F8F9FB] text-[#5A6272] cursor-not-allowed"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-slate-300 mb-2">Price</label>
+                  <label className="block text-sm font-bold text-[#3D4452] mb-2">Price</label>
                   <Input
                     type="number"
                     value={productFormData.price || ''}
                     onChange={(e) => setProductFormData({ ...productFormData, price: e.target.value })}
-                    className="border-slate-400/50 focus:border-red-500 bg-white/10 text-white"
+                    className="border-[#E3E6EC] focus:border-[#0F1B3D] bg-white text-[#121826]"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-bold text-slate-300 mb-2">Stock Quantity</label>
+                  <label className="block text-sm font-bold text-[#3D4452] mb-2">Stock Quantity</label>
                   <Input
                     type="number"
                     value={productFormData.inventory_quantity || ''}
                     onChange={(e) => setProductFormData({ ...productFormData, inventory_quantity: e.target.value })}
-                    className="border-slate-400/50 focus:border-red-500 bg-white/10 text-white"
+                    className="border-[#E3E6EC] focus:border-[#0F1B3D] bg-white text-[#121826]"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-slate-300 mb-2">Product Type</label>
+                  <label className="block text-sm font-bold text-[#3D4452] mb-2">Product Type</label>
                   <Input
                     value={productFormData.product_type || ''}
                     onChange={(e) => setProductFormData({ ...productFormData, product_type: e.target.value })}
-                    className="border-slate-400/50 focus:border-red-500 bg-white/10 text-white placeholder:text-slate-400"
+                    className="border-[#E3E6EC] focus:border-[#0F1B3D] bg-white text-[#121826] placeholder:text-[#8A919E]"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-slate-300 mb-2">Description</label>
+                <label className="block text-sm font-bold text-[#3D4452] mb-2">Description</label>
                 <Textarea
                   value={productFormData.description || ''}
                   onChange={(e) => setProductFormData({ ...productFormData, description: e.target.value })}
-                  className="border-slate-400/50 focus:border-red-500 bg-white/10 text-white placeholder:text-slate-400"
+                  className="border-[#E3E6EC] focus:border-[#0F1B3D] bg-white text-[#121826] placeholder:text-[#8A919E]"
                   rows={3}
                 />
               </div>
 
-              <div className="border-t border-slate-400/30 pt-4">
-                <label className="block text-sm font-bold text-slate-300 mb-3">Product Image</label>
+              <div className="border-t border-[#E3E6EC] pt-4">
+                <label className="block text-sm font-bold text-[#3D4452] mb-3">Product Image</label>
                 <div className="flex items-center gap-4">
-                    <label className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white rounded-lg font-bold cursor-pointer transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                    <label className="bg-[#C8102E] hover:bg-[#A50D26] flex items-center gap-2 px-4 py-2 text-white rounded-lg font-bold cursor-pointer transition-all disabled:opacity-50 disabled:cursor-not-allowed">
                       <Upload className="w-4 h-4" />
                       Upload Images
                       <input
@@ -2827,8 +2723,8 @@ export default function AdminPage() {
                         className="hidden"
                       />
                     </label>
-                    {uploadingImage !== null && <span className="text-sm text-slate-300">Uploading...</span>}
-                    {imageUploadError && <span className="text-sm text-red-400 font-medium">{imageUploadError}</span>}
+                    {uploadingImage !== null && <span className="text-sm text-[#3D4452]">Uploading...</span>}
+                    {imageUploadError && <span className="text-sm text-[#A4161A] font-medium">{imageUploadError}</span>}
                   </div>
                   {productGallery.length > 0 && (
                     <div className="mt-3">
@@ -2837,7 +2733,7 @@ export default function AdminPage() {
                           <div
                             key={`${imageUrl}-${index}`}
                             className={`relative rounded-lg border overflow-hidden transition-all ${
-                              previewImage === imageUrl ? 'border-red-500 ring-2 ring-red-500/40' : 'border-slate-400/30 hover:border-red-500/40'
+                              previewImage === imageUrl ? 'border-red-500 ring-2 ring-red-500/40' : 'border-[#E3E6EC] hover:border-[#E8A5A5]'
                             }`}
                           >
                             <button
@@ -2852,7 +2748,7 @@ export default function AdminPage() {
                               aria-label={`Delete image ${index + 1}`}
                               onClick={() => handleDeleteProductImage(productFormData.sku, imageUrl)}
                               disabled={deletingProductImage === imageUrl}
-                              className="absolute top-1 right-1 inline-flex items-center justify-center rounded-full bg-black/70 text-white p-1.5 hover:bg-red-600 transition-colors disabled:opacity-60"
+                              className="absolute top-1 right-1 inline-flex items-center justify-center rounded-full border border-[#E3E6EC] bg-white text-[#A4161A] p-1.5 transition-colors disabled:opacity-60"
                             >
                               {deletingProductImage === imageUrl ? (
                                 <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -2869,10 +2765,10 @@ export default function AdminPage() {
             </div>
 
             {/* Modal Footer */}
-            <div className="border-t border-slate-400/30 bg-black/20 px-6 py-4 flex justify-between gap-3">
+            <div className="border-t border-[#E3E6EC] bg-[#F8F9FB] px-6 py-4 flex justify-between gap-3">
               <Button
                 variant="outline"
-                className="border-red-500 text-red-400 hover:bg-red-500/10 font-bold bg-transparent"
+                className="border-red-500 text-[#A4161A] hover:bg-[#F4F5F7] font-bold bg-transparent"
                 disabled={deletingProduct === editingProduct?.sku}
                 onClick={() => handleDeleteProduct(editingProduct.sku)}
               >
@@ -2882,7 +2778,7 @@ export default function AdminPage() {
               <div className="flex gap-2">
                 <Button
                   variant="outline"
-                  className="border-slate-400/50 text-slate-300 hover:text-slate-200 hover:bg-slate-400/10 font-bold bg-transparent"
+                  className="border-[#E3E6EC] text-[#3D4452] hover:text-[#121826] hover:bg-[#F4F5F7] font-bold bg-transparent"
                   onClick={() => {
                     setEditingProduct(null)
                     setPreviewImage(null)
@@ -2891,7 +2787,7 @@ export default function AdminPage() {
                   Cancel
                 </Button>
                 <Button
-                  className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold shadow-lg shadow-red-600/50 hover:shadow-red-600/70 transition-all"
+                  className="bg-[#C8102E] hover:bg-[#A50D26] text-white font-bold transition-all"
                   disabled={savingProduct}
                   onClick={() => handleSaveProduct()}
                 >
@@ -2905,10 +2801,10 @@ export default function AdminPage() {
 
       {/* Order Detail Modal */}
       {viewingOrder && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-          <div className="bg-gradient-to-br from-[#0056a1]/40 to-[#002463]/40 border border-slate-400/30 rounded-xl shadow-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0F1B3D]/45 p-4">
+          <div className="bg-white border border-[#E3E6EC] rounded-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto">
             {/* Modal Header */}
-            <div className="sticky top-0 bg-gradient-to-r from-red-600/80 to-red-700/80 text-white border-b border-slate-400/30 p-6 flex items-center justify-between">
+            <div className="bg-white sticky top-0 text-[#121826] border-b border-[#E3E6EC] p-6 flex items-center justify-between">
               <div>
                 <h2 className="text-2xl font-bold">Order {viewingOrder.order_number}</h2>
                 <p className="text-xs opacity-80 mt-1">Order Details</p>
@@ -2916,7 +2812,7 @@ export default function AdminPage() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-white hover:bg-white/10"
+                className="text-[#121826] hover:bg-[#F4F5F7]"
                 onClick={() => setViewingOrder(null)}
               >
                 <X className="w-5 h-5" />
@@ -2928,19 +2824,19 @@ export default function AdminPage() {
               {/* Order Summary */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm text-slate-400 font-bold mb-1">Customer</p>
-                  <p className="text-white font-bold">{viewingOrder.client_name}</p>
+                  <p className="text-sm text-[#5A6272] font-bold mb-1">Customer</p>
+                  <p className="text-[#121826] font-bold">{viewingOrder.client_name}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-slate-400 font-bold mb-1">Order Date</p>
-                  <p className="text-white font-bold">{formatDate(viewingOrder.order_date)}</p>
+                  <p className="text-sm text-[#5A6272] font-bold mb-1">Order Date</p>
+                  <p className="text-[#121826] font-bold">{formatDate(viewingOrder.order_date)}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-slate-400 font-bold mb-1">Items</p>
-                  <p className="text-white font-bold">{viewingOrder.item_count}</p>
+                  <p className="text-sm text-[#5A6272] font-bold mb-1">Items</p>
+                  <p className="text-[#121826] font-bold">{viewingOrder.item_count}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-slate-400 font-bold mb-1">Status</p>
+                  <p className="text-sm text-[#5A6272] font-bold mb-1">Status</p>
                   <span className={`inline-flex px-3 py-1 rounded-full text-xs font-bold border ${getStatusColor(viewingOrder.payment_status)}`}>
                     {viewingOrder.payment_status}
                   </span>
@@ -2948,34 +2844,34 @@ export default function AdminPage() {
               </div>
 
               {/* Send Payment Link */}
-              <div className="border-t border-slate-400/30 pt-4">
-                <p className="text-sm text-slate-400 font-bold mb-3">Send Payment Link</p>
+              <div className="border-t border-[#E3E6EC] pt-4">
+                <p className="text-sm text-[#5A6272] font-bold mb-3">Send Payment Link</p>
                 <div className="space-y-3">
-                  <div className="rounded-lg border border-slate-400/30 bg-black/10 p-4 space-y-3">
+                  <div className="rounded-lg border border-[#E3E6EC] bg-[#F8F9FB] p-4 space-y-3">
                     <div className="flex items-center justify-between gap-3">
                       <div>
-                        <p className="text-xs uppercase tracking-wider text-slate-400 font-bold">To</p>
-                        <p className="text-sm text-white font-medium break-all">{viewingOrderEmail || 'No contact email available'}</p>
+                        <p className="text-xs uppercase tracking-wider text-[#5A6272] font-bold">To</p>
+                        <p className="text-sm text-[#121826] font-medium break-all">{viewingOrderEmail || 'No contact email available'}</p>
                         {viewingOrderContactName && (
-                          <p className="text-xs text-slate-400 mt-1">Contact: {viewingOrderContactName}</p>
+                          <p className="text-xs text-[#5A6272] mt-1">Contact: {viewingOrderContactName}</p>
                         )}
                       </div>
                     </div>
                     <div>
-                      <p className="text-xs uppercase tracking-wider text-slate-400 font-bold">From</p>
-                      <p className="text-sm text-white font-medium break-all">kbc@notification.leadsync.co.za</p>
+                      <p className="text-xs uppercase tracking-wider text-[#5A6272] font-bold">From</p>
+                      <p className="text-sm text-[#121826] font-medium break-all">kbc@notification.leadsync.co.za</p>
                     </div>
                     <div>
-                      <p className="text-xs uppercase tracking-wider text-slate-400 font-bold mb-1">Link</p>
+                      <p className="text-xs uppercase tracking-wider text-[#5A6272] font-bold mb-1">Link</p>
                       <div className="flex gap-2 items-center">
-                        <div className="flex-1 rounded-md border border-slate-400/30 bg-white/5 px-3 py-2 text-sm text-slate-200 break-all">
+                        <div className="flex-1 rounded-md border border-[#E3E6EC] bg-[#F8F9FB] px-3 py-2 text-sm text-[#121826] break-all">
                           {paymentLinkPreview || 'Will be generated when you click Send via Email'}
                         </div>
                         {paymentLinkPreview && (
                           <Button
                             variant="outline"
                             size="sm"
-                            className="border-slate-400/50 text-slate-300 hover:text-slate-200 hover:bg-slate-400/10 font-bold bg-transparent"
+                            className="border-[#E3E6EC] text-[#3D4452] hover:text-[#121826] hover:bg-[#F4F5F7] font-bold bg-transparent"
                             onClick={() => navigator.clipboard.writeText(paymentLinkPreview)}
                           >
                             Copy
@@ -2987,7 +2883,7 @@ export default function AdminPage() {
                   <div className="flex gap-2">
                       <Button
                         variant="outline"
-                        className="flex-1 border-slate-400/50 text-slate-300 hover:text-slate-200 hover:bg-slate-400/10 font-bold bg-transparent gap-2"
+                        className="flex-1 border-[#E3E6EC] text-[#3D4452] hover:text-[#121826] hover:bg-[#F4F5F7] font-bold bg-transparent gap-2"
                         disabled={sendingPaymentLink}
                         onClick={async () => {
                           try {
@@ -3062,7 +2958,7 @@ export default function AdminPage() {
                       </Button>
                     <Button
                       variant="outline"
-                      className="flex-1 border-slate-400/50 text-slate-300 hover:text-slate-200 hover:bg-slate-400/10 font-bold bg-transparent gap-2"
+                      className="flex-1 border-[#E3E6EC] text-[#3D4452] hover:text-[#121826] hover:bg-[#F4F5F7] font-bold bg-transparent gap-2"
                       onClick={() => {
                         console.log('[v0] Sending payment link via SMS to:', viewingOrder.client_name)
                       }}
@@ -3075,37 +2971,37 @@ export default function AdminPage() {
               </div>
 
               {/* Order Amount */}
-              <div className="border-t border-slate-400/30 pt-4">
+              <div className="border-t border-[#E3E6EC] pt-4">
                 <div className="flex items-center justify-between">
-                  <p className="text-slate-300 font-bold">Total Amount</p>
-                  <p className="text-2xl font-bold text-red-400">R{Number(viewingOrder.total_amount).toLocaleString()}</p>
+                  <p className="text-[#3D4452] font-bold">Total Amount</p>
+                  <p className="text-2xl font-bold text-[#A4161A]">R{Number(viewingOrder.total_amount).toLocaleString()}</p>
                 </div>
               </div>
 
               {/* Additional Info */}
-              <div className="border-t border-slate-400/30 pt-4 space-y-3">
+              <div className="border-t border-[#E3E6EC] pt-4 space-y-3">
                 <div>
-                  <p className="text-sm text-slate-400 font-bold mb-1">Order Number</p>
-                  <p className="text-white font-mono">{viewingOrder.order_number}</p>
+                  <p className="text-sm text-[#5A6272] font-bold mb-1">Order Number</p>
+                  <p className="text-[#121826] font-mono">{viewingOrder.order_number}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-slate-400 font-bold mb-1">Payment Status</p>
-                  <p className="text-white capitalize">{viewingOrder.payment_status}</p>
+                  <p className="text-sm text-[#5A6272] font-bold mb-1">Payment Status</p>
+                  <p className="text-[#121826] capitalize">{viewingOrder.payment_status}</p>
                 </div>
               </div>
             </div>
 
             {/* Modal Footer */}
-            <div className="border-t border-slate-400/30 bg-black/20 px-6 py-4 flex justify-end gap-3">
+            <div className="border-t border-[#E3E6EC] bg-[#F8F9FB] px-6 py-4 flex justify-end gap-3">
               <Button
                 variant="outline"
-                className="border-slate-400/50 text-slate-300 hover:text-slate-200 hover:bg-slate-400/10 font-bold bg-transparent"
+                className="border-[#E3E6EC] text-[#3D4452] hover:text-[#121826] hover:bg-[#F4F5F7] font-bold bg-transparent"
                 onClick={() => setViewingOrder(null)}
               >
                 Close
               </Button>
               <Button
-                className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold shadow-lg shadow-red-600/50 hover:shadow-red-600/70 transition-all"
+                className="bg-[#C8102E] hover:bg-[#A50D26] text-white font-bold transition-all"
                 onClick={() => {
                   console.log('[v0] Processing order:', viewingOrder.order_number)
                   setViewingOrder(null)
@@ -3120,9 +3016,9 @@ export default function AdminPage() {
 
       {/* Add Admin Modal */}
       {showAddAdminModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-          <div className="bg-gradient-to-br from-[#0056a1]/40 to-[#002463]/40 border border-slate-400/30 rounded-xl shadow-xl max-w-md w-full">
-            <div className="bg-gradient-to-r from-purple-600/80 to-purple-700/80 text-white border-b border-slate-400/30 p-6 flex items-center justify-between">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0F1B3D]/45 p-4">
+          <div className="bg-white border border-[#E3E6EC] rounded-lg max-w-md w-full">
+            <div className="bg-white text-[#121826] border-b border-[#E3E6EC] p-6 flex items-center justify-between">
               <h2 className="text-xl font-bold flex items-center gap-2">
                 <Plus className="w-5 h-5" />
                 Add New Admin
@@ -3130,7 +3026,7 @@ export default function AdminPage() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-white hover:bg-white/10"
+                className="text-[#121826] hover:bg-[#F4F5F7]"
                 onClick={() => {
                   setShowAddAdminModal(false)
                   setAddAdminFormData({ email: '', full_name: '', password: '' })
@@ -3141,39 +3037,39 @@ export default function AdminPage() {
             </div>
             <div className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-bold text-slate-300 mb-2">Full Name</label>
+                <label className="block text-sm font-bold text-[#3D4452] mb-2">Full Name</label>
                 <Input
                   value={addAdminFormData.full_name}
                   onChange={(e) => setAddAdminFormData({ ...addAdminFormData, full_name: e.target.value })}
                   placeholder="Enter full name"
-                  className="border-slate-400/50 focus:border-purple-500 bg-white/10 text-white"
+                  className="border-[#E3E6EC] focus:border-[#0F1B3D] bg-white text-[#121826]"
                 />
               </div>
               <div>
-                <label className="block text-sm font-bold text-slate-300 mb-2">Email</label>
+                <label className="block text-sm font-bold text-[#3D4452] mb-2">Email</label>
                 <Input
                   type="email"
                   value={addAdminFormData.email}
                   onChange={(e) => setAddAdminFormData({ ...addAdminFormData, email: e.target.value })}
                   placeholder="Enter email address"
-                  className="border-slate-400/50 focus:border-purple-500 bg-white/10 text-white"
+                  className="border-[#E3E6EC] focus:border-[#0F1B3D] bg-white text-[#121826]"
                 />
               </div>
               <div>
-                <label className="block text-sm font-bold text-slate-300 mb-2">Password</label>
+                <label className="block text-sm font-bold text-[#3D4452] mb-2">Password</label>
                 <Input
                   type="password"
                   value={addAdminFormData.password}
                   onChange={(e) => setAddAdminFormData({ ...addAdminFormData, password: e.target.value })}
                   placeholder="Enter password"
-                  className="border-slate-400/50 focus:border-purple-500 bg-white/10 text-white"
+                  className="border-[#E3E6EC] focus:border-[#0F1B3D] bg-white text-[#121826]"
                 />
               </div>
             </div>
-            <div className="border-t border-slate-400/30 bg-black/20 px-6 py-4 flex justify-end gap-3">
+            <div className="border-t border-[#E3E6EC] bg-[#F8F9FB] px-6 py-4 flex justify-end gap-3">
               <Button
                 variant="outline"
-                className="border-slate-400/50 text-slate-300 hover:text-slate-200 hover:bg-slate-400/10 font-bold bg-transparent"
+                className="border-[#E3E6EC] text-[#3D4452] hover:text-[#121826] hover:bg-[#F4F5F7] font-bold bg-transparent"
                 onClick={() => {
                   setShowAddAdminModal(false)
                   setAddAdminFormData({ email: '', full_name: '', password: '' })
@@ -3182,7 +3078,7 @@ export default function AdminPage() {
                 Cancel
               </Button>
               <Button
-                className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-bold"
+                className="bg-[#C8102E] hover:bg-[#A50D26] text-white font-bold"
                 disabled={addAdminLoading || !addAdminFormData.email || !addAdminFormData.full_name || !addAdminFormData.password}
                 onClick={async () => {
                   setAddAdminLoading(true)
@@ -3223,14 +3119,14 @@ export default function AdminPage() {
 
       {/* Change Password Modal */}
       {showChangePasswordModal && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-gradient-to-br from-card to-card/50 border border-primary/20 rounded-xl shadow-2xl w-full max-w-md">
-            <div className="bg-gradient-to-r from-primary to-secondary text-white px-8 py-6 border-b border-primary/30 flex items-center justify-between rounded-t-xl">
+        <div className="fixed inset-0 bg-[#0F1B3D]/45 z-50 flex items-center justify-center p-4">
+          <div className="bg-white border border-[#E3E6EC] rounded-lg w-full max-w-md">
+            <div className="bg-white text-[#121826] px-8 py-6 border-b border-[#E3E6EC] flex items-center justify-between rounded-t-lg">
               <h2 className="text-2xl font-bold">Change Password</h2>
               <Button
                 variant="ghost"
                 size="icon"
-                className="hover:bg-white/10 text-white"
+                className="hover:bg-[#F4F5F7] text-[#121826]"
                 onClick={() => setShowChangePasswordModal(false)}
               >
                 <X className="w-5 h-5" />
@@ -3238,36 +3134,36 @@ export default function AdminPage() {
             </div>
             <div className="p-8 space-y-4">
               <div>
-                <label className="block text-sm font-bold text-slate-300 mb-2">New Password</label>
+                <label className="block text-sm font-bold text-[#3D4452] mb-2">New Password</label>
                 <Input
                   type="password"
                   placeholder="Enter new password"
                   value={passwordFormData.newPassword}
                   onChange={(e) => setPasswordFormData({ ...passwordFormData, newPassword: e.target.value })}
-                  className="border-slate-400/50 focus:border-primary bg-white/10 text-white"
+                  className="border-[#E3E6EC] focus:border-[#0F1B3D] bg-white text-[#121826]"
                 />
               </div>
               <div>
-                <label className="block text-sm font-bold text-slate-300 mb-2">Confirm Password</label>
+                <label className="block text-sm font-bold text-[#3D4452] mb-2">Confirm Password</label>
                 <Input
                   type="password"
                   placeholder="Confirm new password"
                   value={passwordFormData.confirmPassword}
                   onChange={(e) => setPasswordFormData({ ...passwordFormData, confirmPassword: e.target.value })}
-                  className="border-slate-400/50 focus:border-primary bg-white/10 text-white"
+                  className="border-[#E3E6EC] focus:border-[#0F1B3D] bg-white text-[#121826]"
                 />
               </div>
             </div>
-            <div className="border-t border-slate-400/30 bg-black/20 px-8 py-4 flex justify-end gap-3 rounded-b-xl">
+            <div className="border-t border-[#E3E6EC] bg-[#F8F9FB] px-8 py-4 flex justify-end gap-3 rounded-b-xl">
               <Button
                 variant="outline"
-                className="border-slate-400/50 text-slate-300 hover:text-slate-200 hover:bg-slate-400/10 font-bold bg-transparent"
+                className="border-[#E3E6EC] text-[#3D4452] hover:text-[#121826] hover:bg-[#F4F5F7] font-bold bg-transparent"
                 onClick={() => setShowChangePasswordModal(false)}
               >
                 Cancel
               </Button>
               <Button
-                className="bg-gradient-to-r from-primary to-secondary hover:from-primary/80 hover:to-secondary/80 text-white font-bold"
+                className="bg-[#C8102E] hover:bg-[#A50D26] text-white font-bold"
                 disabled={settingsLoading || !passwordFormData.newPassword || !passwordFormData.confirmPassword}
                 onClick={handleChangePassword}
               >
@@ -3287,14 +3183,14 @@ export default function AdminPage() {
 
       {/* Email Settings Modal */}
       {showEmailSettingsModal && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-gradient-to-br from-card to-card/50 border border-primary/20 rounded-xl shadow-2xl w-full max-w-md">
-            <div className="bg-gradient-to-r from-primary to-secondary text-white px-8 py-6 border-b border-primary/30 flex items-center justify-between rounded-t-xl">
+        <div className="fixed inset-0 bg-[#0F1B3D]/45 z-50 flex items-center justify-center p-4">
+          <div className="bg-white border border-[#E3E6EC] rounded-lg w-full max-w-md">
+            <div className="bg-white text-[#121826] px-8 py-6 border-b border-[#E3E6EC] flex items-center justify-between rounded-t-lg">
               <h2 className="text-2xl font-bold">Email Settings</h2>
               <Button
                 variant="ghost"
                 size="icon"
-                className="hover:bg-white/10 text-white"
+                className="hover:bg-[#F4F5F7] text-[#121826]"
                 onClick={() => setShowEmailSettingsModal(false)}
               >
                 <X className="w-5 h-5" />
@@ -3302,44 +3198,44 @@ export default function AdminPage() {
             </div>
             <div className="p-8 space-y-4">
               <div>
-                <label className="block text-sm font-bold text-slate-300 mb-2">Company Name</label>
+                <label className="block text-sm font-bold text-[#3D4452] mb-2">Company Name</label>
                 <Input
                   placeholder="e.g., KBC Trading"
                   value={emailSettings.companyName}
                   onChange={(e) => setEmailSettings({ ...emailSettings, companyName: e.target.value })}
-                  className="border-slate-400/50 focus:border-primary bg-white/10 text-white"
+                  className="border-[#E3E6EC] focus:border-[#0F1B3D] bg-white text-[#121826]"
                 />
               </div>
               <div>
-                <label className="block text-sm font-bold text-slate-300 mb-2">Sender Email</label>
+                <label className="block text-sm font-bold text-[#3D4452] mb-2">Sender Email</label>
                 <Input
                   type="email"
                   placeholder="noreply@kbc.co.za"
                   value={emailSettings.senderEmail}
                   onChange={(e) => setEmailSettings({ ...emailSettings, senderEmail: e.target.value })}
-                  className="border-slate-400/50 focus:border-primary bg-white/10 text-white"
+                  className="border-[#E3E6EC] focus:border-[#0F1B3D] bg-white text-[#121826]"
                 />
               </div>
               <div>
-                <label className="block text-sm font-bold text-slate-300 mb-2">Sender Name</label>
+                <label className="block text-sm font-bold text-[#3D4452] mb-2">Sender Name</label>
                 <Input
                   placeholder="KBC Support"
                   value={emailSettings.senderName}
                   onChange={(e) => setEmailSettings({ ...emailSettings, senderName: e.target.value })}
-                  className="border-slate-400/50 focus:border-primary bg-white/10 text-white"
+                  className="border-[#E3E6EC] focus:border-[#0F1B3D] bg-white text-[#121826]"
                 />
               </div>
             </div>
-            <div className="border-t border-slate-400/30 bg-black/20 px-8 py-4 flex justify-end gap-3 rounded-b-xl">
+            <div className="border-t border-[#E3E6EC] bg-[#F8F9FB] px-8 py-4 flex justify-end gap-3 rounded-b-xl">
               <Button
                 variant="outline"
-                className="border-slate-400/50 text-slate-300 hover:text-slate-200 hover:bg-slate-400/10 font-bold bg-transparent"
+                className="border-[#E3E6EC] text-[#3D4452] hover:text-[#121826] hover:bg-[#F4F5F7] font-bold bg-transparent"
                 onClick={() => setShowEmailSettingsModal(false)}
               >
                 Cancel
               </Button>
               <Button
-                className="bg-gradient-to-r from-primary to-secondary hover:from-primary/80 hover:to-secondary/80 text-white font-bold"
+                className="bg-[#C8102E] hover:bg-[#A50D26] text-white font-bold"
                 disabled={settingsLoading || !emailSettings.companyName || !emailSettings.senderEmail}
                 onClick={handleSaveEmailSettings}
               >
@@ -3356,6 +3252,6 @@ export default function AdminPage() {
           </div>
         </div>
       )}
-    </div>
+    </AdminShell>
   )
 }

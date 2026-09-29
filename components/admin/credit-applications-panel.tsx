@@ -82,15 +82,15 @@ interface Detail extends Summary {
 }
 
 const PANEL =
-  'rounded-2xl border border-white/10 bg-gradient-to-br from-[#0b2a5b]/90 to-[#07163f]/90 shadow-[0_20px_50px_rgba(0,0,0,0.2)] backdrop-blur-xl'
-const EYEBROW = 'text-[11px] uppercase tracking-[0.35em] text-slate-400'
-const FIELD = 'border-white/15 bg-white/5 text-white placeholder:text-slate-500 focus-visible:ring-blue-500/40'
+  'bg-white rounded-lg border border-[#E3E6EC]'
+const EYEBROW = 'text-[11px] uppercase tracking-[0.08em] text-[#5A6272]'
+const FIELD = 'border-[#E3E6EC] bg-[#F8F9FB] text-[#121826] placeholder:text-[#8A919E] focus-visible:ring-blue-500/40'
 
 const STATUS_META: Record<Status, { label: string; cls: string }> = {
-  new: { label: 'New', cls: 'border-blue-400/40 bg-blue-500/15 text-blue-200' },
-  in_review: { label: 'In review', cls: 'border-amber-400/40 bg-amber-500/15 text-amber-200' },
-  approved: { label: 'Approved', cls: 'border-emerald-400/40 bg-emerald-500/15 text-emerald-300' },
-  declined: { label: 'Declined', cls: 'border-red-400/40 bg-red-500/15 text-red-300' },
+  new: { label: 'New', cls: 'border-[#E3E6EC] bg-[#E6EAF3] text-[#0F1B3D]' },
+  in_review: { label: 'In review', cls: 'border-[#E3E6EC] bg-[#FFF4DB] text-[#7A4F00]' },
+  approved: { label: 'Approved', cls: 'border-[#E3E6EC] bg-[#E7F4EE] text-[#0B6B41]' },
+  declined: { label: 'Declined', cls: 'border-[#E8A5A5] bg-[#FDECEA] text-[#A4161A]' },
 }
 
 const rand = (n: number | null | undefined) =>
@@ -106,8 +106,8 @@ function StatusBadge({ status }: { status: Status }) {
 function KV({ label, value }: { label: string; value?: React.ReactNode }) {
   return (
     <div>
-      <p className="text-[11px] uppercase tracking-[0.2em] text-slate-400">{label}</p>
-      <p className="mt-1 whitespace-pre-line break-words text-sm text-white">{value || <span className="text-slate-500">—</span>}</p>
+      <p className="text-[11px] uppercase tracking-[0.08em] text-[#5A6272]">{label}</p>
+      <p className="mt-1 whitespace-pre-line break-words text-sm text-[#121826]">{value || <span className="text-[#5A6272]">—</span>}</p>
     </div>
   )
 }
@@ -135,19 +135,19 @@ function ShareLinkCard() {
   return (
     <div className={`${PANEL} p-6 md:p-8`}>
       <div className="flex items-start gap-3">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-red-500 to-red-700 text-white shadow-lg">
+        <div className="bg-[#EEF1F6] text-[#0F1B3D] flex h-10 w-10 shrink-0 items-center justify-center rounded-lg">
           <Link2 className="h-5 w-5" />
         </div>
         <div className="min-w-0 flex-1">
           <p className={`${EYEBROW} mb-1`}>Share</p>
-          <h2 className="text-xl font-bold text-white">Credit application link</h2>
-          <p className="mt-1 text-sm text-slate-300">
+          <h2 className="text-xl font-bold text-[#121826]">Credit application link</h2>
+          <p className="mt-1 text-sm text-[#3D4452]">
             Send this to new customers. Add a rep&apos;s name to pre-fill the sales representative on the form.
           </p>
           <div className="mt-4 grid gap-3 md:grid-cols-[220px_1fr]">
             <Input value={rep} onChange={(e) => setRep(e.target.value)} placeholder="Sales rep (optional)" className={FIELD} />
-            <div className="flex min-w-0 items-center gap-2 rounded-lg border border-white/15 bg-white/5 px-3 py-2">
-              <span className="truncate font-mono text-sm text-blue-200" title={link}>
+            <div className="flex min-w-0 items-center gap-2 rounded-lg border border-[#E3E6EC] bg-[#F8F9FB] px-3 py-2">
+              <span className="truncate font-mono text-sm text-[#0F1B3D]" title={link}>
                 {link}
               </span>
             </div>
@@ -156,17 +156,17 @@ function ShareLinkCard() {
             <Button
               type="button"
               onClick={copy}
-              className="gap-2 bg-gradient-to-r from-red-600 to-red-700 font-bold text-white shadow-lg shadow-red-600/30 hover:from-red-500 hover:to-red-600"
+              className="bg-[#C8102E] hover:bg-[#A50D26] gap-2 font-bold text-white"
             >
               {copied ? <CheckCircle2 className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
               {copied ? 'Copied' : 'Copy link'}
             </Button>
-            <Button asChild variant="outline" className="gap-2 border-white/15 bg-white/5 text-slate-100 hover:bg-white/10 hover:text-white">
+            <Button asChild variant="outline" className="gap-2 border-[#E3E6EC] bg-[#F8F9FB] text-[#121826] hover:bg-[#F4F5F7] hover:text-[#121826]">
               <a href={whatsapp} target="_blank" rel="noopener noreferrer">
                 <MessageCircle className="h-4 w-4" /> Share on WhatsApp
               </a>
             </Button>
-            <Button asChild variant="outline" className="gap-2 border-white/15 bg-white/5 text-slate-100 hover:bg-white/10 hover:text-white">
+            <Button asChild variant="outline" className="gap-2 border-[#E3E6EC] bg-[#F8F9FB] text-[#121826] hover:bg-[#F4F5F7] hover:text-[#121826]">
               <a href={link} target="_blank" rel="noopener noreferrer">
                 <ExternalLink className="h-4 w-4" /> Open form
               </a>
@@ -232,10 +232,10 @@ function DetailView({ id, onBack, onChanged }: { id: string; onBack: () => void;
   if (error && !app) {
     return (
       <div className="space-y-4">
-        <button onClick={onBack} className="inline-flex items-center gap-2 text-sm text-slate-300 hover:text-white">
+        <button onClick={onBack} className="inline-flex items-center gap-2 text-sm text-[#3D4452] hover:text-[#121826]">
           <ArrowLeft className="h-4 w-4" /> All applications
         </button>
-        <p className="flex items-center gap-2 text-red-300">
+        <p className="flex items-center gap-2 text-[#A4161A]">
           <AlertCircle className="h-4 w-4" /> {error}
         </p>
       </div>
@@ -244,7 +244,7 @@ function DetailView({ id, onBack, onChanged }: { id: string; onBack: () => void;
   if (!app) {
     return (
       <div className="flex justify-center py-16">
-        <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
+        <Loader2 className="h-8 w-8 animate-spin text-[#5A6272]" />
       </div>
     )
   }
@@ -254,13 +254,13 @@ function DetailView({ id, onBack, onChanged }: { id: string; onBack: () => void;
   const missingRequired = DOCUMENT_KINDS.filter((k) => k.required && !app.documents.some((x) => x.kind === k.id && x.uploaded))
 
   const contact = (title: string, c: Contact) => (
-    <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-      <p className="mb-3 text-sm font-bold text-white">{title}</p>
+    <div className="rounded-lg border border-[#E3E6EC] bg-[#F8F9FB] p-4">
+      <p className="mb-3 text-sm font-bold text-[#121826]">{title}</p>
       <div className="grid grid-cols-2 gap-3">
         <KV label="Name" value={c.name} />
         <KV label="Designation" value={c.designation} />
-        <KV label="Email" value={c.email ? <a className="text-blue-200 hover:underline" href={`mailto:${c.email}`}>{c.email}</a> : ''} />
-        <KV label="Tel / cell" value={c.phone ? <a className="text-blue-200 hover:underline" href={`tel:${c.phone}`}>{c.phone}</a> : ''} />
+        <KV label="Email" value={c.email ? <a className="text-[#0F1B3D] hover:underline" href={`mailto:${c.email}`}>{c.email}</a> : ''} />
+        <KV label="Tel / cell" value={c.phone ? <a className="text-[#0F1B3D] hover:underline" href={`tel:${c.phone}`}>{c.phone}</a> : ''} />
       </div>
     </div>
   )
@@ -268,14 +268,14 @@ function DetailView({ id, onBack, onChanged }: { id: string; onBack: () => void;
   return (
     <div className="credit-application-print space-y-6 animate-fade-in-up">
       <div className="flex flex-wrap items-center justify-between gap-3 print:hidden">
-        <button onClick={onBack} className="inline-flex items-center gap-2 text-sm text-slate-300 hover:text-white">
+        <button onClick={onBack} className="inline-flex items-center gap-2 text-sm text-[#3D4452] hover:text-[#121826]">
           <ArrowLeft className="h-4 w-4" /> All applications
         </button>
         <Button
           type="button"
           variant="outline"
           onClick={() => window.print()}
-          className="gap-2 border-white/15 bg-white/5 text-slate-100 hover:bg-white/10 hover:text-white"
+          className="gap-2 border-[#E3E6EC] bg-[#F8F9FB] text-[#121826] hover:bg-[#F4F5F7] hover:text-[#121826]"
         >
           <Printer className="h-4 w-4" /> Print / save PDF
         </Button>
@@ -285,9 +285,9 @@ function DetailView({ id, onBack, onChanged }: { id: string; onBack: () => void;
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <p className={`${EYEBROW} mb-2`}>Credit application · {app.reference}</p>
-            <h1 className="text-3xl font-black tracking-tight text-white">{app.registered_name}</h1>
-            {app.trading_name && <p className="mt-1 text-slate-300">t/a {app.trading_name}</p>}
-            <p className="mt-2 text-sm text-slate-400">Submitted {when(app.created_at)}{app.sales_rep ? ` · Rep: ${app.sales_rep}` : ''}</p>
+            <h1 className="text-3xl font-semibold tracking-tight text-[#121826]">{app.registered_name}</h1>
+            {app.trading_name && <p className="mt-1 text-[#3D4452]">t/a {app.trading_name}</p>}
+            <p className="mt-2 text-sm text-[#5A6272]">Submitted {when(app.created_at)}{app.sales_rep ? ` · Rep: ${app.sales_rep}` : ''}</p>
           </div>
           <StatusBadge status={app.status} />
         </div>
@@ -298,9 +298,9 @@ function DetailView({ id, onBack, onChanged }: { id: string; onBack: () => void;
             ['Owners / directors', String(d.directors.length)],
             ['Documents', `${app.documents.filter((x) => x.uploaded).length} uploaded`],
           ].map(([label, value]) => (
-            <div key={label} className="rounded-2xl border border-white/10 bg-white/5 p-4">
-              <p className="text-[11px] uppercase tracking-[0.32em] text-slate-400">{label}</p>
-              <p className="mt-3 text-xl font-black text-white">{value}</p>
+            <div key={label} className="rounded-lg border border-[#E3E6EC] bg-[#F8F9FB] p-4">
+              <p className="text-[11px] uppercase tracking-[0.08em] text-[#5A6272]">{label}</p>
+              <p className="mt-3 text-xl font-semibold text-[#121826]">{value}</p>
             </div>
           ))}
         </div>
@@ -309,7 +309,7 @@ function DetailView({ id, onBack, onChanged }: { id: string; onBack: () => void;
       {/* Decision */}
       <div className={`${PANEL} p-6 md:p-8 print:hidden`}>
         <p className={`${EYEBROW} mb-2`}>Decision</p>
-        <h2 className="mb-4 text-xl font-bold text-white">Review</h2>
+        <h2 className="mb-4 text-xl font-bold text-[#121826]">Review</h2>
         <div className="mb-5 flex flex-wrap gap-2">
           {(Object.keys(STATUS_META) as Status[]).map((s) => (
             <button
@@ -317,8 +317,8 @@ function DetailView({ id, onBack, onChanged }: { id: string; onBack: () => void;
               type="button"
               disabled={saving || app.status === s}
               onClick={() => patch({ status: s })}
-              className={`rounded-xl border px-4 py-2 text-sm font-bold transition ${
-                app.status === s ? STATUS_META[s].cls : 'border-white/15 bg-white/5 text-slate-300 hover:bg-white/10'
+              className={`rounded-lg border px-4 py-2 text-sm font-bold transition ${
+                app.status === s ? STATUS_META[s].cls : 'border-[#E3E6EC] bg-[#F8F9FB] text-[#3D4452] hover:bg-[#F4F5F7]'
               }`}
             >
               {STATUS_META[s].label}
@@ -327,7 +327,7 @@ function DetailView({ id, onBack, onChanged }: { id: string; onBack: () => void;
         </div>
         <div className="grid gap-4 md:grid-cols-2">
           <label className="block">
-            <span className="mb-2 block text-[11px] uppercase tracking-[0.28em] text-slate-400">Approved limit (R)</span>
+            <span className="mb-2 block text-[11px] uppercase tracking-[0.08em] text-[#5A6272]">Approved limit (R)</span>
             <Input
               value={form.approvedCreditLimit}
               onChange={(e) => setForm((f) => ({ ...f, approvedCreditLimit: e.target.value }))}
@@ -336,16 +336,16 @@ function DetailView({ id, onBack, onChanged }: { id: string; onBack: () => void;
             />
           </label>
           <label className="block">
-            <span className="mb-2 block text-[11px] uppercase tracking-[0.28em] text-slate-400">Account number</span>
+            <span className="mb-2 block text-[11px] uppercase tracking-[0.08em] text-[#5A6272]">Account number</span>
             <Input value={form.accountNumber} onChange={(e) => setForm((f) => ({ ...f, accountNumber: e.target.value }))} className={FIELD} />
           </label>
           <label className="block md:col-span-2">
-            <span className="mb-2 block text-[11px] uppercase tracking-[0.28em] text-slate-400">Internal notes</span>
+            <span className="mb-2 block text-[11px] uppercase tracking-[0.08em] text-[#5A6272]">Internal notes</span>
             <textarea
               rows={3}
               value={form.adminNotes}
               onChange={(e) => setForm((f) => ({ ...f, adminNotes: e.target.value }))}
-              className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-slate-500 outline-none focus:border-blue-400/50"
+              className="w-full rounded-lg border border-[#E3E6EC] bg-[#F8F9FB] px-3 py-2 text-sm text-[#121826] placeholder:text-[#8A919E] outline-none focus:border-[#0F1B3D]"
               placeholder="Credit bureau result, reference checks, follow-ups…"
             />
           </label>
@@ -355,18 +355,18 @@ function DetailView({ id, onBack, onChanged }: { id: string; onBack: () => void;
             type="button"
             disabled={saving}
             onClick={() => patch(form)}
-            className="gap-2 bg-gradient-to-r from-red-600 to-red-700 font-bold text-white shadow-lg shadow-red-600/30 hover:from-red-500 hover:to-red-600"
+            className="bg-[#C8102E] hover:bg-[#A50D26] gap-2 font-bold text-white"
           >
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />} Save
           </Button>
           {saved && (
-            <span className="inline-flex items-center gap-1 text-sm font-bold text-emerald-300">
+            <span className="inline-flex items-center gap-1 text-sm font-bold text-[#0B6B41]">
               <CheckCircle2 className="h-4 w-4" /> Saved
             </span>
           )}
-          {error && <span className="text-sm text-red-300">{error}</span>}
+          {error && <span className="text-sm text-[#A4161A]">{error}</span>}
           {app.reviewed_at && (
-            <span className="text-xs text-slate-400">
+            <span className="text-xs text-[#5A6272]">
               Last reviewed {when(app.reviewed_at)}
               {app.reviewed_by ? ` by ${app.reviewed_by}` : ''}
             </span>
@@ -376,7 +376,7 @@ function DetailView({ id, onBack, onChanged }: { id: string; onBack: () => void;
 
       <div className={`${PANEL} p-6 md:p-8`}>
         <p className={`${EYEBROW} mb-2`}>Company</p>
-        <h2 className="mb-5 text-xl font-bold text-white">Company details</h2>
+        <h2 className="mb-5 text-xl font-bold text-[#121826]">Company details</h2>
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           <KV label="Registration no." value={app.registration_number} />
           <KV label="VAT no." value={app.vat_number} />
@@ -391,7 +391,7 @@ function DetailView({ id, onBack, onChanged }: { id: string; onBack: () => void;
 
       <div className={`${PANEL} p-6 md:p-8`}>
         <p className={`${EYEBROW} mb-2`}>People</p>
-        <h2 className="mb-5 text-xl font-bold text-white">Contacts</h2>
+        <h2 className="mb-5 text-xl font-bold text-[#121826]">Contacts</h2>
         <div className="grid gap-4 lg:grid-cols-3">
           {contact('Buyer', d.buyerContact)}
           {contact('Notifications & promotions', d.notificationsContact)}
@@ -401,7 +401,7 @@ function DetailView({ id, onBack, onChanged }: { id: string; onBack: () => void;
 
       <div className={`${PANEL} p-6 md:p-8`}>
         <p className={`${EYEBROW} mb-2`}>Finance</p>
-        <h2 className="mb-5 text-xl font-bold text-white">Banking details</h2>
+        <h2 className="mb-5 text-xl font-bold text-[#121826]">Banking details</h2>
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           <KV label="Bank" value={d.bankName} />
           <KV label="Account name" value={d.bankAccountName} />
@@ -414,11 +414,11 @@ function DetailView({ id, onBack, onChanged }: { id: string; onBack: () => void;
 
       <div className={`${PANEL} p-6 md:p-8`}>
         <p className={`${EYEBROW} mb-2`}>Sureties</p>
-        <h2 className="mb-5 text-xl font-bold text-white">Directorship / owners</h2>
+        <h2 className="mb-5 text-xl font-bold text-[#121826]">Directorship / owners</h2>
         <div className="grid gap-4 lg:grid-cols-2">
           {d.directors.map((o, i) => (
-            <div key={i} className="rounded-2xl border border-white/10 bg-white/5 p-4">
-              <p className="mb-3 text-sm font-bold text-white">{o.fullName}</p>
+            <div key={i} className="rounded-lg border border-[#E3E6EC] bg-[#F8F9FB] p-4">
+              <p className="mb-3 text-sm font-bold text-[#121826]">{o.fullName}</p>
               <div className="grid grid-cols-2 gap-3">
                 <KV label="ID number" value={o.idNumber} />
                 <KV label="Position" value={o.position} />
@@ -433,14 +433,14 @@ function DetailView({ id, onBack, onChanged }: { id: string; onBack: () => void;
       <div className={`${PANEL} overflow-hidden`}>
         <div className="px-6 pb-4 pt-6 md:px-8 md:pt-8">
           <p className={`${EYEBROW} mb-2`}>Checks</p>
-          <h2 className="text-xl font-bold text-white">Trade references</h2>
+          <h2 className="text-xl font-bold text-[#121826]">Trade references</h2>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-y border-white/10 bg-white/5">
+              <tr className="border-y border-[#E3E6EC] bg-[#F8F9FB]">
                 {['Company', 'Contact person', 'Telephone', 'Designation', 'Est. monthly'].map((h) => (
-                  <th key={h} className="px-6 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-400 md:px-8">
+                  <th key={h} className="px-6 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.08em] text-[#5A6272] md:px-8">
                     {h}
                   </th>
                 ))}
@@ -448,16 +448,16 @@ function DetailView({ id, onBack, onChanged }: { id: string; onBack: () => void;
             </thead>
             <tbody>
               {d.tradeReferences.map((r, i) => (
-                <tr key={i} className="border-b border-white/5 last:border-0">
-                  <td className="px-6 py-3 font-bold text-white md:px-8">{r.companyName}</td>
-                  <td className="px-6 py-3 text-slate-200 md:px-8">{r.contactPerson}</td>
+                <tr key={i} className="border-b border-[#E3E6EC] last:border-0">
+                  <td className="px-6 py-3 font-bold text-[#121826] md:px-8">{r.companyName}</td>
+                  <td className="px-6 py-3 text-[#121826] md:px-8">{r.contactPerson}</td>
                   <td className="px-6 py-3 md:px-8">
-                    <a className="text-blue-200 hover:underline" href={`tel:${r.telephone}`}>
+                    <a className="text-[#0F1B3D] hover:underline" href={`tel:${r.telephone}`}>
                       {r.telephone}
                     </a>
                   </td>
-                  <td className="px-6 py-3 text-slate-300 md:px-8">{r.designation || '—'}</td>
-                  <td className="px-6 py-3 text-slate-300 md:px-8">{r.estMonthlyPurchase ? `R ${r.estMonthlyPurchase}` : '—'}</td>
+                  <td className="px-6 py-3 text-[#3D4452] md:px-8">{r.designation || '—'}</td>
+                  <td className="px-6 py-3 text-[#3D4452] md:px-8">{r.estMonthlyPurchase ? `R ${r.estMonthlyPurchase}` : '—'}</td>
                 </tr>
               ))}
             </tbody>
@@ -467,45 +467,45 @@ function DetailView({ id, onBack, onChanged }: { id: string; onBack: () => void;
 
       <div className={`${PANEL} p-6 md:p-8`}>
         <p className={`${EYEBROW} mb-2`}>Attachments</p>
-        <h2 className="mb-5 text-xl font-bold text-white">Supporting documents</h2>
+        <h2 className="mb-5 text-xl font-bold text-[#121826]">Supporting documents</h2>
         {missingRequired.length > 0 && (
-          <div className="mb-4 flex items-start gap-2 rounded-2xl border border-amber-500/20 bg-amber-500/10 px-4 py-3 text-sm text-amber-300">
+          <div className="mb-4 flex items-start gap-2 rounded-lg border border-[#E3E6EC] bg-[#FFF4DB] px-4 py-3 text-sm text-[#7A4F00]">
             <FileWarning className="mt-0.5 h-4 w-4 shrink-0" />
             <span>Outstanding: {missingRequired.map((k) => k.label.split(' (')[0]).join('; ')}</span>
           </div>
         )}
         {app.documents.length === 0 ? (
-          <p className="text-sm text-slate-400">No documents were attached.</p>
+          <p className="text-sm text-[#5A6272]">No documents were attached.</p>
         ) : (
           <ul className="space-y-2">
             {app.documents.map((doc) => (
-              <li key={doc.path} className="flex flex-wrap items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+              <li key={doc.path} className="flex flex-wrap items-center gap-3 rounded-lg border border-[#E3E6EC] bg-[#F8F9FB] px-4 py-3">
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-bold text-white">{doc.name}</p>
-                  <p className="text-xs text-slate-400">
+                  <p className="truncate text-sm font-bold text-[#121826]">{doc.name}</p>
+                  <p className="text-xs text-[#5A6272]">
                     {kindLabel(doc.kind).split(' (')[0]} · {(doc.size / 1024 / 1024).toFixed(1)} MB
                   </p>
                 </div>
                 {doc.uploaded && doc.url ? (
                   <a
                     href={doc.url}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-red-500/50 px-3 py-1.5 text-sm font-bold text-red-300 hover:bg-red-500/10 print:hidden"
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-[#E8A5A5] px-3 py-1.5 text-sm font-bold text-[#A4161A] hover:bg-[#F4F5F7] print:hidden"
                   >
                     <Download className="h-4 w-4" /> Download
                   </a>
                 ) : (
-                  <span className="text-xs font-bold text-amber-300">Upload did not complete</span>
+                  <span className="text-xs font-bold text-[#7A4F00]">Upload did not complete</span>
                 )}
               </li>
             ))}
           </ul>
         )}
-        <p className="mt-3 text-xs text-slate-500 print:hidden">Download links expire after 10 minutes — reopen the application for fresh links.</p>
+        <p className="mt-3 text-xs text-[#5A6272] print:hidden">Download links expire after 10 minutes — reopen the application for fresh links.</p>
       </div>
 
       <div className={`${PANEL} p-6 md:p-8`}>
         <p className={`${EYEBROW} mb-2`}>Agreement</p>
-        <h2 className="mb-5 text-xl font-bold text-white">Signature</h2>
+        <h2 className="mb-5 text-xl font-bold text-[#121826]">Signature</h2>
         <div className="grid gap-6 md:grid-cols-[1fr_320px]">
           <div className="grid grid-cols-2 gap-4">
             <KV label="Signatory" value={app.signatory_name} />
@@ -524,7 +524,7 @@ function DetailView({ id, onBack, onChanged }: { id: string; onBack: () => void;
             />
             <KV label="Submitted from IP" value={app.submitted_ip} />
           </div>
-          <div className="rounded-2xl bg-white p-3">
+          <div className="rounded-lg bg-white p-3">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={app.signature_png} alt={`Signature of ${app.signatory_name}`} className="h-36 w-full object-contain" />
           </div>
@@ -596,9 +596,9 @@ export function CreditApplicationsPanel({ initialId }: { initialId?: string | nu
   return (
     <div className="space-y-8 animate-fade-in-up">
       <div>
-        <p className="mb-3 text-[11px] uppercase tracking-[0.45em] text-slate-400">Accounts</p>
-        <h1 className="text-4xl font-black tracking-tight text-white">Credit Applications</h1>
-        <p className="mt-3 max-w-2xl text-slate-300">
+        <p className="mb-3 text-[11px] uppercase tracking-[0.08em] text-[#5A6272]">Accounts</p>
+        <h1 className="kbc-display text-[26px] font-semibold leading-8 tracking-tight text-[#121826] sm:text-[28px] sm:leading-[34px]">Credit Applications</h1>
+        <p className="mt-3 max-w-2xl text-[#3D4452]">
           Online credit applications submitted through the website, with signed terms and supporting documents.
         </p>
       </div>
@@ -613,10 +613,10 @@ export function CreditApplicationsPanel({ initialId }: { initialId?: string | nu
                 key={s}
                 type="button"
                 onClick={() => setFilter(s)}
-                className={`rounded-xl px-3 py-1.5 text-sm font-bold transition ${
+                className={`rounded-lg px-3 py-1.5 text-sm font-bold transition ${
                   filter === s
-                    ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-600/30'
-                    : 'bg-white/5 text-slate-300 hover:bg-white/10'
+                    ? 'bg-[#0F1B3D] hover:bg-[#1E2C57] text-white'
+                    : 'bg-[#F8F9FB] text-[#3D4452] hover:bg-[#F4F5F7]'
                 }`}
               >
                 {s === 'all' ? 'All' : STATUS_META[s].label}
@@ -625,32 +625,32 @@ export function CreditApplicationsPanel({ initialId }: { initialId?: string | nu
             ))}
           </div>
           <div className="relative w-full sm:w-72">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#5A6272]" />
             <Input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search company, reference, rep…" className={`pl-9 ${FIELD}`} />
           </div>
         </div>
 
         {error && (
-          <p className="flex items-center gap-2 px-6 pb-4 text-sm text-red-300 md:px-8">
+          <p className="flex items-center gap-2 px-6 pb-4 text-sm text-[#A4161A] md:px-8">
             <AlertCircle className="h-4 w-4" /> {error}
           </p>
         )}
 
         {apps === null ? (
           <div className="flex justify-center py-16">
-            <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
+            <Loader2 className="h-8 w-8 animate-spin text-[#5A6272]" />
           </div>
         ) : visible.length === 0 ? (
-          <p className="border-t border-white/10 px-6 py-12 text-center text-sm text-slate-400 md:px-8">
+          <p className="border-t border-[#E3E6EC] px-6 py-12 text-center text-sm text-[#5A6272] md:px-8">
             {apps.length === 0 ? 'No applications yet — share the link above to get started.' : 'No applications match this filter.'}
           </p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-y border-white/10 bg-white/5">
+                <tr className="border-y border-[#E3E6EC] bg-[#F8F9FB]">
                   {['Company', 'Reference', 'Limit requested', 'Docs', 'Rep', 'Submitted', 'Status'].map((h) => (
-                    <th key={h} className="whitespace-nowrap px-6 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-400">
+                    <th key={h} className="whitespace-nowrap px-6 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.08em] text-[#5A6272]">
                       {h}
                     </th>
                   ))}
@@ -661,17 +661,17 @@ export function CreditApplicationsPanel({ initialId }: { initialId?: string | nu
                   <tr
                     key={a.id}
                     onClick={() => setOpenId(a.id)}
-                    className="cursor-pointer border-b border-white/5 transition-colors last:border-0 hover:bg-white/[0.05]"
+                    className="cursor-pointer border-b border-[#E3E6EC] transition-colors last:border-0 hover:bg-white/[0.05]"
                   >
                     <td className="px-6 py-4">
-                      <p className="font-bold text-white">{a.registered_name}</p>
-                      <p className="text-xs text-slate-400">{a.entity_type} · {a.signatory_name}</p>
+                      <p className="font-bold text-[#121826]">{a.registered_name}</p>
+                      <p className="text-xs text-[#5A6272]">{a.entity_type} · {a.signatory_name}</p>
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 font-mono text-xs text-slate-300">{a.reference}</td>
-                    <td className="whitespace-nowrap px-6 py-4 font-bold text-white tabular-nums">{rand(a.credit_limit_requested)}</td>
-                    <td className="px-6 py-4 text-slate-300">{a.documentCount}</td>
-                    <td className="px-6 py-4 text-slate-300">{a.sales_rep || '—'}</td>
-                    <td className="whitespace-nowrap px-6 py-4 text-slate-400">{when(a.created_at)}</td>
+                    <td className="whitespace-nowrap px-6 py-4 font-mono text-xs text-[#3D4452]">{a.reference}</td>
+                    <td className="whitespace-nowrap px-6 py-4 font-bold text-[#121826] tabular-nums">{rand(a.credit_limit_requested)}</td>
+                    <td className="px-6 py-4 text-[#3D4452]">{a.documentCount}</td>
+                    <td className="px-6 py-4 text-[#3D4452]">{a.sales_rep || '—'}</td>
+                    <td className="whitespace-nowrap px-6 py-4 text-[#5A6272]">{when(a.created_at)}</td>
                     <td className="px-6 py-4">
                       <StatusBadge status={a.status} />
                     </td>

@@ -256,6 +256,25 @@
   .kbc-portal {
     font-family: var(--font-portal-sans), system-ui, sans-serif;
     color: #121826;
+    /* shared UI components (inputs, selects, outline buttons) read these */
+    --background: #f4f5f7;
+    --foreground: #121826;
+    --card: #ffffff;
+    --card-foreground: #121826;
+    --popover: #ffffff;
+    --popover-foreground: #121826;
+    --primary: #c8102e;
+    --primary-foreground: #ffffff;
+    --secondary: #0f1b3d;
+    --secondary-foreground: #ffffff;
+    --muted: #f4f5f7;
+    --muted-foreground: #5a6272;
+    --accent: #eef1f6;
+    --accent-foreground: #0f1b3d;
+    --destructive: #a4161a;
+    --border: #e3e6ec;
+    --input: #d5dae2;
+    --ring: #0f1b3d;
   }
   .kbc-portal :where(h1, h2, h3, h4, h5, h6, p) {
     margin: 0;

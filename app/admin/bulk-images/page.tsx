@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Upload, Loader2, CheckCircle2, AlertCircle, ArrowLeft } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import { portalFontVars } from '@/components/portal/fonts'
 
 /**
  * Extracts the matching number from an image filename.
@@ -191,7 +192,7 @@ export default function BulkImagesPage() {
 
   if (authState === 'checking') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#001b3d] text-white">
+      <div className={`kbc-portal ${portalFontVars} min-h-screen flex items-center justify-center bg-[#F4F5F7] text-[#121826]`}>
         <Loader2 className="w-6 h-6 animate-spin" />
       </div>
     )
@@ -199,8 +200,8 @@ export default function BulkImagesPage() {
 
   if (authState === 'denied') {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-4 bg-[#001b3d] text-white">
-        <AlertCircle className="w-8 h-8 text-red-400" />
+      <div className={`kbc-portal ${portalFontVars} min-h-screen flex flex-col items-center justify-center gap-4 bg-[#F4F5F7] text-[#121826]`}>
+        <AlertCircle className="w-8 h-8 text-[#A4161A]" />
         <p>Admin access required.</p>
         <a href="/login" className="underline">Go to login</a>
       </div>
@@ -211,19 +212,19 @@ export default function BulkImagesPage() {
   const futureCount = rows.length - matchedCount
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#000034] via-[#002463] to-[#0056a1] text-white p-4 md:p-8">
+    <div className={`kbc-portal ${portalFontVars} bg-[#F4F5F7] min-h-screen text-[#121826] p-4 md:p-8`}>
       <div className="max-w-6xl mx-auto">
-        <a href="/admin" className="inline-flex items-center gap-2 text-blue-200 hover:text-white mb-4">
+        <a href="/admin" className="inline-flex items-center gap-2 text-[#0F1B3D] hover:text-[#121826] mb-4">
           <ArrowLeft className="w-4 h-4" /> Back to admin
         </a>
         <h1 className="text-2xl font-bold mb-2">Bulk Image Import</h1>
-        <p className="text-blue-200 mb-6 text-sm max-w-2xl">
+        <p className="text-[#0F1B3D] mb-6 text-sm max-w-2xl">
           Select product images. The number in each filename is matched to a product SKU
           (exact match auto-selected). Unmatched files are skipped as future stock. Review the
           matches below before uploading. The first image per product becomes the primary image.
         </p>
 
-        <label className="inline-flex items-center gap-2 cursor-pointer bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg px-4 py-3 mb-6">
+        <label className="inline-flex items-center gap-2 cursor-pointer bg-white hover:bg-[#F4F5F7] border border-[#E3E6EC] rounded-lg px-4 py-3 mb-6">
           <Upload className="w-4 h-4" />
           <span>Select images</span>
           <input
@@ -236,20 +237,20 @@ export default function BulkImagesPage() {
         </label>
 
         {phase === 'matching' && (
-          <p className="flex items-center gap-2 text-blue-200"><Loader2 className="w-4 h-4 animate-spin" /> Matching {rows.length} files…</p>
+          <p className="flex items-center gap-2 text-[#0F1B3D]"><Loader2 className="w-4 h-4 animate-spin" /> Matching {rows.length} files…</p>
         )}
 
         {rows.length > 0 && phase !== 'matching' && (
           <>
             <div className="flex flex-wrap gap-4 mb-4 text-sm">
-              <span className="px-3 py-1 rounded bg-green-500/20 border border-green-500/40">Matched: {matchedCount}</span>
-              <span className="px-3 py-1 rounded bg-yellow-500/20 border border-yellow-500/40">Future (skipped): {futureCount}</span>
-              <span className="px-3 py-1 rounded bg-white/10 border border-white/20">Total: {rows.length}</span>
+              <span className="px-3 py-1 rounded bg-[#E7F4EE] border border-[#E3E6EC]">Matched: {matchedCount}</span>
+              <span className="px-3 py-1 rounded bg-[#FFF4DB] border border-[#E3E6EC]">Future (skipped): {futureCount}</span>
+              <span className="px-3 py-1 rounded bg-white border border-[#E3E6EC]">Total: {rows.length}</span>
             </div>
 
-            <div className="overflow-x-auto rounded-lg border border-white/10 mb-6">
+            <div className="overflow-x-auto rounded-lg border border-[#E3E6EC] mb-6">
               <table className="w-full text-sm">
-                <thead className="bg-white/10 text-left">
+                <thead className="bg-white text-left">
                   <tr>
                     <th className="p-3">Filename</th>
                     <th className="p-3">Number</th>
@@ -258,23 +259,23 @@ export default function BulkImagesPage() {
                 </thead>
                 <tbody>
                   {rows.map((row, i) => (
-                    <tr key={i} className="border-t border-white/10">
+                    <tr key={i} className="border-t border-[#E3E6EC]">
                       <td className="p-3 font-mono text-xs">{row.filename}</td>
                       <td className="p-3 w-32">
                         <Input
                           value={row.number}
                           onChange={(e) => updateNumber(i, e.target.value)}
-                          className="h-8 bg-white/10 border-white/20 text-white"
+                          className="h-8 bg-white border-[#E3E6EC] text-[#121826]"
                         />
                       </td>
                       <td className="p-3">
                         {row.candidates.length === 0 ? (
-                          <span className="text-yellow-300">no match — future</span>
+                          <span className="text-[#7A4F00]">no match — future</span>
                         ) : (
                           <select
                             value={row.selectedSku}
                             onChange={(e) => updateSelection(i, e.target.value)}
-                            className="h-8 bg-[#002463] border border-white/20 rounded px-2 text-white max-w-xs"
+                            className="h-8 bg-white border border-[#E3E6EC] rounded px-2 text-[#121826] max-w-xs"
                           >
                             <option value="">— skip (future) —</option>
                             {row.candidates.map((c) => (
@@ -295,7 +296,7 @@ export default function BulkImagesPage() {
               <Button
                 onClick={() => runMatch(rows)}
                 variant="outline"
-                className="bg-transparent border-white/30 text-white hover:bg-white/10"
+                className="bg-transparent border-[#E3E6EC] text-[#121826] hover:bg-[#F4F5F7]"
                 disabled={phase === 'uploading'}
               >
                 Re-match
@@ -303,7 +304,7 @@ export default function BulkImagesPage() {
               <Button
                 onClick={handleUpload}
                 disabled={matchedCount === 0 || phase === 'uploading'}
-                className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800"
+                className="bg-[#0F1B3D] hover:bg-[#1E2C57]"
               >
                 {phase === 'uploading' ? (
                   <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Uploading {progress.current}/{progress.total}…</>
@@ -316,9 +317,9 @@ export default function BulkImagesPage() {
         )}
 
         {summary && (
-          <div className="mt-6 p-4 rounded-lg bg-white/10 border border-white/20">
-            <p className="flex items-center gap-2 font-semibold mb-2"><CheckCircle2 className="w-5 h-5 text-green-400" /> Import complete</p>
-            <ul className="text-sm space-y-1 text-blue-100">
+          <div className="mt-6 p-4 rounded-lg bg-white border border-[#E3E6EC]">
+            <p className="flex items-center gap-2 font-semibold mb-2"><CheckCircle2 className="w-5 h-5 text-[#0B6B41]" /> Import complete</p>
+            <ul className="text-sm space-y-1 text-[#0F1B3D]">
               <li>Uploaded & mapped: {summary.uploaded}</li>
               <li>Skipped (future stock): {summary.skipped}</li>
               <li>Failed: {summary.failed.length}{summary.failed.length > 0 ? ` — ${summary.failed.join(', ')}` : ''}</li>

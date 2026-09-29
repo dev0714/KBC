@@ -137,21 +137,21 @@ export function ReportingDashboard({ orders, clients, reporting }: ReportingDash
 
   return (
     <div className="space-y-6">
-      <div className="rounded-[28px] border border-white/10 bg-[#071c4c] p-6 shadow-[0_24px_80px_rgba(2,8,23,0.45)]">
+      <div className="rounded-lg border border-[#E3E6EC] bg-white p-6">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="space-y-2">
-            <p className="text-xs font-semibold uppercase tracking-[0.4em] text-white/45">Reporting</p>
-            <h1 className="text-3xl font-black tracking-tight text-white">Drill into sales, customers, and timing</h1>
-            <p className="max-w-2xl text-sm leading-6 text-white/70">
+            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[#5A6272]">Reporting</p>
+            <h1 className="text-3xl font-semibold tracking-tight text-[#121826]">Drill into sales, customers, and timing</h1>
+            <p className="max-w-2xl text-sm leading-6 text-[#3D4452]">
               Use the summary tiles to jump into product performance, buyer rankings, order value, daily revenue, and peak-time activity.
             </p>
           </div>
-          <div className="rounded-2xl border border-cyan-400/20 bg-cyan-400/10 px-4 py-3 text-sm text-cyan-100">
+          <div className="rounded-lg border border-[#E3E6EC] bg-[#F8F9FB] px-4 py-3 text-sm text-[#121826]">
             <div className="flex items-center gap-2 font-semibold">
               <ArrowUpRight className="h-4 w-4" />
               Live reporting
             </div>
-            <p className="mt-1 text-cyan-50/75">
+            <p className="mt-1 text-[#5A6272]">
               {orders.length.toLocaleString()} orders, {clients.length.toLocaleString()} customers
             </p>
           </div>
@@ -167,27 +167,27 @@ export function ReportingDashboard({ orders, clients, reporting }: ReportingDash
                 type="button"
                 onClick={() => setSelectedReport(metric.key)}
                 className={cn(
-                  'group rounded-2xl border p-4 text-left transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-500/60',
+                  'group rounded-lg border p-4 text-left transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#0F1B3D]/15',
                   isActive
-                    ? 'border-red-400/70 bg-red-500/15 shadow-[0_12px_30px_rgba(239,68,68,0.18)]'
-                    : 'border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/10',
+                    ? 'border-[#E8A5A5] bg-[#FDECEA]'
+                    : 'border-[#E3E6EC] bg-[#F8F9FB] hover:border-[#E3E6EC] hover:bg-[#F4F5F7]',
                 )}
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.35em] text-white/45">{metric.label}</p>
-                    <div className="mt-3 text-3xl font-black tracking-tight text-white">{metric.value}</div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[#5A6272]">{metric.label}</p>
+                    <div className="mt-3 text-3xl font-semibold tracking-tight text-[#121826]">{metric.value}</div>
                   </div>
                   <div
                     className={cn(
-                      'rounded-2xl p-3 transition-transform duration-200 group-hover:-translate-y-0.5',
-                      isActive ? 'bg-red-500 text-white' : 'bg-white/10 text-white/80',
+                      'rounded-lg p-3 transition-transform duration-200 group-hover:-translate-y-0.5',
+                      isActive ? 'bg-[#0F1B3D] text-white' : 'bg-[#EEF1F6] text-[#0F1B3D]',
                     )}
                   >
                     <Icon className="h-5 w-5" />
                   </div>
                 </div>
-                <p className="mt-3 text-sm leading-6 text-white/65">{metric.helper}</p>
+                <p className="mt-3 text-sm leading-6 text-[#3D4452]">{metric.helper}</p>
               </button>
             )
           })}
@@ -379,9 +379,9 @@ function OverviewPanel({
           <SummaryMiniCard title="Orders ranked" value={reporting.orderRankings.length.toLocaleString()} />
         </div>
 
-        <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-5">
-          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-white/45">What you can drill into</p>
-          <div className="mt-3 space-y-3 text-sm leading-6 text-white/75">
+        <div className="mt-6 rounded-lg border border-[#E3E6EC] bg-[#F8F9FB] p-5">
+          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[#5A6272]">What you can drill into</p>
+          <div className="mt-3 space-y-3 text-sm leading-6 text-[#3D4452]">
             {highlights.map((item) => (
               <div key={item} className="flex gap-3">
                 <span className="mt-2 h-2 w-2 rounded-full bg-red-400" />
@@ -399,18 +399,18 @@ function OverviewPanel({
               key={card.key}
               type="button"
               onClick={() => onSelect(card.key)}
-              className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-4 text-left transition hover:border-white/20 hover:bg-white/10"
+              className="flex items-center justify-between rounded-lg border border-[#E3E6EC] bg-[#F8F9FB] px-4 py-4 text-left transition hover:border-[#E3E6EC] hover:bg-[#F4F5F7]"
             >
               <div className="flex items-center gap-3">
-                <span className="rounded-xl bg-white/10 p-2 text-white/80">
+                <span className="rounded-lg bg-white p-2 text-[#3D4452]">
                   <card.icon className="h-4 w-4" />
                 </span>
                 <div>
-                  <p className="font-semibold text-white">{card.label}</p>
-                  <p className="text-sm text-white/55">{card.description}</p>
+                  <p className="font-semibold text-[#121826]">{card.label}</p>
+                  <p className="text-sm text-[#5A6272]">{card.description}</p>
                 </div>
               </div>
-              <ArrowUpRight className="h-4 w-4 text-white/40" />
+              <ArrowUpRight className="h-4 w-4 text-[#5A6272]" />
             </button>
           ))}
         </div>
@@ -433,23 +433,23 @@ function DrilldownCard({
   children: ReactNode
 }) {
   return (
-    <section className="rounded-[24px] border border-white/10 bg-[#082256] p-5 shadow-[0_18px_60px_rgba(2,8,23,0.25)]">
+    <section className="rounded-lg border border-[#E3E6EC] bg-white p-5">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-white/45">{subtitle}</p>
-          <h2 className="mt-2 text-2xl font-black tracking-tight text-white">{title}</h2>
+          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[#5A6272]">{subtitle}</p>
+          <h2 className="mt-2 text-2xl font-semibold tracking-tight text-[#121826]">{title}</h2>
         </div>
         <div className="flex items-center gap-3">
           {onBack ? (
             <button
               type="button"
               onClick={onBack}
-              className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white/80 transition hover:border-white/20 hover:bg-white/10"
+              className="rounded-lg border border-[#E3E6EC] bg-[#F8F9FB] px-4 py-2 text-sm font-semibold text-[#3D4452] transition hover:border-[#E3E6EC] hover:bg-[#F4F5F7]"
             >
               Back to overview
             </button>
           ) : null}
-          <div className="rounded-2xl bg-red-500 p-3 text-white shadow-lg shadow-red-500/30">
+          <div className="bg-[#EEF1F6] rounded-lg p-3 text-[#0F1B3D]">
             <Icon className="h-5 w-5" />
           </div>
         </div>
@@ -461,9 +461,9 @@ function DrilldownCard({
 
 function SummaryMiniCard({ title, value }: { title: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-      <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/40">{title}</p>
-      <div className="mt-3 text-2xl font-black text-white">{value}</div>
+    <div className="rounded-lg border border-[#E3E6EC] bg-[#F8F9FB] p-4">
+      <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[#5A6272]">{title}</p>
+      <div className="mt-3 text-2xl font-semibold text-[#121826]">{value}</div>
     </div>
   )
 }
@@ -476,15 +476,15 @@ function RankingTable({
   rows: Array<Record<string, string>>
 }) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-white/10">
-      <table className="min-w-full divide-y divide-white/10">
-        <thead className="bg-white/5">
+    <div className="overflow-hidden rounded-lg border border-[#E3E6EC]">
+      <table className="min-w-full divide-y divide-[#EEF0F3]">
+        <thead className="bg-[#F8F9FB]">
           <tr>
             {columns.map((column) => (
               <th
                 key={column.key}
                 className={cn(
-                  'px-4 py-3 text-xs font-semibold uppercase tracking-[0.3em] text-white/45',
+                  'px-4 py-3 text-xs font-semibold uppercase tracking-[0.08em] text-[#5A6272]',
                   column.align === 'right' ? 'text-right' : 'text-left',
                 )}
               >
@@ -493,14 +493,14 @@ function RankingTable({
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-white/10 bg-[#061a44]">
+        <tbody className="divide-y divide-[#EEF0F3] bg-white">
           {rows.map((row, index) => (
-            <tr key={`${index}-${Object.values(row).join('-')}`} className="hover:bg-white/5">
+            <tr key={`${index}-${Object.values(row).join('-')}`} className="hover:bg-[#F4F5F7]">
               {columns.map((column) => (
                 <td
                   key={column.key}
                   className={cn(
-                    'px-4 py-4 text-sm text-white/80',
+                    'px-4 py-4 text-sm text-[#3D4452]',
                     column.align === 'right' ? 'text-right' : 'text-left',
                   )}
                 >
@@ -517,9 +517,9 @@ function RankingTable({
 
 function EmptyState({ title, description }: { title: string; description: string }) {
   return (
-    <div className="rounded-2xl border border-dashed border-white/15 bg-white/5 px-6 py-10 text-center">
-      <p className="text-lg font-bold text-white">{title}</p>
-      <p className="mx-auto mt-2 max-w-2xl text-sm leading-6 text-white/60">{description}</p>
+    <div className="rounded-lg border border-dashed border-[#E3E6EC] bg-[#F8F9FB] px-6 py-10 text-center">
+      <p className="text-lg font-bold text-[#121826]">{title}</p>
+      <p className="mx-auto mt-2 max-w-2xl text-sm leading-6 text-[#5A6272]">{description}</p>
     </div>
   )
 }

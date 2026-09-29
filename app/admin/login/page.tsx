@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Eye, EyeOff } from 'lucide-react'
+import { portalFontVars } from '@/components/portal/fonts'
 
 export default function AdminLoginPage() {
   const [showPassword, setShowPassword] = useState(false)
@@ -38,33 +39,33 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-background">
+    <div className={`kbc-portal ${portalFontVars} flex flex-col min-h-screen bg-[#F4F5F7]`}>
       <Navbar />
 
-      <main className="flex-1 flex items-center justify-center py-12 px-4 bg-gradient-to-br from-primary/5 via-background to-secondary/5 relative overflow-hidden">
-        <div className="absolute top-20 right-20 w-72 h-72 bg-secondary/20 rounded-full blur-3xl -z-10"></div>
-        <div className="absolute bottom-20 left-20 w-72 h-72 bg-primary/10 rounded-full blur-3xl -z-10"></div>
+      <main className="bg-[#C8102E] hover:bg-[#A50D26] text-white flex-1 flex items-center justify-center py-12 px-4 relative overflow-hidden">
+        <div className="absolute top-20 right-20 w-72 h-72 bg-[#F8F9FB] rounded-full blur-3xl -z-10"></div>
+        <div className="absolute bottom-20 left-20 w-72 h-72 bg-[#F8F9FB] rounded-full blur-3xl -z-10"></div>
         <div className="w-full max-w-md relative animate-fade-in-up">
-          <div className="bg-gradient-to-br from-card to-card/50 border border-primary/20 rounded-2xl shadow-2xl shadow-primary/20 p-8 backdrop-blur-sm">
+          <div className="bg-white border border-[#E3E6EC] rounded-lg p-8">
             <div className="text-center mb-8">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-secondary to-secondary/80 rounded-xl mb-4 shadow-lg shadow-secondary/30">
-                <span className="text-2xl font-bold text-white">A</span>
+              <div className="bg-white inline-flex items-center justify-center w-16 h-16 rounded-lg mb-4">
+                <span className="text-2xl font-bold text-[#121826]">A</span>
               </div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-2">Admin Access</h1>
-              <p className="text-muted-foreground text-sm">
+              <h1 className="kbc-display text-[26px] font-semibold leading-8 mb-2">Admin Access</h1>
+              <p className="text-[#5A6272] text-sm">
                 Sign in to manage KBC operations
               </p>
             </div>
 
             {error && (
-              <div className="mb-4 p-4 rounded-lg bg-gradient-to-r from-destructive/20 to-secondary/20 border border-destructive/50 text-destructive text-sm font-medium animate-fade-in-up">
+              <div className="bg-white mb-4 p-4 rounded-lg border border-destructive/50 text-[#A4161A] text-sm font-medium animate-fade-in-up">
                 {error}
               </div>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
-                <Label htmlFor="email" className="text-sm font-bold mb-2 block text-foreground">
+                <Label htmlFor="email" className="text-sm font-bold mb-2 block text-[#121826]">
                   Admin Email
                 </Label>
                 <Input
@@ -75,12 +76,12 @@ export default function AdminLoginPage() {
                   value={formData.email}
                   onChange={handleInputChange}
                   required
-                  className="border-primary/30 focus:border-secondary bg-white/50 dark:bg-black/30 backdrop-blur-sm transition-all focus:ring-secondary/30 font-medium"
+                  className="border-[#E3E6EC] focus:border-[#0F1B3D] bg-white/50 dark:bg-black/30 transition-all focus:ring-secondary/30 font-medium"
                 />
               </div>
 
               <div>
-                <Label htmlFor="password" className="text-sm font-bold mb-2 block text-foreground">
+                <Label htmlFor="password" className="text-sm font-bold mb-2 block text-[#121826]">
                   Password
                 </Label>
                 <div className="relative">
@@ -92,12 +93,12 @@ export default function AdminLoginPage() {
                     value={formData.password}
                     onChange={handleInputChange}
                     required
-                    className="border-primary/30 focus:border-secondary bg-white/50 dark:bg-black/30 backdrop-blur-sm transition-all focus:ring-secondary/30 font-medium"
+                    className="border-[#E3E6EC] focus:border-[#0F1B3D] bg-white/50 dark:bg-black/30 transition-all focus:ring-secondary/30 font-medium"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-3 text-secondary hover:text-secondary/70 transition-colors"
+                    className="absolute right-3 top-3 text-[#1D3A8A] hover:text-[#132A6B] transition-colors"
                   >
                     {showPassword ? (
                       <EyeOff className="w-4 h-4" />
@@ -110,22 +111,22 @@ export default function AdminLoginPage() {
 
               <Button
                 type="submit"
-                className="w-full bg-gradient-to-r from-secondary to-secondary/80 hover:from-secondary/90 hover:to-secondary/70 text-white font-bold py-3 shadow-lg shadow-secondary/30 hover:shadow-secondary/50 transition-all duration-300 text-base"
+                className="bg-white w-full text-[#121826] font-bold py-3 transition-all duration-300 text-base"
                 disabled={loading}
               >
                 {loading ? 'Signing in...' : 'Sign In to Admin Panel'}
               </Button>
             </form>
 
-            <div className="mt-6 p-4 rounded-lg bg-gradient-to-r from-secondary/10 to-primary/10 border border-primary/20">
-              <p className="text-xs text-muted-foreground text-center font-medium">
+            <div className="bg-white mt-6 p-4 rounded-lg border border-[#E3E6EC]">
+              <p className="text-xs text-[#5A6272] text-center font-medium">
                 Demo: Use any email and password to access the admin panel
               </p>
             </div>
           </div>
 
           <div className="mt-8 text-center">
-            <Link href="/contact" className="text-sm text-secondary hover:text-secondary/70 font-bold transition-colors">
+            <Link href="/contact" className="text-sm text-[#1D3A8A] hover:text-[#132A6B] font-bold transition-colors">
               Need help? Contact support
             </Link>
           </div>

@@ -34,10 +34,10 @@ interface QuoteResponse {
 const rand = (n: number) => `R ${n.toFixed(2)}`
 
 const PANEL =
-  'rounded-2xl border border-white/10 bg-gradient-to-br from-[#0b2a5b]/90 to-[#07163f]/90 shadow-[0_20px_50px_rgba(0,0,0,0.2)] backdrop-blur-xl'
-const LABEL = 'block text-[11px] uppercase tracking-[0.28em] text-slate-400 mb-2'
+  'bg-white rounded-lg border border-[#E3E6EC]'
+const LABEL = 'block text-[11px] uppercase tracking-[0.08em] text-[#5A6272] mb-2'
 const FIELD =
-  'border-white/15 bg-white/5 text-white placeholder:text-slate-500 focus-visible:ring-blue-500/40'
+  'border-[#E3E6EC] bg-[#F8F9FB] text-[#121826] placeholder:text-[#8A919E] focus-visible:ring-blue-500/40'
 
 function TownInput({
   label,
@@ -89,19 +89,19 @@ function TownInput({
         onBlur={() => setTimeout(() => setOpen(false), 150)}
       />
       {open && suggestions.length > 0 && (
-        <ul className="absolute z-20 mt-2 w-full max-h-56 overflow-auto rounded-2xl border border-white/10 bg-[#07163f]/95 shadow-[0_20px_50px_rgba(0,0,0,0.35)] backdrop-blur-xl">
+        <ul className="absolute z-20 mt-2 w-full max-h-56 overflow-auto rounded-lg border border-[#E3E6EC] bg-white">
           {suggestions.map((s) => (
             <li key={`${s.source}:${s.name}`}>
               <button
                 type="button"
-                className="w-full px-4 py-2.5 text-left text-sm text-slate-200 transition-colors hover:bg-white/10"
+                className="w-full px-4 py-2.5 text-left text-sm text-[#121826] transition-colors hover:bg-[#F4F5F7]"
                 onMouseDown={() => {
                   onChange(s.name)
                   setOpen(false)
                 }}
               >
                 {s.name}
-                <span className="ml-2 text-[10px] uppercase tracking-wider text-slate-500">{s.source}</span>
+                <span className="ml-2 text-[10px] uppercase tracking-wider text-[#5A6272]">{s.source}</span>
               </button>
             </li>
           ))}
@@ -160,9 +160,9 @@ export function CourierQuotePanel() {
   return (
     <div className="space-y-8 animate-fade-in-up">
       <div>
-        <p className="text-[11px] uppercase tracking-[0.45em] text-slate-400 mb-3">Logistics</p>
-        <h1 className="text-4xl font-black tracking-tight text-white">Courier Quote</h1>
-        <p className="mt-3 max-w-2xl text-slate-300">
+        <p className="text-[11px] uppercase tracking-[0.08em] text-[#5A6272] mb-3">Logistics</p>
+        <h1 className="kbc-display text-[26px] font-semibold leading-8 tracking-tight text-[#121826] sm:text-[28px] sm:leading-[34px]">Courier Quote</h1>
+        <p className="mt-3 max-w-2xl text-[#3D4452]">
           Compare MJV and DSV for a shipment and get the cheapest option with its delivery promise.
         </p>
       </div>
@@ -198,7 +198,7 @@ export function CourierQuotePanel() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 items-end">
           <div>
             <label className={LABEL}>Service</label>
-            <div className="flex rounded-xl overflow-hidden border border-white/15">
+            <div className="flex rounded-lg overflow-hidden border border-[#E3E6EC]">
               {(['Economy', 'Express'] as const).map((s) => (
                 <button
                   key={s}
@@ -206,8 +206,8 @@ export function CourierQuotePanel() {
                   onClick={() => setService(s)}
                   className={`flex-1 px-3 py-2 text-sm font-bold transition-all ${
                     service === s
-                      ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-600/30'
-                      : 'bg-white/5 text-slate-300 hover:bg-white/10'
+                      ? 'bg-[#0F1B3D] hover:bg-[#1E2C57] text-white'
+                      : 'bg-[#F8F9FB] text-[#3D4452] hover:bg-[#F4F5F7]'
                   }`}
                 >
                   {s}
@@ -225,7 +225,7 @@ export function CourierQuotePanel() {
               className={FIELD}
             />
           </div>
-          <label className="flex items-center gap-3 pb-2 cursor-pointer text-sm text-slate-300">
+          <label className="flex items-center gap-3 pb-2 cursor-pointer text-sm text-[#3D4452]">
             <input
               type="checkbox"
               checked={allowSplit}
@@ -239,14 +239,14 @@ export function CourierQuotePanel() {
         <Button
           type="submit"
           disabled={loading || !origin.trim() || !destination.trim() || !(Number(weight) > 0)}
-          className="w-full bg-gradient-to-r from-red-600 to-red-700 text-white font-bold gap-2 shadow-lg shadow-red-600/30 hover:from-red-500 hover:to-red-600"
+          className="bg-[#C8102E] hover:bg-[#A50D26] w-full text-white font-bold gap-2"
         >
           {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Truck className="w-4 h-4" />}
           {loading ? 'Quoting…' : 'Get Quote'}
         </Button>
 
         {error && (
-          <p className="flex items-center gap-2 text-sm text-red-300">
+          <p className="flex items-center gap-2 text-sm text-[#A4161A]">
             <AlertCircle className="w-4 h-4" /> {error}
           </p>
         )}
@@ -255,7 +255,7 @@ export function CourierQuotePanel() {
       {result && (
         <div className="space-y-6">
           <div className={`${PANEL} p-8`}>
-            <p className="text-[11px] uppercase tracking-[0.35em] text-slate-400 mb-2">Route</p>
+            <p className="text-[11px] uppercase tracking-[0.08em] text-[#5A6272] mb-2">Route</p>
             {result.route.ok ? (
               <div className="mt-4 grid grid-cols-2 gap-4 lg:grid-cols-4">
                 {[
@@ -264,15 +264,15 @@ export function CourierQuotePanel() {
                   { label: 'Scope', value: result.route.blns === 'LOC' ? 'Domestic' : result.route.blns ?? '—' },
                   { label: 'Service', value: service },
                 ].map((stat) => (
-                  <div key={stat.label} className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                    <p className="text-[11px] uppercase tracking-[0.32em] text-slate-400">{stat.label}</p>
-                    <p className="mt-3 text-2xl font-black text-white">{stat.value}</p>
+                  <div key={stat.label} className="rounded-lg border border-[#E3E6EC] bg-[#F8F9FB] p-4">
+                    <p className="text-[11px] uppercase tracking-[0.08em] text-[#5A6272]">{stat.label}</p>
+                    <p className="mt-3 text-2xl font-semibold text-[#121826]">{stat.value}</p>
                   </div>
                 ))}
               </div>
             ) : (
               <div className="space-y-3">
-                <p className="flex items-center gap-2 text-amber-300 text-sm">
+                <p className="flex items-center gap-2 text-[#7A4F00] text-sm">
                   <AlertCircle className="w-4 h-4" /> {result.route.error}
                   {result.route.sla ? ` (lead time still resolved: ${result.route.sla})` : ''}
                 </p>
@@ -280,13 +280,13 @@ export function CourierQuotePanel() {
                   const names = result.suggestions?.[field]
                   if (!names?.length) return null
                   return (
-                    <p key={field} className="text-sm text-slate-300">
+                    <p key={field} className="text-sm text-[#3D4452]">
                       Did you mean ({field}):{' '}
                       {names.map((n) => (
                         <button
                           key={n}
                           type="button"
-                          className="mr-2 rounded-full border border-blue-400/40 bg-blue-500/10 px-3 py-1 text-blue-200 transition-colors hover:bg-blue-500/25"
+                          className="mr-2 rounded-full border border-transparent bg-[#E6EAF3] px-3 py-1 text-[#0F1B3D] transition-colors hover:bg-[#F4F5F7]"
                           onClick={() => (field === 'origin' ? setOrigin(n) : setDestination(n))}
                         >
                           {n}
@@ -302,29 +302,29 @@ export function CourierQuotePanel() {
           {result.quotes.length > 0 && (
             <div className={`${PANEL} overflow-hidden`}>
               <div className="px-8 pt-8 pb-4">
-                <p className="text-[11px] uppercase tracking-[0.35em] text-slate-400 mb-2">Comparison</p>
-                <h2 className="text-xl font-bold text-white">Carrier Prices</h2>
+                <p className="text-[11px] uppercase tracking-[0.08em] text-[#5A6272] mb-2">Comparison</p>
+                <h2 className="text-xl font-bold text-[#121826]">Carrier Prices</h2>
               </div>
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-y border-white/10 bg-white/5">
-                    <th className="text-left px-8 py-3 text-[11px] uppercase tracking-[0.28em] text-slate-400 font-semibold">Carrier</th>
-                    <th className="text-left px-4 py-3 text-[11px] uppercase tracking-[0.28em] text-slate-400 font-semibold">Detail</th>
-                    <th className="text-right px-8 py-3 text-[11px] uppercase tracking-[0.28em] text-slate-400 font-semibold">Total</th>
+                  <tr className="border-y border-[#E3E6EC] bg-[#F8F9FB]">
+                    <th className="text-left px-8 py-3 text-[11px] uppercase tracking-[0.08em] text-[#5A6272] font-semibold">Carrier</th>
+                    <th className="text-left px-4 py-3 text-[11px] uppercase tracking-[0.08em] text-[#5A6272] font-semibold">Detail</th>
+                    <th className="text-right px-8 py-3 text-[11px] uppercase tracking-[0.08em] text-[#5A6272] font-semibold">Total</th>
                   </tr>
                 </thead>
                 <tbody>
                   {result.quotes.map((q) => (
-                    <tr key={q.carrier} className="border-b border-white/5 last:border-0 transition-colors hover:bg-white/[0.04]">
-                      <td className="px-8 py-4 font-bold text-white">
+                    <tr key={q.carrier} className="border-b border-[#E3E6EC] last:border-0 transition-colors hover:bg-white/[0.04]">
+                      <td className="px-8 py-4 font-bold text-[#121826]">
                         {q.carrier}
                         {cheapest === q.carrier && (
-                          <span className="ml-2 inline-flex items-center gap-1 rounded-full border border-emerald-400/40 bg-emerald-500/15 px-2.5 py-1 text-xs font-bold text-emerald-300">
+                          <span className="ml-2 inline-flex items-center gap-1 rounded-full border border-transparent bg-[#E7F4EE] px-2.5 py-1 text-xs font-bold text-[#0B6B41]">
                             <CheckCircle2 className="w-3 h-3" /> Cheapest
                           </span>
                         )}
                       </td>
-                      <td className="px-4 py-4 text-slate-400">
+                      <td className="px-4 py-4 text-[#5A6272]">
                         {q.parcels && q.parcels.length > 1
                           ? `${q.parcels.length} parcels (${q.parcels.map((p) => `${p}kg`).join(' + ')})`
                           : Object.entries(q.breakdown)
@@ -332,13 +332,13 @@ export function CourierQuotePanel() {
                               .map(([k, v]) => `${k}: ${v}`)
                               .join(' · ') || '—'}
                       </td>
-                      <td className="px-8 py-4 text-right font-black text-white tabular-nums">{rand(q.total)}</td>
+                      <td className="px-8 py-4 text-right font-semibold text-[#121826] tabular-nums">{rand(q.total)}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
               {result.comparison && result.comparison.quotes.length > 1 && (
-                <div className="px-8 py-4 border-t border-emerald-500/20 bg-emerald-500/10 text-sm font-bold text-emerald-300">
+                <div className="px-8 py-4 border-t border-[#E3E6EC] bg-[#E7F4EE] text-sm font-bold text-[#0B6B41]">
                   Cheapest: {result.comparison.cheapest} — saves {rand(result.comparison.difference)}
                 </div>
               )}
@@ -350,7 +350,7 @@ export function CourierQuotePanel() {
               {result.warnings.map((w) => (
                 <li
                   key={w}
-                  className="flex items-start gap-2 rounded-2xl border border-amber-500/20 bg-amber-500/10 px-4 py-3 text-sm text-amber-300"
+                  className="flex items-start gap-2 rounded-lg border border-[#E3E6EC] bg-[#FFF4DB] px-4 py-3 text-sm text-[#7A4F00]"
                 >
                   <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" /> {w}
                 </li>
