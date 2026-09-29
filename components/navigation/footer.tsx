@@ -44,14 +44,17 @@ export function Footer() {
             <div className="space-y-4">
               <h4 className="font-bold text-foreground">Company</h4>
               <div className="space-y-2 text-sm">
-                <Link href="/about" className="text-muted-foreground hover:text-accent transition-colors">
+                <Link href="/about" className="block text-muted-foreground hover:text-accent transition-colors">
                   About Us
                 </Link>
-                <Link href="/services" className="text-muted-foreground hover:text-accent transition-colors">
+                <Link href="/services" className="block text-muted-foreground hover:text-accent transition-colors">
                   Services
                 </Link>
-                <Link href="/contact" className="text-muted-foreground hover:text-accent transition-colors">
+                <Link href="/contact" className="block text-muted-foreground hover:text-accent transition-colors">
                   Contact
+                </Link>
+                <Link href="/credit-application" className="block text-muted-foreground hover:text-accent transition-colors">
+                  Credit Application
                 </Link>
               </div>
             </div>

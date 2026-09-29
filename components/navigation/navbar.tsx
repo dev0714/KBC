@@ -38,6 +38,9 @@ export function Navbar() {
           <Link href="/contact" className="text-sm font-medium text-white hover:text-secondary transition-colors duration-200">
             Contact
           </Link>
+          <Link href="/credit-application" className="text-sm font-medium text-white hover:text-secondary transition-colors duration-200">
+            Apply for Credit
+          </Link>
         </div>
 
         {/* Right Side */}
@@ -74,6 +77,9 @@ export function Navbar() {
             </Link>
             <Link href="/contact" className="text-sm font-medium text-white hover:text-secondary transition py-2">
               Contact
+            </Link>
+            <Link href="/credit-application" className="text-sm font-medium text-white hover:text-secondary transition py-2">
+              Apply for Credit
             </Link>
             <Button asChild className="w-full bg-accent text-white text-xs font-medium mt-2">
               <Link href="/login">Login</Link>

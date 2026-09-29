@@ -5,10 +5,11 @@ import useSWR from 'swr'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { LogOut, Package, Users, ShoppingCart, BarChart3, Menu, X, Edit2, Trash2, Plus, CheckCircle2, AlertCircle, Clock, Loader2, Send, Mail, MessageSquare, Check, XCircle, Upload, ImageIcon, TrendingUp, ChevronDown, Lock, Shield, Bell, Database, Globe, Palette, CreditCard, Building2, Settings, User, Search } from 'lucide-react'
+import { LogOut, Package, Users, ShoppingCart, BarChart3, Menu, X, Edit2, Trash2, Plus, CheckCircle2, AlertCircle, Clock, Loader2, Send, Mail, MessageSquare, Check, XCircle, Upload, ImageIcon, TrendingUp, ChevronDown, Lock, Shield, Bell, Database, Globe, Palette, CreditCard, Building2, Settings, User, Search, FileSignature } from 'lucide-react'
 import { ReportingDashboard } from '@/components/admin/reporting/reporting-dashboard'
 import { CourierQuotePanel } from '@/components/admin/courier/quote-panel'
 import { RateCardsPanel } from '@/components/admin/courier/rate-cards-panel'
+import { CreditApplicationsPanel } from '@/components/admin/credit-applications-panel'
 import { buildReportingModel } from '@/lib/admin/reporting'
 import { createClient } from '@/lib/supabase/client'
 
@@ -71,6 +72,15 @@ export default function AdminPage() {
   const { data: adminData, error: adminError, isLoading, mutate } = useSWR('/api/admin', fetcher)
   
   const [activeTab, setActiveTab] = useState('overview')
+  const [creditApplicationId, setCreditApplicationId] = useState<string | null>(null)
+
+  // Deep links such as /admin?tab=credit-applications&id=<uuid> (used in notification emails).
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const tab = params.get('tab')
+    if (tab) setActiveTab(tab)
+    if (tab === 'credit-applications') setCreditApplicationId(params.get('id'))
+  }, [])
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [showAddProductModal, setShowAddProductModal] = useState(false)
@@ -977,6 +987,7 @@ export default function AdminPage() {
   { id: 'products', label: 'Products', icon: Package },
   { id: 'customers', label: 'Customers', icon: Users },
               { id: 'orders', label: 'Orders', icon: ShoppingCart },
+              { id: 'credit-applications', label: 'Credit Applications', icon: FileSignature },
               { id: 'quote', label: 'Courier Quote', icon: Send },
               { id: 'rate-cards', label: 'Rate Cards', icon: TrendingUp },
               { id: 'payment', label: 'Payment', icon: CreditCard },
@@ -1200,6 +1211,8 @@ export default function AdminPage() {
             {activeTab === 'quote' && <CourierQuotePanel />}
 
             {activeTab === 'rate-cards' && <RateCardsPanel />}
+
+            {activeTab === 'credit-applications' && <CreditApplicationsPanel initialId={creditApplicationId} />}
 
             {/* Products Tab */}
             {activeTab === 'products' && (() => {
