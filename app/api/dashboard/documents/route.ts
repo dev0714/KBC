@@ -17,6 +17,13 @@ export async function POST(request: NextRequest) {
   if (!file_name || !storage_path || !document_type) {
     return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
   }
+  // Only files uploaded into this account's own folder can be recorded.
+  if (typeof storage_path !== 'string' || !storage_path.startsWith(`${accountNo}/`) || storage_path.includes('..')) {
+    return NextResponse.json({ error: 'Invalid document path' }, { status: 400 })
+  }
+  if (!['Invoice', 'Receipt', 'Certificate', 'Statement', 'CreditNote'].includes(document_type)) {
+    return NextResponse.json({ error: 'Invalid document type' }, { status: 400 })
+  }
 
   const supabase = createServiceClient()
   const { error } = await supabase.from('documents').insert([

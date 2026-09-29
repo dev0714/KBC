@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { XCircle, Loader2 } from 'lucide-react'
+import { PortalScreen } from '@/components/portal/shell'
+import { ResultCard } from '@/components/portal/result-card'
+import { btn } from '@/components/portal/ui'
 import Link from 'next/link'
 
 export default function PaymentCancelContent() {
@@ -105,45 +105,30 @@ export default function PaymentCancelContent() {
     markCancelled()
   }, [searchParams])
 
+  const isAdmin = returnHref.startsWith('/admin')
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-950 via-background to-blue-900 flex items-center justify-center py-12 px-4">
-      <Card className="max-w-md w-full bg-card/95 backdrop-blur-sm border-border/50">
-        <CardHeader className="text-center">
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-destructive/20">
-            {isUpdating ? (
-              <Loader2 className="h-10 w-10 animate-spin text-destructive" />
-            ) : (
-              <XCircle className="h-10 w-10 text-destructive" />
-            )}
-          </div>
-          <CardTitle className="text-2xl text-foreground">
-            {isUpdating ? 'Updating Cancellation' : 'Payment Cancelled'}
-          </CardTitle>
-          <CardDescription className="text-muted-foreground">
-            {message}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="rounded-lg bg-accent/20 p-4 space-y-2">
-            <p className="text-sm text-muted-foreground">
-              If you experienced any issues, please contact our support team.
-            </p>
-          </div>
-          <div className="flex flex-col gap-2">
-            <Button asChild className="w-full">
-              <Link href={returnHref}>{returnLabel}</Link>
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              className="w-full bg-transparent"
-              onClick={() => router.push(returnHref)}
-            >
-              Try Again
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+    <PortalScreen>
+      <ResultCard
+        tone={isUpdating ? 'loading' : 'cancelled'}
+        title={isUpdating ? 'Updating your order…' : 'Payment cancelled'}
+        actions={
+          isUpdating ? undefined : (
+            <>
+              <Link href={isAdmin ? returnHref : '/dashboard?tab=cart'} className={btn.primary}>
+                {isAdmin ? returnLabel : 'Back to cart'}
+              </Link>
+              {!isAdmin && (
+                <Link href="/dashboard?tab=orders&refresh=true" className={btn.secondary}>
+                  View your orders
+                </Link>
+              )}
+            </>
+          )
+        }
+      >
+        <p>{message}</p>
+      </ResultCard>
+    </PortalScreen>
   )
 }

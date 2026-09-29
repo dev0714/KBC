@@ -2,13 +2,14 @@
 
 import { useEffect, useState } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
-import { Loader2, CheckCircle2, AlertCircle } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { PortalScreen } from '@/components/portal/shell'
+import { ResultCard } from '@/components/portal/result-card'
+import { btn } from '@/components/portal/ui'
 
 export default function PaymentCallbackContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
-  const [status, setStatus] = useState<'loading' | 'success' | 'failed'>('loading')
+  const [status, setStatus] = useState<'loading' | 'success' | 'cancelled' | 'failed'>('loading')
   const [message, setMessage] = useState('')
 
   useEffect(() => {
@@ -62,7 +63,7 @@ export default function PaymentCallbackContent() {
           const data = await response.json()
 
           if (response.ok) {
-            setStatus('success')
+            setStatus('cancelled')
             setMessage(data.newStatus === 'Cancelled'
               ? 'Your payment was cancelled and the order has been updated.'
               : data.message || 'Your payment was cancelled.')
@@ -98,7 +99,7 @@ export default function PaymentCallbackContent() {
 
         if (data.success) {
           setStatus('success')
-          setMessage('Payment successful! Your order has been confirmed.')
+          setMessage('Your payment was successful and your order is confirmed.')
           // Redirect to dashboard after 3 seconds
           setTimeout(async () => router.push(await resolveReturnTarget()), 3000)
         } else {
@@ -115,52 +116,44 @@ export default function PaymentCallbackContent() {
     processPayment()
   }, [searchParams, router])
 
+  const goBack = async () => {
+    if (searchParams.get('source') === 'admin') return router.push('/admin?tab=orders&refresh=true')
+    try {
+      const sessionResponse = await fetch('/api/auth/session')
+      if (sessionResponse.ok) {
+        const session = await sessionResponse.json()
+        if (session?.role === 'admin') return router.push('/admin?tab=orders&refresh=true')
+      }
+    } catch {
+      // Fall back below.
+    }
+    router.push('/dashboard?tab=orders&refresh=true')
+  }
+
+  const titles = {
+    loading: 'Checking your payment…',
+    success: 'Payment received',
+    cancelled: 'Payment cancelled',
+    failed: 'We could not confirm your payment',
+  }
+
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-b from-[#000034] via-[#002463] to-[#0056a1] items-center justify-center px-4">
-      <div className="bg-slate-400/10 border border-slate-400/20 rounded-lg p-8 max-w-md w-full text-center">
-        {status === 'loading' && (
-          <>
-            <Loader2 className="w-12 h-12 text-blue-400 animate-spin mx-auto mb-4" />
-            <h1 className="text-2xl font-bold text-white mb-2">Processing Payment</h1>
-            <p className="text-slate-400">Please wait while we verify your payment...</p>
-          </>
-        )}
-
-        {status === 'success' && (
-          <>
-            <CheckCircle2 className="w-12 h-12 text-green-400 mx-auto mb-4" />
-            <h1 className="text-2xl font-bold text-white mb-2">Payment Successful</h1>
-            <p className="text-slate-300 mb-6">{message}</p>
-            <p className="text-sm text-slate-400">Redirecting to dashboard...</p>
-          </>
-        )}
-
-        {status === 'failed' && (
-          <>
-            <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-4" />
-            <h1 className="text-2xl font-bold text-white mb-2">Payment Failed</h1>
-            <p className="text-slate-300 mb-6">{message}</p>
-          <Button
-              onClick={async () => router.push(await (async () => {
-                if (searchParams.get('source') === 'admin') return '/admin?tab=orders&refresh=true'
-                try {
-                  const sessionResponse = await fetch('/api/auth/session')
-                  if (sessionResponse.ok) {
-                    const session = await sessionResponse.json()
-                    if (session?.role === 'admin') return '/admin?tab=orders&refresh=true'
-                  }
-                } catch {
-                  // Fall back below.
-                }
-                return '/dashboard'
-              })())}
-              className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold w-full"
-            >
-              Return to Dashboard
-            </Button>
-          </>
-        )}
-      </div>
-    </div>
+    <PortalScreen>
+      <ResultCard
+        tone={status === 'failed' ? 'error' : status}
+        title={titles[status]}
+        actions={
+          status === 'failed' ? (
+            <button type="button" onClick={goBack} className={btn.primary}>
+              Return to your orders
+            </button>
+          ) : undefined
+        }
+      >
+        <p>{status === 'loading' ? 'Please wait while we confirm the result with PayFast.' : message}</p>
+        {(status === 'success' || status === 'cancelled') && <p>Taking you back to the portal…</p>}
+        {status === 'failed' && <p>If money left your account, contact us and we will sort it out.</p>}
+      </ResultCard>
+    </PortalScreen>
   )
 }

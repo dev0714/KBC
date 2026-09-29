@@ -3,9 +3,11 @@
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import { Button } from '@/components/ui/button'
+import useSWR from 'swr'
+import { PortalShell } from '@/components/portal/shell'
+import { StockLabel, btn, card, formatRand } from '@/components/portal/ui'
 import { addCartItem, getCartStorageKey, parseCartItems, serializeCartItems } from '@/lib/cart-storage.mjs'
-import { ArrowLeft, CheckCircle2, Download, Heart, Share2, ShoppingCart, Shield, Truck, Loader2, ImageIcon } from 'lucide-react'
+import { AlertCircle, ArrowLeft, CheckCircle2, Heart, ImageIcon, Loader2, Mail, Phone, Share2, ShoppingCart } from 'lucide-react'
 
 type ProductImage = {
   file_name?: string | null
@@ -27,6 +29,8 @@ type Product = {
   product_images?: ProductImage[]
 }
 
+const fetcher = (url: string) => fetch(url).then((res) => (res.ok ? res.json() : null))
+
 export default function ProductDetailPage() {
   const params = useParams<{ id?: string | string[] }>()
   const [product, setProduct] = useState<Product | null>(null)
@@ -35,6 +39,65 @@ export default function ProductDetailPage() {
   const [error, setError] = useState<string | null>(null)
   const [cartMessage, setCartMessage] = useState<string | null>(null)
   const [addingToCart, setAddingToCart] = useState(false)
+  const [cartUnits, setCartUnits] = useState(0)
+  const [saved, setSaved] = useState(false)
+  const [savingWishlist, setSavingWishlist] = useState(false)
+  const [shareMessage, setShareMessage] = useState<string | null>(null)
+
+  const { data: dash } = useSWR('/api/dashboard', fetcher)
+  const { data: wishlist, mutate: mutateWishlist } = useSWR('/api/dashboard/wishlists', fetcher)
+  const client = dash?.client
+  const displayName = client?.business_name || client?.client_name || client?.full_name
+  const wishlistSkus: string[] = wishlist?.skus || []
+
+  const refreshCartUnits = () => {
+    const items = parseCartItems(sessionStorage.getItem(getCartStorageKey()))
+    setCartUnits(items.reduce((sum: number, item: { qty: number }) => sum + item.qty, 0))
+  }
+  useEffect(refreshCartUnits, [])
+  useEffect(() => {
+    if (product) setSaved(wishlistSkus.includes(product.sku))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product, wishlist])
+
+  const toggleWishlist = async () => {
+    if (!product) return
+    setSavingWishlist(true)
+    try {
+      const res = await fetch('/api/dashboard/wishlists', {
+        method: saved ? 'DELETE' : 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sku: product.sku }),
+      })
+      if (res.ok) {
+        setSaved(!saved)
+        mutateWishlist()
+      }
+    } finally {
+      setSavingWishlist(false)
+    }
+  }
+
+  const share = async () => {
+    const url = window.location.href
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: product?.title, url })
+        return
+      } catch (err) {
+        if (err instanceof DOMException && err.name === 'AbortError') return
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(url)
+      setShareMessage('Link copied')
+    } catch {
+      window.prompt('Copy this link', url)
+      return
+    }
+    window.setTimeout(() => setShareMessage(null), 2000)
+  }
+
 
   const productId = useMemo(() => {
     const rawId = Array.isArray(params?.id) ? params.id[0] : params?.id
@@ -115,253 +178,158 @@ export default function ProductDetailPage() {
 
       sessionStorage.setItem(getCartStorageKey(), serializeCartItems(nextCart))
 
-      const updatedItem = nextCart.find((item) => item.id === product.id)
+      const updatedItem = nextCart.find((item: { id: number; qty: number }) => item.id === product.id)
       if (existingItem && updatedItem && updatedItem.qty === existingItem.qty) {
         showCartMessage(`Only ${availableStock} units available.`)
         return
       }
 
+      refreshCartUnits()
       showCartMessage(`${product.title} added to your cart.`)
     } finally {
       setAddingToCart(false)
     }
   }
 
+  const stock = Number(product?.inventory_quantity || 0)
+
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-[#000034] via-[#002463] to-[#0056a1]">
-      <div className="fixed inset-x-0 top-0 z-50 border-b border-blue-500/30 bg-[#06123dcc]/90 text-white shadow-[0_18px_40px_rgba(0,0,0,0.25)] backdrop-blur-xl">
-        <div className="flex h-[72px] items-center justify-between px-4 lg:px-8">
-          <div className="flex items-center gap-4">
-            <img src="/kbc-logo.png" alt="KBC" className="h-10 w-auto" />
-            <div>
-              <p className="text-[11px] uppercase tracking-[0.45em] text-slate-400">Customer CRM</p>
-              <h1 className="text-lg font-black leading-tight text-white">Shop Detail</h1>
-            </div>
-          </div>
+    <PortalShell
+      active="shop"
+      crumb="Shop catalog"
+      displayName={displayName}
+      accountNumber={client?.account_no}
+      cartUnits={cartUnits}
+      wishlistCount={wishlistSkus.length}
+    >
+      <Link href="/dashboard?tab=shop" className="inline-flex w-fit items-center gap-1.5 text-sm font-medium text-[#1D3A8A] hover:text-[#132A6B]">
+        <ArrowLeft className="h-4 w-4" /> Back to catalog
+      </Link>
 
-          <Button asChild variant="outline" className="hidden border-white/10 bg-white/5 text-white hover:bg-white/10 hover:text-white sm:inline-flex">
-            <Link href="/dashboard?tab=shop" className="gap-2">
-              <ArrowLeft className="h-4 w-4" />
-              Back to Shop
-            </Link>
-          </Button>
+      {loading ? (
+        <div className="flex justify-center py-24">
+          <Loader2 className="h-8 w-8 animate-spin text-[#0F1B3D]" />
         </div>
-      </div>
+      ) : error ? (
+        <section className={`${card} flex flex-col items-center gap-3 px-6 py-14 text-center`}>
+          <span className="flex h-12 w-12 items-center justify-center rounded-full bg-[#FDECEA] text-[#A4161A]">
+            <AlertCircle className="h-5 w-5" />
+          </span>
+          <p className="text-[15px] font-semibold">This part could not be loaded</p>
+          <p className="max-w-sm text-sm text-[#5A6272]">{error}</p>
+          <Link href="/dashboard?tab=shop" className={btn.primary}>
+            Back to catalog
+          </Link>
+        </section>
+      ) : product ? (
+        <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
+          <section className="flex flex-col gap-3">
+            <div className={`${card} aspect-[4/3] overflow-hidden`}>
+              {activeImage ? (
+                <img src={activeImage} alt={product.title} className="h-full w-full bg-white object-contain" />
+              ) : (
+                <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-[#EEF0F3] text-[#8A919E]">
+                  <ImageIcon className="h-10 w-10" />
+                  <span className="text-sm">No photo available</span>
+                </div>
+              )}
+            </div>
+            {images.length > 1 && (
+              <div className="grid grid-cols-5 gap-2.5">
+                {images.map((img, index) => (
+                  <button
+                    key={`${img.url}-${index}`}
+                    type="button"
+                    onClick={() => setActiveImageIndex(index)}
+                    aria-label={`Show photo ${index + 1}`}
+                    aria-pressed={index === activeImageIndex}
+                    className={`aspect-square overflow-hidden rounded-md border bg-white ${
+                      index === activeImageIndex ? 'border-[#0F1B3D] ring-2 ring-[#0F1B3D]/20' : 'border-[#E3E6EC] hover:border-[#9AA3B2]'
+                    }`}
+                  >
+                    <img src={img.url || ''} alt="" className="h-full w-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            )}
+          </section>
 
-      <div className="relative z-10 flex pt-[72px]">
-        <aside className="hidden md:fixed md:top-[72px] md:bottom-0 md:left-0 md:flex md:w-64 md:flex-col border-r border-white/10 bg-[#06123d]/80 backdrop-blur-xl shadow-[12px_0_40px_rgba(0,0,0,0.18)]">
-          <div className="border-b border-white/10 p-4">
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-3.5 shadow-[0_16px_30px_rgba(0,0,0,0.18)]">
-              <p className="mb-1.5 text-[11px] uppercase tracking-[0.35em] text-slate-400">Workspace</p>
-              <h2 className="text-lg font-bold text-white">Customer CRM</h2>
-              <p className="mt-1.5 text-sm leading-relaxed text-slate-300">
-                Browse the product catalog and inspect each item without leaving the CRM workspace.
+          <section className="flex flex-col gap-5">
+            <div className={`${card} flex flex-col gap-4 p-6`}>
+              <div className="flex flex-col gap-2">
+                {product.product_type && <span className="text-[13px] text-[#5A6272]">{product.product_type}</span>}
+                <h1 className="kbc-display text-[26px] font-semibold leading-8 tracking-tight">{product.title}</h1>
+                <span className="kbc-mono text-[13px] text-[#5A6272]">SKU {product.sku}</span>
+              </div>
+              <div className="flex flex-wrap items-end justify-between gap-3 border-y border-[#EEF0F3] py-4">
+                <div className="flex flex-col gap-1">
+                  <span className="kbc-mono text-[28px] font-medium leading-none">{formatRand(product.price)}</span>
+                  <span className="text-xs text-[#5A6272]">per unit</span>
+                </div>
+                <StockLabel qty={stock} />
+              </div>
+              <div className="grid grid-cols-2 gap-2.5 sm:flex">
+                <button
+                  type="button"
+                  onClick={handleAddToCart}
+                  disabled={addingToCart || stock <= 0}
+                  className={`${btn.navy} col-span-2 h-11 px-5 text-[15px] sm:flex-1`}
+                >
+                  {addingToCart ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShoppingCart className="h-4 w-4" />}
+                  {stock <= 0 ? 'Out of stock' : addingToCart ? 'Adding…' : 'Add to cart'}
+                </button>
+                <button
+                  type="button"
+                  onClick={toggleWishlist}
+                  disabled={savingWishlist}
+                  aria-pressed={saved}
+                  className={`${btn.secondary} h-11`}
+                >
+                  <Heart className={`h-4 w-4 ${saved ? 'fill-[#C8102E] text-[#C8102E]' : ''}`} />
+                  {saved ? 'Saved' : 'Save'}
+                </button>
+                <button type="button" onClick={share} className={`${btn.secondary} h-11`}>
+                  <Share2 className="h-4 w-4" /> {shareMessage || 'Share'}
+                </button>
+              </div>
+              {cartMessage && (
+                <p role="status" className="flex items-center gap-2 rounded-md bg-[#E7F4EE] px-3.5 py-2.5 text-sm font-medium text-[#0B6B41]">
+                  <CheckCircle2 className="h-4 w-4" />
+                  {cartMessage}{' '}
+                  <Link href="/dashboard?tab=cart" className="ml-auto underline">
+                    View cart
+                  </Link>
+                </p>
+              )}
+            </div>
+
+            <div className={`${card} flex flex-col gap-2 p-6`}>
+              <h2 className="kbc-display text-[17px] font-semibold">Description</h2>
+              <p className="whitespace-pre-line text-sm leading-[22px] text-[#3D4452]">
+                {product.description || 'No description has been added for this part yet.'}
               </p>
             </div>
-          </div>
 
-          <nav className="flex-1 p-3.5">
-            <div className="mb-3 px-3 text-[11px] uppercase tracking-[0.45em] text-slate-500">Navigation</div>
-            <div className="space-y-2">
-              {[
-                { id: 'overview', label: 'Overview', href: '/dashboard', icon: '📊' },
-                { id: 'shop', label: 'Shop Catalog', href: '/dashboard?tab=shop', icon: '🛍️' },
-                { id: 'wishlist', label: 'Wishlist', href: '/dashboard?tab=wishlist', icon: '❤️' },
-                { id: 'cart', label: 'Shopping Cart', href: '/dashboard?tab=cart', icon: '🛒' },
-                { id: 'orders', label: 'Orders', href: '/dashboard?tab=orders', icon: '📦' },
-                { id: 'documents', label: 'Documents', href: '/dashboard?tab=documents', icon: '📑' },
-                { id: 'account', label: 'Account', href: '/dashboard?tab=account', icon: '⚙️' },
-              ].map((tab) => (
-                <Link
-                  key={tab.id}
-                  href={tab.href}
-                  className={`flex items-center gap-3 rounded-2xl px-4 py-3.5 font-bold transition-all duration-300 ${
-                    tab.id === 'shop'
-                      ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-[0_16px_30px_rgba(37,99,235,0.35)]'
-                      : 'text-slate-300 hover:bg-white/5 hover:text-white'
-                  }`}
+            <div className={`${card} flex flex-col gap-2.5 p-6`}>
+              <h2 className="kbc-display text-[17px] font-semibold">Need help choosing a part?</h2>
+              <p className="text-sm text-[#5A6272]">Our sales desk can confirm fitment and availability.</p>
+              <div className="flex flex-wrap gap-x-6 gap-y-2">
+                <a href="tel:+27114931336" className="flex items-center gap-2 text-sm text-[#1D3A8A] hover:underline">
+                  <Phone className="h-4 w-4" />
+                  <span className="kbc-mono">011 493 1336</span>
+                </a>
+                <a
+                  href={`mailto:kbc1@telkomsa.net?subject=${encodeURIComponent(`Enquiry: ${product.sku} ${product.title}`)}`}
+                  className="flex items-center gap-2 text-sm text-[#1D3A8A] hover:underline"
                 >
-                  <span className={`flex h-9 w-9 items-center justify-center rounded-lg ${tab.id === 'shop' ? 'bg-white/15' : 'bg-white/5'}`}>
-                    {tab.icon}
-                  </span>
-                  <span className="flex-1">{tab.label}</span>
-                  {tab.id === 'shop' && <span className="h-2 w-2 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]" />}
-                </Link>
-              ))}
+                  <Mail className="h-4 w-4" />
+                  kbc1@telkomsa.net
+                </a>
+              </div>
             </div>
-          </nav>
-        </aside>
-
-        <main className="relative flex-1 md:ml-64 md:h-[calc(100vh-72px)] md:overflow-y-auto md:pb-6">
-          <div className="mx-auto w-full max-w-[1700px] px-4 py-4 lg:px-8 lg:py-4">
-            <div className="mb-3 flex flex-col gap-3 rounded-[22px] border border-white/10 bg-[#06123d]/60 p-4 shadow-[0_18px_50px_rgba(0,0,0,0.2)] backdrop-blur-xl sm:flex-row sm:items-end sm:justify-between">
-              <div>
-                <p className="text-[11px] uppercase tracking-[0.45em] text-slate-400">Product Detail</p>
-                <h2 className="mt-1.5 text-xl font-black text-white">{product?.title || 'Loading product'}</h2>
-                <p className="mt-1 text-sm leading-relaxed text-slate-300">
-                  CRM product view for quick gallery inspection and catalog navigation.
-                </p>
-              </div>
-
-              <Button asChild className="bg-gradient-to-r from-red-600 to-red-700 font-bold text-white shadow-lg shadow-red-600/40 transition-all duration-300 hover:from-red-700 hover:to-red-800">
-                <Link href="/dashboard?tab=shop" className="gap-2">
-                  <ArrowLeft className="h-4 w-4" />
-                  Back to Shop
-                </Link>
-              </Button>
-            </div>
-
-            <div className="mb-5 md:hidden">
-              <Link href="/dashboard?tab=shop" className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-white">
-                <ArrowLeft className="h-4 w-4" />
-                Back to Shop
-              </Link>
-            </div>
-
-            {loading ? (
-              <div className="flex h-[calc(100vh-220px)] items-center justify-center">
-                <Loader2 className="h-10 w-10 animate-spin text-red-400" />
-              </div>
-            ) : error ? (
-              <div className="mx-auto max-w-2xl rounded-2xl border border-red-500/30 bg-red-500/10 p-6 text-center backdrop-blur-xl">
-                <p className="mb-2 text-lg font-bold text-red-300">Could not load product</p>
-                <p className="text-sm text-red-100/80">{error}</p>
-              </div>
-            ) : product ? (
-              <div className="overflow-hidden rounded-[24px] border border-white/10 bg-gradient-to-br from-[#07163f]/95 via-[#0b2a5b]/95 to-[#102f73]/95 p-4 shadow-[0_18px_50px_rgba(0,0,0,0.25)] backdrop-blur-xl md:p-4">
-                <div className="grid grid-cols-1 gap-5 xl:grid-cols-[1.05fr_0.95fr]">
-                  <div className="space-y-3">
-                    <div className="aspect-[4/3] overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-[#102f73]/80 to-[#07163f]/95 shadow-[0_16px_40px_rgba(0,0,0,0.24)] xl:aspect-[16/11]">
-                      {activeImage ? (
-                        <img
-                          src={activeImage}
-                          alt={product.title}
-                          className="h-full w-full bg-black/20 object-contain"
-                        />
-                      ) : (
-                        <div className="flex h-full w-full items-center justify-center text-slate-400">
-                          <div className="text-center">
-                            <ImageIcon className="mx-auto mb-2 h-12 w-12 opacity-70" />
-                            <p className="text-sm">No product image available</p>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    {images.length > 1 && (
-                      <div className="grid grid-cols-4 gap-2.5">
-                        {images.map((img, index) => (
-                          <button
-                            key={`${img.url}-${index}`}
-                            type="button"
-                            onClick={() => setActiveImageIndex(index)}
-                            className={`aspect-square overflow-hidden rounded-xl border transition-all ${
-                              index === activeImageIndex
-                                ? 'border-red-400 ring-2 ring-red-400/40'
-                                : 'border-white/10 hover:border-red-400/40'
-                            }`}
-                          >
-                            <img
-                              src={img.url || ''}
-                              alt={`${product.title} ${index + 1}`}
-                              className="h-full w-full object-cover"
-                            />
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="flex flex-col">
-                    <div className="mb-3 flex items-center justify-between gap-3">
-                      <p className="text-sm font-bold text-red-300">SKU: {product.sku}</p>
-                      <p className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-bold uppercase tracking-[0.35em] text-slate-300">
-                        CRM Detail
-                      </p>
-                    </div>
-
-                    <h1 className="mb-2 text-3xl font-black text-white">{product.title}</h1>
-
-                    <div className="mb-3 border-b border-white/10 pb-3">
-                      <div className="mb-2 flex items-baseline gap-2">
-                        <span className="text-3xl font-black text-white">R{Number(product.price || 0).toLocaleString()}</span>
-                        <span className="text-sm text-slate-300">per unit</span>
-                      </div>
-
-                      {Number(product.inventory_quantity || 0) > 0 ? (
-                        <span className="inline-flex rounded-full border border-green-500/50 bg-green-500/20 px-4 py-2 text-sm font-bold text-green-300">
-                          In Stock - {product.inventory_quantity} available
-                        </span>
-                      ) : (
-                        <span className="inline-flex rounded-full border border-red-500/50 bg-red-500/20 px-4 py-2 text-sm font-bold text-red-300">
-                          Out of Stock
-                        </span>
-                      )}
-                    </div>
-
-                    <p className="mb-4 whitespace-pre-line text-base leading-relaxed text-slate-300">
-                      {product.description || 'No description available for this product.'}
-                    </p>
-
-                    <div className="space-y-2.5 rounded-2xl border border-white/10 bg-white/5 p-4">
-                      <div className="flex items-start gap-3">
-                        <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-400" />
-                        <div className="text-sm">
-                          <p className="font-bold text-white">Quality Guaranteed</p>
-                          <p className="text-slate-300">Manufactured and stored with care</p>
-                        </div>
-                      </div>
-                      <div className="flex items-start gap-3">
-                        <Truck className="mt-0.5 h-5 w-5 flex-shrink-0 text-blue-300" />
-                        <div className="text-sm">
-                          <p className="font-bold text-white">Fast Dispatch</p>
-                          <p className="text-slate-300">Prepared for shipping after order confirmation</p>
-                        </div>
-                      </div>
-                      <div className="flex items-start gap-3">
-                        <Shield className="mt-0.5 h-5 w-5 flex-shrink-0 text-sky-300" />
-                        <div className="text-sm">
-                          <p className="font-bold text-white">Product Support</p>
-                          <p className="text-slate-300">Contact us if you need help choosing the right part</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="mt-4 grid grid-cols-2 gap-2">
-                      <Button variant="outline" className="h-10 gap-2 border-white/10 bg-white/5 text-sm text-white hover:bg-white/10 hover:text-white">
-                        <Download className="h-4 w-4" />
-                        Datasheet
-                      </Button>
-                      <Button variant="outline" className="h-10 gap-2 border-white/10 bg-white/5 text-sm text-white hover:bg-white/10 hover:text-white">
-                        <Share2 className="h-4 w-4" />
-                        Share
-                      </Button>
-                      <Button variant="outline" className="h-10 gap-2 border-white/10 bg-white/5 text-sm text-white hover:bg-white/10 hover:text-white">
-                        <Heart className="h-4 w-4" />
-                        Wishlist
-                      </Button>
-                      <Button
-                        className="h-10 gap-2 bg-gradient-to-r from-red-600 to-red-700 text-sm font-bold text-white shadow-lg shadow-red-600/30 hover:from-red-700 hover:to-red-800 disabled:cursor-not-allowed disabled:opacity-60"
-                        onClick={handleAddToCart}
-                        disabled={addingToCart || Number(product.inventory_quantity || 0) <= 0}
-                      >
-                        <ShoppingCart className="h-4 w-4" />
-                        {addingToCart ? 'Adding...' : 'Add to Cart'}
-                      </Button>
-                    </div>
-                    {cartMessage && (
-                      <p className="mt-3 rounded-xl border border-green-500/30 bg-green-500/10 px-4 py-3 text-sm font-medium text-green-200">
-                        {cartMessage}
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-              </div>
-            ) : null}
-          </div>
-        </main>
-      </div>
-    </div>
+          </section>
+        </div>
+      ) : null}
+    </PortalShell>
   )
 }

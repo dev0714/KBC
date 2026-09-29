@@ -55,6 +55,16 @@ export async function GET(request: NextRequest) {
       query = query.eq('id', productId)
     }
 
+    // Exact SKU lookup (the portal wishlist asks for its saved parts this way)
+    const skus = (searchParams.get('skus') || '')
+      .split(',')
+      .map((sku) => sku.trim())
+      .filter(Boolean)
+      .slice(0, 100)
+    if (skus.length) {
+      query = query.in('sku', skus)
+    }
+
     // Add search filter if provided
     if (search) {
       query = query.or(

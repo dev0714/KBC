@@ -17,9 +17,7 @@ import {
   Download,
   FileText,
   Heart,
-  LayoutDashboard,
   Loader2,
-  LogOut,
   Mail,
   Minus,
   Package,
@@ -29,10 +27,10 @@ import {
   ShieldCheck,
   ShoppingCart,
   Upload,
-  User,
   X,
 } from 'lucide-react'
 import { portalFontVars } from '@/components/portal/fonts'
+import { PortalShell } from '@/components/portal/shell'
 import {
   EmptyState,
   PageHead,
@@ -54,12 +52,16 @@ const fetcher = (url: string) => fetch(url).then(res => res.json())
 
 function DashboardTabSync({
   setActiveTab,
+  setSearchTerm,
 }: {
   setActiveTab: (tab: string) => void
+  setSearchTerm: (term: string) => void
 }) {
   const searchParams = useSearchParams()
 
   useEffect(() => {
+    const q = searchParams.get('q')
+    if (q) setSearchTerm(q)
     const tab = searchParams.get('tab')
     if (!tab) return
 
@@ -67,7 +69,7 @@ function DashboardTabSync({
     if (allowedTabs.has(tab)) {
       setActiveTab(tab)
     }
-  }, [searchParams, setActiveTab])
+  }, [searchParams, setActiveTab, setSearchTerm])
 
   return null
 }
@@ -98,7 +100,6 @@ export default function DashboardPage() {
   const [submittingOrder, setSubmittingOrder] = useState(false)
   const [orderSubmitted, setOrderSubmitted] = useState(false)
   const [expandedOrders, setExpandedOrders] = useState<Set<string | number>>(new Set())
-  const [showUploadModal, setShowUploadModal] = useState(false)
   const [uploadingDocument, setUploadingDocument] = useState(false)
   const [uploadDocumentError, setUploadDocumentError] = useState<string | null>(null)
     const [selectedDocumentType, setSelectedDocumentType] = useState('Invoice')
@@ -124,7 +125,6 @@ export default function DashboardPage() {
   const [orderFilter, setOrderFilter] = useState('All')
   const [orderSearch, setOrderSearch] = useState('')
   const [docFilter, setDocFilter] = useState('All')
-  const [topSearch, setTopSearch] = useState('')
   const [profileSaved, setProfileSaved] = useState(false)
   const client = dashData?.client
   const displayName = client?.business_name || client?.client_name || client?.full_name || 'Customer'
@@ -144,15 +144,6 @@ export default function DashboardPage() {
     if (!cartReady) return
     sessionStorage.setItem(getCartStorageKey(), serializeCartItems(cart))
   }, [cart, cartReady])
-
-  const handleLogout = async () => {
-    try {
-      await fetch('/api/auth/logout', { method: 'POST' })
-    } catch (error) {
-      console.error('[v0] Logout error:', error)
-    }
-    window.location.href = '/login'
-  }
 
   // Fetch initial products
   useEffect(() => {
@@ -265,67 +256,73 @@ export default function DashboardPage() {
     setUploadingDocument(true)
     setUploadDocumentError(null)
     try {
-      const supabase = createClient()
-      const accountNo = client?.account_no
-      
-      if (!accountNo) {
-        setUploadDocumentError('Account number not found')
+      const prepared = await fetch('/api/dashboard/documents/upload-url', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ file_name: file.name, file_size: file.size, content_type: file.type }),
+      })
+      const target = await prepared.json()
+      if (!prepared.ok) {
+        setUploadDocumentError(target.error || 'Could not prepare the upload')
         return
       }
 
-      const filePath = `${accountNo}/${Date.now()}_${file.name}`
-
-      // Upload to storage
-      const { error: uploadError } = await supabase
-        .storage
-        .from('documents')
-        .upload(filePath, file)
-
+      const { error: uploadError } = await createClient()
+        .storage.from('documents')
+        .uploadToSignedUrl(target.path, target.token, file, { contentType: file.type })
       if (uploadError) {
-        console.error('[v0] Document upload error:', uploadError)
+        console.error('[documents] upload error:', uploadError)
         setUploadDocumentError('Failed to upload document')
         return
       }
 
-      // Get public URL
-      const { data } = supabase
-        .storage
-        .from('documents')
-        .getPublicUrl(filePath)
-
-      // Insert into documents table (server-side; account is taken from session)
       const insertResponse = await fetch('/api/dashboard/documents', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           file_name: file.name,
-          storage_path: data.publicUrl,
+          storage_path: target.path,
           document_type: selectedDocumentType,
           file_size: file.size,
         }),
       })
-
       if (!insertResponse.ok) {
-        console.error('[v0] Document insert failed:', await insertResponse.text())
-        setUploadDocumentError('Failed to save document record')
+        const body = await insertResponse.json().catch(() => ({}))
+        setUploadDocumentError(body.error || 'Failed to save document record')
         return
       }
 
-      console.log('[v0] Document upload successful:', { accountNo, fileName: file.name, documentType: selectedDocumentType })
-
-      // Refresh dashboard data to show new document
       mutateDashboard()
-      
-      // Close modal
-      setShowUploadModal(false)
-      setSelectedDocumentType('Invoice')
     } catch (err) {
-      console.error('[v0] Error in handleUploadDocument:', err)
+      console.error('[documents] upload failed:', err)
       setUploadDocumentError('An error occurred during upload')
     } finally {
       setUploadingDocument(false)
     }
   }
+
+  // Load every saved part by SKU; the catalog list only holds one page.
+  const [wishlistItems, setWishlistItems] = useState<any[] | null>(null)
+  useEffect(() => {
+    if (favoritesLoading) return
+    if (favorites.size === 0) {
+      setWishlistItems([])
+      return
+    }
+    const skus = Array.from(favorites).slice(0, 100).join(',')
+    let cancelled = false
+    fetch(`/api/products?limit=100&skus=${encodeURIComponent(skus)}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (!cancelled) setWishlistItems(data.products || [])
+      })
+      .catch(() => {
+        if (!cancelled) setWishlistItems(null)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [favorites, favoritesLoading])
 
   // Fetch wishlists from Supabase when accountNo is ready
   useEffect(() => {
@@ -621,39 +618,10 @@ export default function DashboardPage() {
 
   const accountNumber: string | undefined = client?.account_no || accountNo || undefined
   const cartUnits = cart.reduce((sum, item) => sum + item.qty, 0)
-  const initials =
-    displayName
-      .split(/\s+/)
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((w: string) => w[0]?.toUpperCase())
-      .join('') || 'KB'
-
   const go = (tab: string) => {
     setActiveTab(tab)
     window.scrollTo({ top: 0 })
   }
-
-  const NAV: Array<{ id: string; label: string; icon: typeof LayoutDashboard; badge?: number } | { section: string }> = [
-    { id: 'overview', label: 'Overview', icon: LayoutDashboard },
-    { section: 'Purchasing' },
-    { id: 'shop', label: 'Shop catalog', icon: BookOpen },
-    { id: 'wishlist', label: 'Wishlist', icon: Heart, badge: favorites.size },
-    { id: 'cart', label: 'Cart', icon: ShoppingCart, badge: cartUnits },
-    { section: 'Account' },
-    { id: 'orders', label: 'Orders', icon: Package },
-    { id: 'documents', label: 'Documents', icon: FileText },
-    { id: 'account', label: 'Account settings', icon: User },
-  ]
-  const MOBILE_NAV = [
-    { id: 'overview', label: 'Overview', icon: LayoutDashboard },
-    { id: 'shop', label: 'Shop', icon: BookOpen },
-    { id: 'orders', label: 'Orders', icon: Package },
-    { id: 'documents', label: 'Documents', icon: FileText },
-    { id: 'account', label: 'Account', icon: User },
-  ]
-  const tabLabel =
-    (NAV.find((n) => 'id' in n && n.id === activeTab) as { label: string } | undefined)?.label ?? 'Overview'
 
   const orderTotal = (order: any) =>
     Number(order.total_amount) ||
@@ -685,7 +653,7 @@ export default function DashboardPage() {
   const docTypeLabel = (t?: string) => (t === 'CreditNote' ? 'Credit note' : t || 'Document')
   const docCount = (t: string) => (t === 'All' ? documents.length : documents.filter((d: any) => d.document_type === t).length)
   const visibleDocs = documents.filter((d: any) => docFilter === 'All' || d.document_type === docFilter)
-  const docUrl = (d: any) => (typeof d.storage_path === 'string' && d.storage_path.startsWith('http') ? d.storage_path : null)
+  const docUrl = (d: any) => (d.storage_path ? `/api/dashboard/documents/${encodeURIComponent(d.id)}/download` : null)
 
   const frequent = Object.values(
     orders.reduce((acc: Record<string, { sku: string; title: string; units: number; price: number }>, o: any) => {
@@ -701,7 +669,7 @@ export default function DashboardPage() {
     .sort((a: any, b: any) => b.units - a.units)
     .slice(0, 4) as Array<{ sku: string; title: string; units: number; price: number }>
 
-  const wishlistProducts = products.filter((p: any) => favorites.has(p.sku))
+  const wishlistProducts = (wishlistItems ?? products).filter((p: any) => favorites.has(p.sku))
   const inCart = (id: number) => cart.some((item) => item.id === id)
 
   const setCartQty = (id: number, qty: number) =>
@@ -782,147 +750,21 @@ export default function DashboardPage() {
   )
 
   return (
-    <div className={`kbc-portal ${portalFontVars} min-h-screen bg-[#F4F5F7] text-[#121826]`}>
+    <PortalShell
+      active={activeTab}
+      onNavigate={go}
+      displayName={displayName}
+      accountNumber={accountNumber}
+      cartUnits={cartUnits}
+      wishlistCount={favorites.size}
+      onSearch={(term) => {
+        setSearchTerm(term)
+        go('shop')
+      }}
+    >
       <Suspense fallback={null}>
-        <DashboardTabSync setActiveTab={setActiveTab} />
+        <DashboardTabSync setActiveTab={setActiveTab} setSearchTerm={setSearchTerm} />
       </Suspense>
-
-      {/* Sidebar */}
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-[248px] flex-col bg-[#0F1B3D] px-3.5 py-5 text-[#C9D1E4] lg:flex">
-        <div className="flex items-center gap-2.5 border-b border-[#24345F] px-1.5 pb-5">
-          <img src="/images/kbc-logo.png" alt="KBC" className="h-8 w-12 object-contain" />
-          <div className="flex flex-col gap-0.5">
-            <span className="kbc-display whitespace-nowrap text-[14px] font-bold text-white">KBC Brake &amp; Clutch</span>
-            <span className="text-xs text-[#9AA5C1]">Trade client portal</span>
-          </div>
-        </div>
-        <nav aria-label="Portal" className="mt-3 flex flex-col gap-0.5 overflow-y-auto">
-          {NAV.map((item) =>
-            'section' in item ? (
-              <div key={item.section} className="px-3 pb-1.5 pt-[18px] text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8C98B7]">
-                {item.section}
-              </div>
-            ) : (
-              <button
-                key={item.id}
-                type="button"
-                onClick={() => go(item.id)}
-                aria-current={activeTab === item.id ? 'page' : undefined}
-                className={`relative flex h-10 items-center gap-3 rounded-md px-3 text-left text-sm font-medium transition ${
-                  activeTab === item.id ? 'bg-[#1E2C57] text-white' : 'text-[#C9D1E4] hover:bg-[#17244A] hover:text-white'
-                }`}
-              >
-                {activeTab === item.id && <span className="absolute left-0 h-[18px] w-[3px] rounded-r bg-[#C8102E]" />}
-                <item.icon className="h-[18px] w-[18px] shrink-0" />
-                <span>{item.label}</span>
-                {!!item.badge && (
-                  <span className="kbc-mono ml-auto flex h-5 min-w-[22px] items-center justify-center rounded-full bg-[#26365F] px-1.5 text-[11px] text-[#E6EAF4]">
-                    {item.badge}
-                  </span>
-                )}
-              </button>
-            ),
-          )}
-        </nav>
-        <div className="mt-auto flex flex-col gap-3">
-          <div className="flex flex-col gap-2 rounded-lg border border-[#24345F] p-3.5">
-            <span className="text-xs font-semibold text-white">Sales desk</span>
-            <a href="tel:+27114931336" className="flex items-center gap-2 text-[13px] text-[#C9D1E4] hover:text-white">
-              <Phone className="h-3.5 w-3.5" />
-              <span className="kbc-mono">011 493 1336</span>
-            </a>
-            <a href="mailto:kbc1@telkomsa.net" className="flex items-center gap-2 text-[13px] text-[#C9D1E4] hover:text-white">
-              <Mail className="h-3.5 w-3.5" />
-              kbc1@telkomsa.net
-            </a>
-            <span className="text-xs text-[#9AA5C1]">Mon–Fri 08:00–17:00 · Sat 08:00–13:00</span>
-          </div>
-          <button
-            type="button"
-            onClick={handleLogout}
-            className="flex h-10 items-center gap-3 rounded-md px-3 text-sm text-[#C9D1E4] transition hover:bg-[#17244A] hover:text-white"
-          >
-            <LogOut className="h-[18px] w-[18px]" />
-            Sign out
-          </button>
-        </div>
-      </aside>
-
-      <div className="flex min-h-screen flex-col lg:pl-[248px]">
-        {/* Mobile header */}
-        <header className="sticky top-0 z-20 flex h-14 items-center gap-2.5 bg-[#0F1B3D] pl-4 pr-2 lg:hidden">
-          <img src="/images/kbc-logo.png" alt="KBC" className="h-8 w-12 object-contain" />
-          <span className="kbc-display text-[15px] font-bold text-white">Client portal</span>
-          <button
-            type="button"
-            onClick={() => go('cart')}
-            aria-label={`Cart, ${cartUnits} items`}
-            className="relative ml-auto flex h-11 w-11 items-center justify-center text-white"
-          >
-            <ShoppingCart className="h-5 w-5" />
-            {cartUnits > 0 && (
-              <span className="kbc-mono absolute right-1 top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#C8102E] px-1 text-[10px]">
-                {cartUnits}
-              </span>
-            )}
-          </button>
-          <button type="button" onClick={handleLogout} aria-label="Sign out" className="flex h-11 w-11 items-center justify-center text-white">
-            <LogOut className="h-5 w-5" />
-          </button>
-        </header>
-
-        {/* Desktop top bar */}
-        <header className="sticky top-0 z-20 hidden h-16 items-center gap-6 border-b border-[#E3E6EC] bg-white px-8 lg:flex">
-          <span className="text-[13px] text-[#5A6272]">
-            Portal <span className="text-[#A0A7B4]">/</span> <span className="font-medium text-[#121826]">{tabLabel}</span>
-          </span>
-          <form
-            role="search"
-            className="ml-auto flex h-10 w-[380px] items-center gap-2.5 rounded-md border border-[#D5DAE2] bg-white px-3 text-[#5A6272] focus-within:border-[#0F1B3D]"
-            onSubmit={(e) => {
-              e.preventDefault()
-              setSearchTerm(topSearch)
-              go('shop')
-            }}
-          >
-            <Search className="h-4 w-4 shrink-0" />
-            <input
-              type="search"
-              aria-label="Search parts"
-              value={topSearch}
-              onChange={(e) => setTopSearch(e.target.value)}
-              placeholder="Search parts by name or SKU"
-              className="h-full flex-1 border-0 bg-transparent text-sm text-[#121826] outline-none placeholder:text-[#8A919E]"
-            />
-          </form>
-          <button
-            type="button"
-            onClick={() => go('cart')}
-            aria-label={`Cart, ${cartUnits} items`}
-            className="relative flex h-10 w-10 items-center justify-center rounded-md border border-[#E3E6EC] bg-white hover:bg-[#F4F5F7]"
-          >
-            <ShoppingCart className="h-[18px] w-[18px]" />
-            {cartUnits > 0 && (
-              <span className="kbc-mono absolute -right-1.5 -top-1.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#C8102E] px-1 text-[11px] text-white">
-                {cartUnits}
-              </span>
-            )}
-          </button>
-          <div className="h-8 w-px bg-[#E3E6EC]" />
-          <button type="button" onClick={() => go('account')} className="flex items-center gap-3 text-left">
-            <span className="kbc-display flex h-9 w-9 items-center justify-center rounded-full bg-[#E6EAF3] text-[13px] font-bold text-[#0F1B3D]">
-              {initials}
-            </span>
-            <span className="flex flex-col gap-px">
-              <span className="max-w-[220px] truncate text-sm font-semibold">{displayName}</span>
-              {accountNumber && <span className="kbc-mono text-xs text-[#5A6272]">Acc. {accountNumber}</span>}
-            </span>
-            <ChevronDown className="h-4 w-4 text-[#5A6272]" />
-          </button>
-        </header>
-
-        <main className="flex-1 px-4 pb-24 pt-6 sm:px-6 lg:px-10 lg:pb-12 lg:pt-8">
-          <div className="mx-auto flex max-w-[1280px] flex-col gap-6">
             {/* Overview */}
             {activeTab === 'overview' && (
               <>
@@ -1347,10 +1189,10 @@ export default function DashboardPage() {
                           </tbody>
                         </table>
                       </div>
-                      {wishlistProducts.length < favorites.size && (
+                      {wishlistItems !== null && wishlistProducts.length < favorites.size && (
                         <p className="border-t border-[#EEF0F3] px-5 py-3.5 text-[13px] text-[#5A6272]">
-                          {favorites.size - wishlistProducts.length} saved {favorites.size - wishlistProducts.length === 1 ? 'part is' : 'parts are'} not
-                          in the catalog page currently loaded. Search the catalog by name or SKU to see {favorites.size - wishlistProducts.length === 1 ? 'it' : 'them'}.
+                          {favorites.size - wishlistProducts.length} saved {favorites.size - wishlistProducts.length === 1 ? 'part is' : 'parts are'} no
+                          longer in the catalog.
                         </p>
                       )}
                     </>
@@ -1759,10 +1601,10 @@ export default function DashboardPage() {
                           </>
                         )}
                       </span>
-                      <span className="text-xs text-[#5A6272]">PDF or image</span>
+                      <span className="text-xs text-[#5A6272]">PDF or image, up to 10 MB</span>
                       <input
                         type="file"
-                        accept=".pdf,image/*"
+                        accept="application/pdf,image/jpeg,image/png,image/webp,image/heic"
                         disabled={uploadingDocument}
                         className="sr-only"
                         onChange={(e) => {
@@ -1875,11 +1717,11 @@ export default function DashboardPage() {
                           Current password
                           <input type="password" className={input} value={passwordFormData.currentPassword} onChange={(e) => setPasswordFormData({ ...passwordFormData, currentPassword: e.target.value })} autoComplete="current-password" />
                         </label>
-                        <label className="flex flex-col gap-1.5 text-[13px] font-medium">
-                          New password
-                          <input type="password" className={input} value={passwordFormData.newPassword} onChange={(e) => setPasswordFormData({ ...passwordFormData, newPassword: e.target.value })} autoComplete="new-password" />
-                          <span className="text-xs font-normal text-[#5A6272]">At least 6 characters</span>
-                        </label>
+                        <div className="flex flex-col gap-1.5 text-[13px] font-medium">
+                          <label htmlFor="new-password">New password</label>
+                          <input id="new-password" type="password" aria-describedby="new-password-note" className={input} value={passwordFormData.newPassword} onChange={(e) => setPasswordFormData({ ...passwordFormData, newPassword: e.target.value })} autoComplete="new-password" />
+                          <span id="new-password-note" className="text-xs font-normal text-[#5A6272]">At least 6 characters</span>
+                        </div>
                         <label className="flex flex-col gap-1.5 text-[13px] font-medium">
                           Confirm new password
                           <input type="password" className={input} value={passwordFormData.confirmPassword} onChange={(e) => setPasswordFormData({ ...passwordFormData, confirmPassword: e.target.value })} autoComplete="new-password" />
@@ -1938,27 +1780,6 @@ export default function DashboardPage() {
                 </div>
               </>
             )}
-          </div>
-        </main>
-
-        {/* Mobile tab bar */}
-        <nav aria-label="Portal" className="fixed inset-x-0 bottom-0 z-20 flex h-16 border-t border-[#E3E6EC] bg-white lg:hidden">
-          {MOBILE_NAV.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              onClick={() => go(item.id)}
-              aria-current={activeTab === item.id ? 'page' : undefined}
-              className={`flex flex-1 flex-col items-center justify-center gap-1 text-[11px] ${
-                activeTab === item.id ? 'font-semibold text-[#0F1B3D]' : 'font-medium text-[#5A6272]'
-              }`}
-            >
-              <item.icon className="h-5 w-5" />
-              {item.label}
-            </button>
-          ))}
-        </nav>
-      </div>
-    </div>
+    </PortalShell>
   )
 }
