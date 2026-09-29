@@ -248,3 +248,30 @@
     animation: spin-slow 8s linear infinite;
   }
 }
+
+/* Client portal: a light, restrained workspace. The site-wide base styles above
+   make every heading and paragraph large, bold and white, so they are reset
+   inside .kbc-portal and each element is styled explicitly. */
+@layer base {
+  .kbc-portal {
+    font-family: var(--font-portal-sans), system-ui, sans-serif;
+    color: #121826;
+  }
+  .kbc-portal :where(h1, h2, h3, h4, h5, h6, p) {
+    margin: 0;
+    font-size: inherit;
+    line-height: inherit;
+    font-weight: inherit;
+    color: inherit;
+    animation: none;
+    filter: none;
+    text-wrap: wrap;
+  }
+  .kbc-portal .kbc-display {
+    font-family: var(--font-portal-display), var(--font-portal-sans), sans-serif;
+  }
+  .kbc-portal .kbc-mono {
+    font-family: var(--font-portal-mono), ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+}
